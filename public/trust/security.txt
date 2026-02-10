@@ -1,0 +1,7 @@
+Contact: mailto:security@yourcompany.com
+Preferred-Languages: en
+Disclosure: https://yourdomain.com/trust
+Policy: https://yourdomain.com/trust
+Hiring: https://yourdomain.com/careers
+
+Encryption: https://yourdomain.com/.well-known/pgp-key.txt

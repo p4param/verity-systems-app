@@ -1,0 +1,219 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  users     User[]
+  roles     Role[]
+  invites   UserInvite[]
+  auditLogs AuditLog[]
+}
+
+model User {
+  id           Int     @id @default(autoincrement())
+  tenantId     Int
+  fullName     String
+  email        String
+  passwordHash String?
+  status       String  @default("PENDING")
+
+  mfaEnabled       Boolean @default(false)
+  mfaSecret        String?
+  mfaSetupRequired Boolean @default(false)
+
+  isActive Boolean @default(true)
+  isLocked Boolean @default(false)
+
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  createdBy   Int?
+  updatedAt   DateTime?
+  updatedBy   Int?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  passwordResetTokens PasswordResetToken[]
+  refreshTokens       RefreshToken[]
+  userRoles           UserRole[]
+  mfaBackupCodes      MfaBackupCode[]
+
+  auditLogsInitiated AuditLog[] @relation("AuditActor")
+  auditLogsReceived  AuditLog[] @relation("AuditTarget")
+
+  securityAlerts SecurityAlert[]
+  invites        UserInvite[]
+
+  @@unique([tenantId, email])
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  tenantId    Int
+  name        String
+  description String?
+  isSystem    Boolean  @default(false)
+  requiresMfa Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+
+  @@unique([tenantId, name])
+}
+
+model UserRole {
+  userId     Int
+  roleId     Int
+  assignedAt DateTime @default(now())
+  assignedBy Int?
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+}
+
+model Permission {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  description String?
+
+  rolePermissions RolePermission[]
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([tokenHash])
+}
+
+model PasswordResetRequest {
+  id          Int      @id @default(autoincrement())
+  email       String
+  ipAddress   String
+  requestedAt DateTime @default(now())
+
+  @@index([email, requestedAt])
+  @@index([ipAddress, requestedAt])
+}
+
+model MfaBackupCode {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  codeHash  String
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model RefreshToken {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  tokenHash   String
+  mfaVerified Boolean @default(false)
+
+  deviceInfo   String?
+  ipAddress    String?
+  lastActiveAt DateTime?
+
+  expiresAt       DateTime
+  revokedAt       DateTime?
+  revokedByIp     String?
+  replacedByToken String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([tokenHash])
+}
+
+model AuditLog {
+  id           Int  @id @default(autoincrement())
+  tenantId     Int
+  actorUserId  Int?
+  targetUserId Int?
+
+  action    String
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  actor  User? @relation("AuditActor", fields: [actorUserId], references: [id])
+  target User? @relation("AuditTarget", fields: [targetUserId], references: [id])
+
+  @@index([tenantId])
+  @@index([actorUserId])
+  @@index([targetUserId])
+  @@index([action])
+}
+
+model SecurityAlert {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String
+  title     String
+  message   String
+  severity  String
+  metadata  String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model UserInvite {
+  id        String    @id @default(cuid())
+  tenantId  Int
+  email     String
+  tokenHash String
+  expiresAt DateTime
+  createdBy Int
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  tenant  Tenant @relation(fields: [tenantId], references: [id])
+  creator User   @relation(fields: [createdBy], references: [id])
+
+  @@index([tokenHash])
+  @@index([tenantId, email])
+}

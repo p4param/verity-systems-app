@@ -1,0 +1,31 @@
+// 1. Add force flag to User
+model User {
+  // ... existing fields ...
+  mfaSetupRequired Boolean @default(false) @map("MfaSetupRequired")
+  // ... existing relations ...
+  // Add relations for audit logging (optional but good for referential integrity)
+  auditLogsInitiated AuditLog[] @relation("AuditActor")
+  auditLogsReceived  AuditLog[] @relation("AuditTarget")
+}
+
+// 2. Add AuditLog model
+model AuditLog {
+  id           Int      @id(map: "PK__AuditLogs") @default(autoincrement()) @map("AuditLogId")
+  tenantId     Int      @map("TenantId")
+  actorUserId  Int?     @map("ActorUserId")
+  targetUserId Int?     @map("TargetUserId")
+  action       String   @map("Action") @db.NVarChar(50)
+  details      String?  @map("Details") @db.NVarChar(MAX)
+  ipAddress    String?  @map("IpAddress") @db.NVarChar(50)
+  createdAt    DateTime @default(dbgenerated("sysutcdatetime()")) @map("CreatedAt")
+
+  tenant     Tenant @relation(fields: [tenantId], references: [id], onUpdate: NoAction, map: "FK_AuditLogs_Tenant")
+  actor      User?  @relation("AuditActor", fields: [actorUserId], references: [id], onUpdate: NoAction, map: "FK_AuditLogs_Actor")
+  targetUser User?  @relation("AuditTarget", fields: [targetUserId], references: [id], onUpdate: NoAction, map: "FK_AuditLogs_Target")
+
+  @@index([tenantId], map: "IX_AuditLogs_TenantId")
+  @@index([actorUserId], map: "IX_AuditLogs_ActorUserId")
+  @@index([targetUserId], map: "IX_AuditLogs_TargetUserId")
+  @@index([action], map: "IX_AuditLogs_Action")
+  @@map("AuditLogs")
+}
