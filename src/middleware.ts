@@ -81,7 +81,7 @@ export async function middleware(request: NextRequest) {
                             path: pathname,
                             alertCode: area.alertCode
                         }),
-                        ipAddress: request.ip || "unknown"
+                        ipAddress: request.headers.get("x-forwarded-for") || "unknown"
                     })
                 }).catch(err => console.error("Middleware alert fetch error:", err))
             } catch (err) {

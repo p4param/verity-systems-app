@@ -41,7 +41,7 @@ export async function POST(req: Request) {
                     mfaSecret: secret,
                     mfaSetupRequired: false,
                     // Nested writes ensure tenant context is maintained for relations
-                    MfaBackupCodes: {
+                    mfaBackupCodes: {
                         deleteMany: {}, // Deletes all existing codes for this user
                         create: hashedCodes.map(hash => ({
                             codeHash: hash,
