@@ -32,12 +32,17 @@ export async function GET(req: Request) {
             entityType: searchParams.get("entityType") || undefined,
         };
 
+        const sortBy = searchParams.get("sortBy") as 'createdAt' | 'action' | 'entityType' | 'actorUserId' || 'createdAt';
+        const sortOrder = searchParams.get("sortOrder") as 'asc' | 'desc' || 'desc';
+
         // 3. Service Call
         const auditLogs = await AuditService.getDmsAuditLogs({
             tenantId: user.tenantId,
             page,
             limit,
-            filters
+            filters,
+            sortBy,
+            sortOrder
         });
 
         return NextResponse.json(auditLogs);

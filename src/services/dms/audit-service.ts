@@ -153,7 +153,9 @@ export class AuditService {
         tenantId,
         page = 1,
         limit = 20,
-        filters
+        filters,
+        sortBy = 'createdAt',
+        sortOrder = 'desc'
     }: {
         tenantId: number;
         page?: number;
@@ -165,6 +167,8 @@ export class AuditService {
             userId?: number;
             entityType?: string;
         };
+        sortBy?: 'createdAt' | 'action' | 'entityType' | 'actorUserId';
+        sortOrder?: 'asc' | 'desc';
     }) {
         const skip = (page - 1) * limit;
         const where: any = {
@@ -204,7 +208,7 @@ export class AuditService {
                         select: { fullName: true, email: true }
                     }
                 },
-                orderBy: { createdAt: 'desc' },
+                orderBy: { [sortBy]: sortOrder },
                 skip,
                 take: limit
             })
