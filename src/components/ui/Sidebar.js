@@ -141,9 +141,30 @@ function NavItem({ item, collapsed, pathname, expandedMenus, toggleMenu, onNavig
 
 export function Sidebar({ mobileOpen, setMobileOpen }) {
     const [collapsed, setCollapsed] = useState(false);
-    const [expandedMenus, setExpandedMenus] = useState({ Admin: true });
     const pathname = usePathname();
     const { user } = useAuth();
+
+    const getActiveParent = (path) => {
+        for (const item of navItems) {
+            if (item.children) {
+                const hasActiveChild = item.children.some(child => child.href && path === child.href);
+                const hasActivePrefix = item.children.some(child => child.href && child.href !== "/" && path.startsWith(child.href));
+                if (hasActiveChild || hasActivePrefix) return item.name;
+            }
+        }
+        return null;
+    };
+
+    const [expandedMenus, setExpandedMenus] = useState(() => {
+        return {};
+    });
+
+    useEffect(() => {
+        const activeParent = getActiveParent(pathname);
+        if (activeParent) {
+            setExpandedMenus({ [activeParent]: true });
+        }
+    }, [pathname]);
 
     const toggleMenu = (name) => {
         setExpandedMenus(prev => {
