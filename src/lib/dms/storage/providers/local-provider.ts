@@ -6,16 +6,12 @@ import { StorageError } from "../errors";
 
 export class LocalStorageProvider implements StorageProvider {
     private uploadDir: string;
-    private baseUrl: string;
 
     constructor() {
-        // Store files in a private directory at project root
         this.uploadDir = path.join(process.cwd(), "private", "uploads");
-        this.baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
 
-        // Ensure directory exists asynchronously (handled in methods usually, but good to init)
         fs.mkdir(this.uploadDir, { recursive: true }).catch(err => {
-            console.error("Failed to create upgrade directory", err);
+            console.error("Failed to create upload directory", err);
         });
     }
 
@@ -50,7 +46,7 @@ export class LocalStorageProvider implements StorageProvider {
             .update(`${key}:${expires}`)
             .digest('hex');
 
-        return `${this.baseUrl}/api/secure/dms/storage/local?key=${encodeURIComponent(key)}&expires=${expires}&signature=${signature}`;
+        return `/api/secure/dms/storage/local?key=${encodeURIComponent(key)}&expires=${expires}&signature=${signature}`;
     }
 
     async exists(key: string): Promise<boolean> {
