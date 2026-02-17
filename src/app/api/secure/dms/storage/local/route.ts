@@ -68,7 +68,10 @@ export async function GET(req: Request) {
         return new NextResponse(fileBuffer, {
             headers: {
                 "Content-Type": mimeType,
-                "Content-Disposition": `inline; filename="${path.basename(key)}"`
+                "Content-Disposition": `inline; filename="${path.basename(key)}"`,
+                "Content-Length": String(fileBuffer.length),
+                "Cache-Control": "private, max-age=300",
+                "X-Content-Type-Options": "nosniff",
             }
         });
 

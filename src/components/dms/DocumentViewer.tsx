@@ -196,13 +196,26 @@ export function DocumentViewer({
                 {state.signedUrl && (
                     <>
                         {isPdf ? (
-                            <iframe
-                                src={`${state.signedUrl}#toolbar=0`}
-                                className="w-full h-full min-h-[600px] border-0"
-                                title="Document Preview"
-                            // sandbox removed to allow PDF viewers to work
-                            // sandbox="allow-scripts allow-same-origin" 
-                            />
+                            <object
+                                data={state.signedUrl}
+                                type="application/pdf"
+                                className="w-full h-full min-h-[600px]"
+                            >
+                                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+                                    <FileX className="h-12 w-12 text-gray-400 mb-4" />
+                                    <h3 className="text-lg font-medium text-gray-900 mb-2">PDF preview not supported in this browser</h3>
+                                    <p className="text-sm text-gray-500 mb-4">You can download the file to view it.</p>
+                                    <a
+                                        href={state.signedUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+                                    >
+                                        <Download className="h-4 w-4" />
+                                        Open PDF
+                                    </a>
+                                </div>
+                            </object>
                         ) : isImage ? (
                             <div className="w-full h-full flex items-center justify-center p-4">
                                 <img
