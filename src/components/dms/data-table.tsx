@@ -13,14 +13,6 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import {
     Select,
@@ -111,59 +103,61 @@ export function DataTable<TData, TValue>({
     }
 
     return (
-        <div className="flex flex-col min-h-full bg-background flex-1">
-            <div className="rounded-md border flex-1">
-                <Table>
-                    <TableHeader className="sticky top-0 bg-muted/60 z-10">
-                        {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id} className="hover:bg-muted/60 border-b">
-                                {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id} className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                                        {header.isPlaceholder
-                                            ? null
-                                            : flexRender(
-                                                header.column.columnDef.header,
-                                                header.getContext()
-                                            )}
-                                    </TableHead>
-                                ))}
-                            </TableRow>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={row.getIsSelected() && "selected"}
-                                    onClick={() => onRowClick?.(row.original)}
-                                    className="cursor-pointer bg-background hover:bg-muted/30"
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext()
-                                            )}
-                                        </TableCell>
+        <div className="flex flex-col min-h-full flex-1">
+            <div className="rounded-lg border bg-card shadow-sm overflow-hidden flex-1">
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm text-left">
+                        <thead className="bg-muted/50 text-muted-foreground font-medium border-b text-xs uppercase tracking-wider">
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <tr key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => (
+                                        <th key={header.id} className="px-4 py-3">
+                                            {header.isPlaceholder
+                                                ? null
+                                                : flexRender(
+                                                    header.column.columnDef.header,
+                                                    header.getContext()
+                                                )}
+                                        </th>
                                     ))}
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={columns.length}
-                                    className="h-24 text-center text-muted-foreground"
-                                >
-                                    No results.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-            </div>
-            {meta && meta.totalPages > 0 && (
-                <div className="flex items-center justify-between py-3 border-t mt-auto">
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody className="divide-y">
+                            {table.getRowModel().rows?.length ? (
+                                table.getRowModel().rows.map((row) => (
+                                    <tr
+                                        key={row.id}
+                                        data-state={row.getIsSelected() && "selected"}
+                                        onClick={() => onRowClick?.(row.original)}
+                                        className="cursor-pointer bg-background hover:bg-muted/30 transition-colors data-[state=selected]:bg-muted"
+                                    >
+                                        {row.getVisibleCells().map((cell) => (
+                                            <td key={cell.id} className="px-4 py-3 align-middle">
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={columns.length}
+                                        className="h-24 text-center text-muted-foreground"
+                                    >
+                                        No results.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+
+                {meta && meta.totalPages > 0 && (
+                    <div className="flex items-center justify-between px-4 py-3 border-t bg-muted/10">
                     <div className="flex items-center gap-3">
                         <p className="text-sm text-muted-foreground whitespace-nowrap">
                             {meta.total} document{meta.total !== 1 ? "s" : ""}
@@ -243,8 +237,9 @@ export function DataTable<TData, TValue>({
                             </Button>
                         </div>
                     )}
-                </div>
-            )}
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
