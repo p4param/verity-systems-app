@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="flex flex-col min-h-full flex-1">
-            <div className="rounded-lg border bg-card shadow-sm overflow-hidden flex-1">
+            <div className="rounded-lg border bg-card shadow-md ring-1 ring-black/5 overflow-hidden flex-1">
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-left">
                         <thead className="bg-muted/50 text-muted-foreground font-medium border-b text-xs uppercase tracking-wider">
