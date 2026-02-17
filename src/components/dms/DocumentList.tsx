@@ -147,14 +147,14 @@ export function DmsDocumentList({
     const isEmpty = !loading && documents.length === 0 && meta.total === 0
 
     return (
-        <div className="flex flex-col min-h-full bg-background flex-1">
+        <div className="flex flex-col min-h-full flex-1">
             <AdvancedFilterDrawer
                 isOpen={isFilterOpen}
                 onClose={() => onFilterOpenChange?.(false)}
                 documentTypes={documentTypes.map(t => ({ id: t.value, name: t.label }))}
             />
 
-            <div className="flex-1 flex flex-col p-4">
+            <div className="flex-1 flex flex-col">
                 {initialLoad ? (
                     <TableSkeleton rows={8} columns={7} />
                 ) : isEmpty ? (
