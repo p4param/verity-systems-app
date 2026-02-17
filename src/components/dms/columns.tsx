@@ -16,6 +16,15 @@ import {
     File,
     type LucideIcon,
 } from "lucide-react"
+import React from "react"
+
+const PdfIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <text x="12" y="17" textAnchor="middle" fill="currentColor" fontSize="6" fontWeight="700" fontFamily="system-ui, sans-serif">PDF</text>
+    </svg>
+)
 import { formatRelativeDate } from "@/lib/utils/format-date"
 import { StatusBadge } from "@/components/dms/StatusBadge"
 import { Button } from "@/components/ui/button"
@@ -94,9 +103,10 @@ const EXT_ICON_MAP: Record<string, { icon: LucideIcon; color: string }> = {
     dxf: { icon: FileImage, color: "text-fuchsia-600" },
 }
 
-function getFileIcon(fileName: string | undefined | null): { icon: LucideIcon; color: string } {
+function getFileIcon(fileName: string | undefined | null): { icon: LucideIcon | null; color: string; isPdf?: boolean } {
     if (!fileName) return { icon: File, color: "text-muted-foreground" }
     const ext = fileName.split(".").pop()?.toLowerCase()
+    if (ext === "pdf") return { icon: null, color: "text-red-600", isPdf: true }
     if (ext && EXT_ICON_MAP[ext]) return EXT_ICON_MAP[ext]
     return { icon: File, color: "text-muted-foreground" }
 }
@@ -155,11 +165,17 @@ export const columns: ColumnDef<DocumentData>[] = [
         },
         cell: ({ row }) => {
             const doc = row.original
-            const { icon: Icon, color } = getFileIcon(doc.currentVersion?.fileName)
+            const { icon: Icon, color, isPdf } = getFileIcon(doc.currentVersion?.fileName)
             return (
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-primary/5 rounded border transition-colors">
-                        <Icon size={18} className={color} />
+                        {isPdf ? (
+                            <PdfIcon size={18} className={color} />
+                        ) : Icon ? (
+                            <Icon size={18} className={color} />
+                        ) : (
+                            <File size={18} className="text-muted-foreground" />
+                        )}
                     </div>
                     <div className="flex flex-col min-w-0">
                         <span className="text-sm font-medium truncate">{doc.title}</span>
