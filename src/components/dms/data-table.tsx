@@ -114,11 +114,11 @@ export function DataTable<TData, TValue>({
         <div className="flex flex-col min-h-full bg-background flex-1">
             <div className="rounded-md border flex-1">
                 <Table>
-                    <TableHeader className="sticky top-0 bg-background z-10">
+                    <TableHeader className="sticky top-0 bg-muted/60 z-10">
                         {table.getHeaderGroups().map((headerGroup) => (
-                            <TableRow key={headerGroup.id}>
+                            <TableRow key={headerGroup.id} className="hover:bg-muted/60 border-b">
                                 {headerGroup.headers.map((header) => (
-                                    <TableHead key={header.id}>
+                                    <TableHead key={header.id} className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(
@@ -137,7 +137,7 @@ export function DataTable<TData, TValue>({
                                     key={row.id}
                                     data-state={row.getIsSelected() && "selected"}
                                     onClick={() => onRowClick?.(row.original)}
-                                    className="cursor-pointer hover:bg-muted/50"
+                                    className="cursor-pointer bg-background hover:bg-muted/30"
                                 >
                                     {row.getVisibleCells().map((cell) => (
                                         <TableCell key={cell.id}>
