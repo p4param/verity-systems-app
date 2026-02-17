@@ -104,14 +104,14 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="flex flex-col min-h-full flex-1">
-            <div className="rounded-md border bg-card shadow-sm overflow-hidden flex-1">
+            <div className="rounded-lg bg-card shadow-sm overflow-hidden flex-1">
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left">
-                        <thead className="bg-muted/50 text-muted-foreground font-medium border-b text-xs uppercase tracking-wider">
+                    <table className="w-full text-sm">
+                        <thead className="border-2 border-background">
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <tr key={headerGroup.id}>
+                                <tr key={headerGroup.id} className="bg-muted/50">
                                     {headerGroup.headers.map((header) => (
-                                        <th key={header.id} className="px-4 py-3">
+                                        <th key={header.id} className="h-12 px-4 text-left font-medium text-muted-foreground">
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -123,17 +123,17 @@ export function DataTable<TData, TValue>({
                                 </tr>
                             ))}
                         </thead>
-                        <tbody className="divide-y">
+                        <tbody>
                             {table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
                                     <tr
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
                                         onClick={() => onRowClick?.(row.original)}
-                                        className="cursor-pointer bg-background hover:bg-muted/30 transition-colors data-[state=selected]:bg-muted"
+                                        className="border-2 border-background cursor-pointer hover:bg-muted/50 transition-colors data-[state=selected]:bg-muted"
                                     >
                                         {row.getVisibleCells().map((cell) => (
-                                            <td key={cell.id} className="px-4 py-3 align-middle">
+                                            <td key={cell.id} className="p-4 align-middle">
                                                 {flexRender(
                                                     cell.column.columnDef.cell,
                                                     cell.getContext()

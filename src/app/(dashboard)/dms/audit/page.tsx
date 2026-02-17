@@ -357,12 +357,12 @@ export default function DmsAuditPage() {
                         <p>No log entries found matching your criteria.</p>
                     </div>
                 ) : (
-                    <div className="rounded-md border bg-card shadow-sm overflow-hidden">
+                    <div className="rounded-lg bg-card shadow-sm overflow-hidden">
                         <div className="overflow-x-auto">
-                            <table className="w-full text-sm text-left">
-                                <thead className="bg-muted/50 text-muted-foreground font-medium border-b text-xs uppercase tracking-wider">
-                                    <tr>
-                                        <th className="px-4 py-3">
+                            <table className="w-full text-sm">
+                                <thead className="border-2 border-background">
+                                    <tr className="bg-muted/50">
+                                        <th className="h-12 px-4 text-left font-medium text-muted-foreground">
                                             <DataTableHeader
                                                 title="Timestamp"
                                                 columnId="createdAt"
@@ -371,7 +371,7 @@ export default function DmsAuditPage() {
                                                 onSort={handleSort}
                                             />
                                         </th>
-                                        <th className="px-4 py-3">
+                                        <th className="h-12 px-4 text-left font-medium text-muted-foreground">
                                             <DataTableHeader
                                                 title="Action"
                                                 columnId="action"
@@ -385,7 +385,7 @@ export default function DmsAuditPage() {
                                                 onFilter={(val) => handleFilter("action", val)}
                                             />
                                         </th>
-                                        <th className="px-4 py-3">
+                                        <th className="h-12 px-4 text-left font-medium text-muted-foreground">
                                             <DataTableHeader
                                                 title="Entity"
                                                 columnId="entityType"
@@ -399,7 +399,7 @@ export default function DmsAuditPage() {
                                                 onFilter={(val) => handleFilter("entityType", val)}
                                             />
                                         </th>
-                                        <th className="px-4 py-3">
+                                        <th className="h-12 px-4 text-left font-medium text-muted-foreground">
                                             <DataTableHeader
                                                 title="User"
                                                 columnId="actorUserId"
@@ -413,22 +413,22 @@ export default function DmsAuditPage() {
                                                 onFilter={(val) => handleFilter("userId", val)}
                                             />
                                         </th>
-                                        <th className="px-4 py-3">Details</th>
-                                        <th className="px-4 py-3">Metadata</th>
+                                        <th className="h-12 px-4 text-left font-medium text-muted-foreground">Details</th>
+                                        <th className="h-12 px-4 text-left font-medium text-muted-foreground">Metadata</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y">
+                                <tbody>
                                     {logs.map((log) => (
-                                        <tr key={log.id} className="hover:bg-muted/30 transition-colors">
-                                            <td className="px-4 py-3 whitespace-nowrap text-muted-foreground text-xs font-mono">
+                                        <tr key={log.id} className="border-2 border-background hover:bg-muted/50 cursor-pointer transition-colors">
+                                            <td className="p-4 whitespace-nowrap text-muted-foreground text-xs font-mono">
                                                 {formatDate(log.createdAt)}
                                             </td>
-                                            <td className="px-4 py-3">
+                                            <td className="p-4">
                                                 <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border ${getActionBadgeColor(log.action)}`}>
                                                     {log.action.replace("DMS.", "")}
                                                 </span>
                                             </td>
-                                            <td className="px-4 py-3">
+                                            <td className="p-4">
                                                 <div className="flex flex-col text-xs">
                                                     <span className="font-semibold text-foreground">{log.entityName}</span>
                                                     <span className="text-muted-foreground bg-muted/50 px-1 rounded w-fit mt-0.5">
@@ -436,7 +436,7 @@ export default function DmsAuditPage() {
                                                     </span>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3">
+                                            <td className="p-4">
                                                 <div className="flex items-center gap-2">
                                                     <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px] font-bold">
                                                         {log.actorName.charAt(0)}
@@ -447,10 +447,10 @@ export default function DmsAuditPage() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3">
+                                            <td className="p-4">
                                                 <span className="text-foreground">{log.details || "-"}</span>
                                             </td>
-                                            <td className="px-4 py-3 align-top min-w-[200px]">
+                                            <td className="p-4 align-top min-w-[200px]">
                                                 {log.metadata && Object.keys(log.metadata).length > 0 && (
                                                     <div className="space-y-1">
                                                         {Object.entries(log.metadata).slice(0, 3).map(([key, value]) => (
