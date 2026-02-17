@@ -12,18 +12,8 @@ import {
     FileAudio,
     FileArchive,
     FileCode,
-    FilePen,
-    FileCheck,
-    FileWarning,
-    FileClock,
-    FileKey,
     Presentation,
-    ScrollText,
-    ClipboardList,
-    BookOpen,
-    ShieldCheck,
-    Scale,
-    Receipt,
+    File,
     type LucideIcon,
 } from "lucide-react"
 import { formatRelativeDate } from "@/lib/utils/format-date"
@@ -57,52 +47,58 @@ export interface DocumentData {
     }
 }
 
-const TYPE_ICON_MAP: Record<string, { icon: LucideIcon; color: string }> = {
-    "policy": { icon: ShieldCheck, color: "text-blue-600" },
-    "procedure": { icon: ClipboardList, color: "text-teal-600" },
-    "sop": { icon: ClipboardList, color: "text-teal-600" },
-    "standard operating procedure": { icon: ClipboardList, color: "text-teal-600" },
-    "manual": { icon: BookOpen, color: "text-indigo-600" },
-    "form": { icon: FilePen, color: "text-orange-600" },
-    "template": { icon: FileText, color: "text-violet-600" },
-    "report": { icon: FileSpreadsheet, color: "text-emerald-600" },
-    "spreadsheet": { icon: FileSpreadsheet, color: "text-green-600" },
-    "contract": { icon: Scale, color: "text-amber-700" },
-    "agreement": { icon: Scale, color: "text-amber-700" },
-    "legal": { icon: Scale, color: "text-amber-700" },
-    "invoice": { icon: Receipt, color: "text-green-700" },
-    "receipt": { icon: Receipt, color: "text-green-700" },
-    "certificate": { icon: FileCheck, color: "text-emerald-700" },
-    "license": { icon: FileKey, color: "text-yellow-700" },
-    "permit": { icon: FileKey, color: "text-yellow-700" },
-    "presentation": { icon: Presentation, color: "text-rose-600" },
-    "image": { icon: FileImage, color: "text-pink-600" },
-    "photo": { icon: FileImage, color: "text-pink-600" },
-    "video": { icon: FileVideo, color: "text-purple-600" },
-    "audio": { icon: FileAudio, color: "text-sky-600" },
-    "archive": { icon: FileArchive, color: "text-stone-600" },
-    "code": { icon: FileCode, color: "text-slate-600" },
-    "specification": { icon: ScrollText, color: "text-cyan-700" },
-    "memo": { icon: ScrollText, color: "text-cyan-600" },
-    "letter": { icon: ScrollText, color: "text-cyan-600" },
-    "drawing": { icon: FileImage, color: "text-fuchsia-600" },
-    "diagram": { icon: FileImage, color: "text-fuchsia-600" },
-    "checklist": { icon: FileCheck, color: "text-lime-700" },
-    "audit": { icon: FileWarning, color: "text-amber-600" },
-    "record": { icon: FileClock, color: "text-slate-500" },
-    "log": { icon: FileClock, color: "text-slate-500" },
-    "guideline": { icon: BookOpen, color: "text-blue-500" },
-    "instruction": { icon: BookOpen, color: "text-blue-500" },
+const EXT_ICON_MAP: Record<string, { icon: LucideIcon; color: string }> = {
+    pdf: { icon: FileText, color: "text-red-600" },
+    doc: { icon: FileText, color: "text-blue-600" },
+    docx: { icon: FileText, color: "text-blue-600" },
+    odt: { icon: FileText, color: "text-blue-600" },
+    rtf: { icon: FileText, color: "text-blue-500" },
+    txt: { icon: FileText, color: "text-slate-500" },
+    xls: { icon: FileSpreadsheet, color: "text-green-600" },
+    xlsx: { icon: FileSpreadsheet, color: "text-green-600" },
+    csv: { icon: FileSpreadsheet, color: "text-green-500" },
+    ods: { icon: FileSpreadsheet, color: "text-green-600" },
+    ppt: { icon: Presentation, color: "text-orange-600" },
+    pptx: { icon: Presentation, color: "text-orange-600" },
+    odp: { icon: Presentation, color: "text-orange-600" },
+    jpg: { icon: FileImage, color: "text-pink-600" },
+    jpeg: { icon: FileImage, color: "text-pink-600" },
+    png: { icon: FileImage, color: "text-pink-600" },
+    gif: { icon: FileImage, color: "text-pink-600" },
+    svg: { icon: FileImage, color: "text-pink-500" },
+    bmp: { icon: FileImage, color: "text-pink-600" },
+    webp: { icon: FileImage, color: "text-pink-600" },
+    tiff: { icon: FileImage, color: "text-pink-600" },
+    tif: { icon: FileImage, color: "text-pink-600" },
+    mp4: { icon: FileVideo, color: "text-purple-600" },
+    avi: { icon: FileVideo, color: "text-purple-600" },
+    mov: { icon: FileVideo, color: "text-purple-600" },
+    mkv: { icon: FileVideo, color: "text-purple-600" },
+    webm: { icon: FileVideo, color: "text-purple-600" },
+    mp3: { icon: FileAudio, color: "text-sky-600" },
+    wav: { icon: FileAudio, color: "text-sky-600" },
+    ogg: { icon: FileAudio, color: "text-sky-600" },
+    flac: { icon: FileAudio, color: "text-sky-600" },
+    zip: { icon: FileArchive, color: "text-amber-700" },
+    rar: { icon: FileArchive, color: "text-amber-700" },
+    "7z": { icon: FileArchive, color: "text-amber-700" },
+    tar: { icon: FileArchive, color: "text-amber-700" },
+    gz: { icon: FileArchive, color: "text-amber-700" },
+    html: { icon: FileCode, color: "text-orange-500" },
+    css: { icon: FileCode, color: "text-blue-500" },
+    js: { icon: FileCode, color: "text-yellow-600" },
+    ts: { icon: FileCode, color: "text-blue-600" },
+    json: { icon: FileCode, color: "text-slate-600" },
+    xml: { icon: FileCode, color: "text-teal-600" },
+    dwg: { icon: FileImage, color: "text-fuchsia-600" },
+    dxf: { icon: FileImage, color: "text-fuchsia-600" },
 }
 
-function getDocTypeIcon(typeName: string | undefined | null): { icon: LucideIcon; color: string } {
-    if (!typeName) return { icon: FileText, color: "text-primary/70" }
-    const lower = typeName.toLowerCase()
-    if (TYPE_ICON_MAP[lower]) return TYPE_ICON_MAP[lower]
-    for (const [key, val] of Object.entries(TYPE_ICON_MAP)) {
-        if (lower.includes(key) || key.includes(lower)) return val
-    }
-    return { icon: FileText, color: "text-primary/70" }
+function getFileIcon(fileName: string | undefined | null): { icon: LucideIcon; color: string } {
+    if (!fileName) return { icon: File, color: "text-muted-foreground" }
+    const ext = fileName.split(".").pop()?.toLowerCase()
+    if (ext && EXT_ICON_MAP[ext]) return EXT_ICON_MAP[ext]
+    return { icon: File, color: "text-muted-foreground" }
 }
 
 export const columns: ColumnDef<DocumentData>[] = [
@@ -159,7 +155,7 @@ export const columns: ColumnDef<DocumentData>[] = [
         },
         cell: ({ row }) => {
             const doc = row.original
-            const { icon: Icon, color } = getDocTypeIcon(doc.type?.name)
+            const { icon: Icon, color } = getFileIcon(doc.currentVersion?.fileName)
             return (
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-primary/5 rounded border transition-colors">
