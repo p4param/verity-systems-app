@@ -55,7 +55,21 @@ export default function DmsDashboard() {
     const [itemCount, setItemCount] = useState(0)
     const [isFilterOpen, setIsFilterOpen] = useState(false)
     const [activeFilterCount, setActiveFilterCount] = useState(0)
-    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(() => {
+        if (typeof window !== "undefined") {
+            try {
+                const saved = localStorage.getItem("dms-column-visibility")
+                if (saved) return JSON.parse(saved)
+            } catch {}
+        }
+        return {}
+    })
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("dms-column-visibility", JSON.stringify(columnVisibility))
+        } catch {}
+    }, [columnVisibility])
 
     const canCreateDocument = usePermission("DMS_DOCUMENT_CREATE")
 
