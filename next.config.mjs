@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: ['*'],
+  allowedDevOrigins: [
+    `https://${process.env.REPLIT_DEV_DOMAIN}`,
+    `http://${process.env.REPLIT_DEV_DOMAIN}`,
+    process.env.REPLIT_DEV_DOMAIN,
+  ].filter(Boolean),
   async headers() {
     return [
       {

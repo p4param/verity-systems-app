@@ -6,7 +6,8 @@ import React, {
     useEffect,
     useRef,
     useState,
-    useCallback
+    useCallback,
+    useMemo
 } from "react"
 import { useRouter } from "next/navigation"
 import { handleAPIResponse } from "../api-client"
@@ -155,6 +156,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         router.push("/dashboard")
     }
 
+    const routerRef = useRef(router)
+    useEffect(() => {
+        routerRef.current = router
+    }, [router])
+
     const logout = useCallback(async () => {
         try {
             const refreshToken = localStorage.getItem("refreshToken")
@@ -169,15 +175,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             // ignore
         } finally {
             clearSession()
-            router.push("/login")
+            routerRef.current.push("/login")
         }
-    }, [router])
+    }, [])
 
     /* ----------------------------------------
        Refresh logic (ROTATING refresh tokens)
     ---------------------------------------- */
 
-    const refreshTokensInternal = async (): Promise<string | null> => {
+    const refreshTokensInternal = useCallback(async (): Promise<string | null> => {
         const refreshToken = localStorage.getItem("refreshToken")
         if (!refreshToken) return null
 
@@ -195,9 +201,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(data.user)
         }
         return data.accessToken
-    }
+    }, [])
 
-    const getRefreshTokenSingleton = async (): Promise<string | null> => {
+    const getRefreshTokenSingleton = useCallback(async (): Promise<string | null> => {
         if (!refreshPromise.current) {
             refreshPromise.current = (async () => {
                 try {
@@ -209,11 +215,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         return refreshPromise.current
-    }
+    }, [refreshTokensInternal])
 
-    const refreshTokens = async (): Promise<boolean> => {
+    const refreshTokens = useCallback(async (): Promise<boolean> => {
         return !!(await getRefreshTokenSingleton())
-    }
+    }, [getRefreshTokenSingleton])
 
     /* ----------------------------------------
        Authenticated fetch helper
@@ -223,7 +229,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         input: RequestInfo | URL,
         init: RequestInit = {}
     ): Promise<T> => {
-        // Global Guard: Wait for session restore to complete
         if (loadingRef.current) {
             while (loadingRef.current) {
                 await new Promise(resolve => setTimeout(resolve, 50))
@@ -234,24 +239,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const token = accessTokenRef.current
 
         if (token) {
-            // ✅ Optimization: Check expiry locally before wasting a network call
             if (isTokenExpired(token)) {
-                console.log(`[AUTH_CONTEXT] Token expired locally, attempting refresh for ${input}`)
                 const newToken = await getRefreshTokenSingleton()
                 if (newToken) {
                     headers.set("Authorization", `Bearer ${newToken}`)
                 } else {
-                    console.warn(`[AUTH_CONTEXT] Refresh failed for ${input}, proceeding with old token`)
                     headers.set("Authorization", `Bearer ${token}`)
                 }
             } else {
                 headers.set("Authorization", `Bearer ${token}`)
             }
-        } else {
-            console.warn(`[AUTH_CONTEXT] No access token found in state while fetching ${input}`)
         }
 
-        // Auto-set Content-Type for JSON
         if (init.body && !headers.has("Content-Type") && !(init.body instanceof FormData)) {
             headers.set("Content-Type", "application/json")
         }
@@ -262,7 +261,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             return handleAPIResponse<T>(response)
         }
 
-        // Access token expired → refresh
         const newToken = await getRefreshTokenSingleton()
 
         if (!newToken) {
@@ -274,7 +272,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         response = await fetch(input, { ...init, headers })
 
         return handleAPIResponse<T>(response)
-    }, [logout])
+    }, [logout, getRefreshTokenSingleton])
 
 
     /* ----------------------------------------
@@ -289,25 +287,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 return
             }
 
-            const ok = await refreshTokens()
-            if (!ok) {
+            const newToken = await getRefreshTokenSingleton()
+            if (!newToken) {
                 clearSession()
                 setLoading(false)
                 return
             }
 
-            // Restore user data
             try {
-                // We use manual fetch here to avoid circular dep or issues with fetchWithAuth state
-                const token = await getRefreshTokenSingleton()
-                if (token) {
-                    const res = await fetch("/api/secure/profile", {
-                        headers: { Authorization: `Bearer ${token}` }
-                    })
-                    if (res.ok) {
-                        const data = await res.json()
-                        setUser(data.user)
-                    }
+                const res = await fetch("/api/secure/profile", {
+                    headers: { Authorization: `Bearer ${newToken}` }
+                })
+                if (res.ok) {
+                    const data = await res.json()
+                    setUser(data.user)
                 }
             } catch (error) {
                 console.error("Failed to restore user profile:", error)
@@ -319,21 +312,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         restore()
     }, [])
 
+    const contextValue = useMemo(() => ({
+        user,
+        accessToken,
+        loading,
+        mfaRequired,
+        mfaSetupRequired,
+        login,
+        logout,
+        verifyMfa,
+        refreshTokens,
+        fetchWithAuth
+    }), [user, accessToken, loading, mfaRequired, mfaSetupRequired, login, logout, verifyMfa, refreshTokens, fetchWithAuth])
+
     return (
-        <AuthContext.Provider
-            value={{
-                user,
-                accessToken,
-                loading,
-                mfaRequired,
-                mfaSetupRequired,
-                login,
-                logout,
-                verifyMfa,
-                refreshTokens,
-                fetchWithAuth
-            }}
-        >
+        <AuthContext.Provider value={contextValue}>
             {children}
         </AuthContext.Provider>
     )

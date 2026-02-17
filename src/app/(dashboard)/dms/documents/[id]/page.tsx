@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useCallback, use } from "react"
+import React, { useEffect, useState, useCallback, useRef, use } from "react"
 import { useRouter } from "next/navigation"
 import {
     ArrowLeft,
@@ -54,22 +54,23 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
     const { id } = use(params)
     const router = useRouter()
     const { fetchWithAuth } = useAuth()
+    const fetchWithAuthRef = useRef(fetchWithAuth)
+    useEffect(() => { fetchWithAuthRef.current = fetchWithAuth }, [fetchWithAuth])
 
     const [document, setDocument] = useState<DocumentDetail | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false) // Added
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [activeTab, setActiveTab] = useState<"about" | "versions" | "audit">("about")
 
-    // Permissions
     const canShare = usePermission("DMS_SHARE_CREATE")
-    const canEdit = usePermission("DMS_DOCUMENT_EDIT") // Added
+    const canEdit = usePermission("DMS_DOCUMENT_EDIT")
 
     const loadDocument = useCallback(async () => {
         try {
             setLoading(true)
-            const data = await fetchWithAuth<DocumentDetail>(`/api/secure/dms/documents/${id}`)
+            const data = await fetchWithAuthRef.current<DocumentDetail>(`/api/secure/dms/documents/${id}`)
             setDocument(data)
         } catch (err: any) {
             console.error("Failed to load document:", err)
@@ -85,7 +86,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
         } finally {
             setLoading(false)
         }
-    }, [id, fetchWithAuth])
+    }, [id])
 
     useEffect(() => {
         loadDocument()

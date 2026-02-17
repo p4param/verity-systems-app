@@ -33,6 +33,9 @@ export function DocumentViewer({
     fileName = "document"
 }: DocumentViewerProps) {
     const { fetchWithAuth } = useAuth()
+    const fetchWithAuthRef = React.useRef(fetchWithAuth)
+    React.useEffect(() => { fetchWithAuthRef.current = fetchWithAuth }, [fetchWithAuth])
+
     const [state, setState] = React.useState<ViewerState>({
         signedUrl: null,
         isLoading: false,
@@ -40,17 +43,19 @@ export function DocumentViewer({
         fetchedAt: null
     })
 
-    const refreshTimerRef = React.useRef<NodeJS.Timeout | null>(null)
     const isMounted = React.useRef(true)
+    const hasSignedUrl = React.useRef(false)
 
-    // Clear state on unmount
     React.useEffect(() => {
         isMounted.current = true
         return () => {
             isMounted.current = false
-            if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current)
         }
     }, [])
+
+    React.useEffect(() => {
+        hasSignedUrl.current = !!state.signedUrl
+    }, [state.signedUrl])
 
     const fetchSignedUrl = React.useCallback(async (silent = false) => {
         if (!currentVersionId) return
@@ -60,13 +65,9 @@ export function DocumentViewer({
         }
 
         try {
-            // Using existing endpoint that returns { downloadUrl }
-            // GET /api/secure/dms/documents/[id]/versions?action=view&versionId=...
-            const data = await fetchWithAuth<{ downloadUrl: string }>(
+            const data = await fetchWithAuthRef.current<{ downloadUrl: string }>(
                 `/api/secure/dms/documents/${documentId}/versions?action=view&versionId=${currentVersionId}`
             )
-
-            console.log("[DocumentViewer] Received signed URL:", data);
 
             if (isMounted.current) {
                 setState({
@@ -88,7 +89,6 @@ export function DocumentViewer({
         }
     }, [documentId, currentVersionId])
 
-    // Initial load & version change
     React.useEffect(() => {
         if (effectiveStatus === "EXPIRED") {
             setState(prev => ({ ...prev, signedUrl: null, error: null }))
@@ -102,18 +102,18 @@ export function DocumentViewer({
         }
     }, [currentVersionId, effectiveStatus, fetchSignedUrl])
 
-    // Auto-refresh signed URL
     React.useEffect(() => {
-        if (!state.signedUrl || effectiveStatus === "EXPIRED") return
+        if (effectiveStatus === "EXPIRED") return
+        if (!currentVersionId) return
 
         const timer = setInterval(() => {
-            // Re-fetch silently to keep URL fresh
-            console.log("[DocumentViewer] Refreshing signed URL...")
-            fetchSignedUrl(true)
+            if (hasSignedUrl.current) {
+                fetchSignedUrl(true)
+            }
         }, REFRESH_INTERVAL_MS)
 
         return () => clearInterval(timer)
-    }, [state.signedUrl, effectiveStatus, fetchSignedUrl])
+    }, [currentVersionId, effectiveStatus, fetchSignedUrl])
 
     // --- State: Expired ---
     if (effectiveStatus === "OBSOLETE" || effectiveStatus === "EXPIRED") { // Assuming 'EXPIRED' maps to 'OBSOLETE' or is a computed status
