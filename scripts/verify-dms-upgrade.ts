@@ -8,6 +8,7 @@ async function verifyDmsUpgrade() {
     // Mock user context
     const mockUser = {
         sub: 1, // Assumes user ID 1 exists
+        id: 1,  // For consistency with AuthUser
         tenantId: 1, // Assumes tenant ID 1 exists
         email: "test@example.com",
         fullName: "Test User",
@@ -29,6 +30,17 @@ async function verifyDmsUpgrade() {
         });
         console.log("   - Created Type:", docType.name);
 
+        // 1b. Create Mock Folder (Documents must be in a folder)
+        console.log("1b. Creating Mock Folder...");
+        const folder = await prisma.folder.create({
+            data: {
+                name: "Verification Folder " + Date.now(),
+                tenantId: mockUser.tenantId,
+                createdById: mockUser.id
+            }
+        });
+        console.log("   - Created Folder:", folder.name);
+
         // 2. Create Document with Metadata
         console.log("2. Creating Document with Metadata...");
         const doc = await DocumentService.createDocument({
@@ -36,6 +48,7 @@ async function verifyDmsUpgrade() {
             description: "Auto-generated for verification",
             tenantId: mockUser.tenantId,
             user: mockUser,
+            folderId: folder.id,
             typeId: docType.id,
             expiryDate: new Date("2025-12-31")
         });
