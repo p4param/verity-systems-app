@@ -30,18 +30,15 @@ function getRequiredFolderPermission(action: WorkflowAction): "READ" | "WRITE" |
     }
 }
 
-/**
- * getEffectiveDocumentStatus
- * 
- * Determines the ACTUAL status of a document, factoring in expiry.
- * The database status might be 'APPROVED', but if expiryDate < now, it is effectively 'EXPIRED'.
- */
 export function getEffectiveDocumentStatus(document: { status: DocumentStatus, expiryDate: Date | null, effectiveDate?: Date | null }): DocumentStatus | "EXPIRED" | "PENDING_EFFECTIVE" {
     if (document.status === DocumentStatus.APPROVED) {
-        if (document.expiryDate && document.expiryDate < new Date()) {
+        const now = new Date();
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+        if (document.expiryDate && document.expiryDate < startOfToday) {
             return "EXPIRED";
         }
-        if (document.effectiveDate && document.effectiveDate > new Date()) {
+        if (document.effectiveDate && document.effectiveDate > now) {
             return "PENDING_EFFECTIVE";
         }
     }

@@ -82,11 +82,12 @@ export class S3Provider implements StorageProvider {
     /**
      * Generates a signed URL for temporary access.
      */
-    async getSignedUrl(key: string, expiresIn: number = 3600): Promise<string> {
+    async getSignedUrl(key: string, expiresIn: number = 3600, fileName?: string): Promise<string> {
         try {
             const command = new GetObjectCommand({
                 Bucket: this.bucket,
                 Key: key,
+                ResponseContentDisposition: fileName ? `attachment; filename="${fileName}"` : undefined,
             });
 
             return await getSignedUrl(this.client, command, { expiresIn });

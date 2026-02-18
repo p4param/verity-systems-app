@@ -28,6 +28,7 @@ export async function GET(req: Request) {
         const key = searchParams.get("key");
         const expires = searchParams.get("expires");
         const signature = searchParams.get("signature");
+        const fileName = searchParams.get("fileName");
 
         if (!key || !expires || !signature) {
             return NextResponse.json({ error: "Missing parameters" }, { status: 400 });
@@ -41,9 +42,10 @@ export async function GET(req: Request) {
         // 2. Verify Signature
         const secret = process.env.APP_SECRET || "local-dev-secret";
         const crypto = require('crypto');
+        const signaturePayload = fileName ? `${key}:${expires}:${fileName}` : `${key}:${expires}`;
         const expectedSignature = crypto
             .createHmac('sha256', secret)
-            .update(`${key}:${expires}`)
+            .update(signaturePayload)
             .digest('hex');
 
         if (signature !== expectedSignature) {
@@ -68,7 +70,7 @@ export async function GET(req: Request) {
         return new NextResponse(fileBuffer, {
             headers: {
                 "Content-Type": mimeType,
-                "Content-Disposition": `inline; filename="${path.basename(key)}"`,
+                "Content-Disposition": `attachment; filename="${fileName || path.basename(key)}"`,
                 "Content-Length": String(fileBuffer.length),
                 "Cache-Control": "private, max-age=300",
                 "X-Content-Type-Options": "nosniff",

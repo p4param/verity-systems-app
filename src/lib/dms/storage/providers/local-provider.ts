@@ -34,19 +34,24 @@ export class LocalStorageProvider implements StorageProvider {
         }
     }
 
-    async getSignedUrl(key: string, expiresIn: number = 3600): Promise<string> {
+    async getSignedUrl(key: string, expiresIn: number = 3600, fileName?: string): Promise<string> {
         // For local dev, we generate a signed URL to allow access without auth header
         const expires = Math.floor(Date.now() / 1000) + expiresIn;
         const secret = process.env.APP_SECRET || "local-dev-secret";
 
-        // Simple HMAC signature
+        // Simple HMAC signature - include fileName if present
         const crypto = require('crypto');
+        const signaturePayload = fileName ? `${key}:${expires}:${fileName}` : `${key}:${expires}`;
         const signature = crypto
             .createHmac('sha256', secret)
-            .update(`${key}:${expires}`)
+            .update(signaturePayload)
             .digest('hex');
 
-        return `/api/secure/dms/storage/local?key=${encodeURIComponent(key)}&expires=${expires}&signature=${signature}`;
+        let url = `/api/secure/dms/storage/local?key=${encodeURIComponent(key)}&expires=${expires}&signature=${signature}`;
+        if (fileName) {
+            url += `&fileName=${encodeURIComponent(fileName)}`;
+        }
+        return url;
     }
 
     async exists(key: string): Promise<boolean> {

@@ -117,8 +117,8 @@ export class StorageService {
     /**
      * Generates a temporary signed URL for file download.
      */
-    static async getDownloadUrl(key: string, expiresIn: number = 3600): Promise<string> {
-        return await this.getProvider().getSignedUrl(key, expiresIn);
+    static async getDownloadUrl(key: string, expiresIn: number = 3600, fileName?: string): Promise<string> {
+        return await this.getProvider().getSignedUrl(key, expiresIn, fileName);
     }
 
     /**

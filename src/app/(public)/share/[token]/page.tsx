@@ -50,13 +50,18 @@ export default function PublicSharePage({ params }: { params: Promise<{ token: s
 
                 if (!res.ok) {
                     const err = await res.json()
-                    throw new Error(err.error || "Failed to load document")
+                    // The API returns { success: false, error: { code, message } }
+                    throw new Error(err.error?.message || err.message || "Failed to load document")
                 }
 
                 const json = await res.json()
                 setData(json)
             } catch (err: any) {
-                setError(err.message || "Invalid or expired link")
+                // Extremely robust error message extraction to avoid [object Object]
+                const message = err.message ||
+                    (typeof err.error === 'string' ? err.error : err.error?.message) ||
+                    (typeof err === 'string' ? err : "Invalid or expired link");
+                setError(String(message));
             } finally {
                 setLoading(false)
             }

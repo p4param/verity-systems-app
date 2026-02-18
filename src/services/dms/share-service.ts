@@ -4,7 +4,7 @@ import { AuthUser } from "@/lib/auth/auth-types";
 import { createAuditLog } from "@/lib/audit";
 import crypto from "crypto";
 import { DocumentStatus } from "@prisma/client";
-import { DocumentNotFoundError, ShareLinkNotFoundError, ShareLinkExpiredError } from "@/lib/dms/errors";
+import { DocumentNotFoundError, ShareLinkNotFoundError, ShareLinkExpiredError, DomainViolationError } from "@/lib/dms/errors";
 
 export interface CreateShareLinkParams {
     documentId: string;
@@ -119,8 +119,12 @@ export class ShareService {
             const effectiveStatus = getEffectiveDocumentStatus(link.document);
 
             if (effectiveStatus !== "APPROVED") {
-                console.warn(`[ShareService] Blocked access to document ${link.documentId} (Effective Status: ${effectiveStatus}) via share ${token}`);
-                return null;
+                const message = effectiveStatus === "EXPIRED"
+                    ? "The shared document has reached its expiry date."
+                    : `The shared document is not in a states that allows public access (Status: ${effectiveStatus}).`;
+
+                console.warn(`[ShareService] Blocked access: ${message} (Token: ${token})`);
+                throw new DomainViolationError(message);
             }
 
             // Increment clicks and Audit
@@ -131,7 +135,7 @@ export class ShareService {
 
             await createAuditLog({
                 tenantId: link.tenantId,
-                actorUserId: 0, // System/Anonymous action
+                actorUserId: undefined, // System/Anonymous action
                 entityType: "DOCUMENT",
                 entityId: link.documentId,
                 action: "DMS.SHARE_ACCESS",

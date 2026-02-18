@@ -1,7 +1,7 @@
 
 import { prisma as globalPrisma } from "@/lib/prisma";
 import { AuthUser } from "@/lib/auth/auth-types";
-import { S3StorageProvider } from "../storage/s3StorageProvider";
+import { StorageService } from "../storage";
 import { createAuditLog } from "@/lib/audit";
 
 /**
@@ -46,6 +46,7 @@ export class DocumentAccessService {
 
         let storageKey: string;
         let targetVersionId: string;
+        let originalFileName: string;
 
         // 2. Resolve version to download
         if (versionId) {
@@ -55,6 +56,7 @@ export class DocumentAccessService {
             }
             storageKey = version.storageKey;
             targetVersionId = version.id;
+            originalFileName = version.fileName;
         } else {
             // Use current version
             if (!document.currentVersionId) {
@@ -72,19 +74,16 @@ export class DocumentAccessService {
 
             storageKey = currentVersion.storageKey;
             targetVersionId = currentVersion.id;
+            originalFileName = currentVersion.fileName;
         }
 
-        // 3. Generate signed URL via S3 provider (expires in 300s)
-        const storage = new S3StorageProvider();
-        const signedUrl = await storage.generateDownloadUrl({
-            storageKey,
-            expiresInSeconds: 300
-        });
+        // 3. Generate signed URL via StorageService (respects environment provider)
+        const signedUrl = await StorageService.getDownloadUrl(storageKey, 300, originalFileName);
 
         // 4. Log Audit Event
         await createAuditLog({
             tenantId,
-            actorUserId: user?.sub || 0,
+            actorUserId: user?.sub,
             action: user ? "DMS.READ_DOWNLOAD" : "DMS.SHARE_DOWNLOAD",
             details: `Generated download URL for document ${documentId} (Version: ${targetVersionId}).${!user ? " (Public access)" : ""}`,
         });

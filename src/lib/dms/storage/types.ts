@@ -34,7 +34,7 @@ export interface StorageProvider {
      * Generates a signed URL for temporary access to a file.
      * Default expiration: 1 hour.
      */
-    getSignedUrl(key: string, expiresIn?: number): Promise<string>;
+    getSignedUrl(key: string, expiresIn?: number, fileName?: string): Promise<string>;
 
     /**
      * Checks if a file exists at the given key.
