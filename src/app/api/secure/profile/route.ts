@@ -28,6 +28,7 @@ export async function GET(req: Request) {
       message: "You are authenticated",
       user: {
         id: user.id,
+        sub: user.id,
         fullName: user.fullName,
         email: user.email,
         roles,

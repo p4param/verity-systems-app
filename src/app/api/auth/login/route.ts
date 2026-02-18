@@ -155,6 +155,7 @@ export async function POST(req: Request) {
         const accessToken = signJwt(
             {
                 sub: user.id,
+                id: user.id,
                 tenantId: user.tenantId,
                 email: user.email,
                 roles,

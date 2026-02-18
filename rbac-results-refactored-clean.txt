@@ -1,0 +1,17 @@
+<anonymous_script>:1
+ -encodedCommand XAAiAG0AbwBkAHUAbABlAFwAIgA6AFwAIgBDAG8AbQBtAG8AbgBKAFMAXAAiAA== 
+  ^
+
+SyntaxError: No number after minus sign in JSON at position 2
+    at JSON.parse (<anonymous>)
+    at parse (C:\Users\Param\AppData\Local\npm-cache\_npx\1bf7c3c15bf47d04\node_modules\ts-node\dist\util.js:52:45)
+    at arg (C:\Users\Param\AppData\Local\npm-cache\_npx\1bf7c3c15bf47d04\node_modules\arg\index.js:122:24)
+    at parseArgv (C:\Users\Param\AppData\Local\npm-cache\_npx\1bf7c3c15bf47d04\node_modules\ts-node\dist\bin.js:69:12)
+    at main (C:\Users\Param\AppData\Local\npm-cache\_npx\1bf7c3c15bf47d04\node_modules\ts-node\dist\bin.js:25:18)
+    at Object.<anonymous> (C:\Users\Param\AppData\Local\npm-cache\_npx\1bf7c3c15bf47d04\node_modules\ts-node\dist\bin.js:579:5)
+    at Module._compile (node:internal/modules/cjs/loader:1529:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1613:10)
+    at Module.load (node:internal/modules/cjs/loader:1275:32)
+    at Module._load (node:internal/modules/cjs/loader:1096:12)
+
+Node.js v20.19.0

@@ -123,8 +123,9 @@ export class DocumentService {
      * 
      * Retrieves a document with its versions and folder info.
      * Resolves effective status (computes EXPIRED if applicable).
+     * Includes effectivePermissions for the requesting user.
      */
-    static async getDocumentById(id: string, tenantId: number) {
+    static async getDocumentById(id: string, tenantId: number, user: AuthUser) {
         const document = await globalPrisma.document.findUnique({
             where: { id, tenantId },
             include: {
@@ -146,7 +147,7 @@ export class DocumentService {
                     }
                 },
                 folder: {
-                    select: { id: true, name: true }
+                    select: { id: true, name: true, parentId: true }
                 },
                 createdBy: {
                     select: { fullName: true, email: true }
@@ -162,9 +163,13 @@ export class DocumentService {
 
         if (!document) return null;
 
+        const { PermissionService } = require("../../lib/dms/services/PermissionService");
+        const effectivePermissions = await PermissionService.getEffectivePermissions(user, document.folderId);
+
         return {
             ...document,
-            effectiveStatus: resolveEffectiveStatus(document)
+            effectiveStatus: resolveEffectiveStatus(document),
+            effectivePermissions
         };
     }
 

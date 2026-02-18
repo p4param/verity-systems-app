@@ -21,7 +21,8 @@ export interface UiWorkflowAction {
  */
 export function getAvailableWorkflowActions(
     status: DocumentStatus | string,
-    userPermissions: string[] = []
+    userPermissions: string[] = [],
+    isCreator: boolean = false
 ): UiWorkflowAction[] {
     const actions: UiWorkflowAction[] = [];
 
@@ -37,7 +38,7 @@ export function getAvailableWorkflowActions(
         }
     }
 
-    // 2. SUBMITTED -> Approve / Reject
+    // 2. SUBMITTED -> Approve / Reject / Withdraw
     if (status === "SUBMITTED") {
         if (userPermissions.includes("DMS_DOCUMENT_APPROVE")) {
             actions.push({
@@ -53,6 +54,15 @@ export function getAvailableWorkflowActions(
                 label: "Reject",
                 variant: "danger",
                 requiredPermission: "DMS_DOCUMENT_REJECT"
+            });
+        }
+        // Withdraw logic: Allowed for Creator OR specific permission.
+        if (isCreator || userPermissions.includes("DMS_DOCUMENT_WITHDRAW")) {
+            actions.push({
+                action: "withdraw",
+                label: "Withdraw",
+                variant: "secondary",
+                requiredPermission: "DMS_DOCUMENT_WITHDRAW"
             });
         }
     }

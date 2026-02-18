@@ -1,0 +1,78 @@
+
+| DMS Contributor | DRAFT | Viewer_WRITE | withdraw | ??? 
+| ??? | Invalid transition: Document is in DRAFT, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | No_ACL | withdraw | ??? | ??? 
+| Invalid transition: Document is in DRAFT, but action 
+'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | No_ACL | withdraw | ??? | ??? 
+| Invalid transition: Document is in DRAFT, but action 
+'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Contributor_READ | withdraw | 
+??? | ??? | Invalid transition: Document is in DRAFT, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | APPROVED | No_ACL | withdraw | ??? | 
+??? | Invalid transition: Document is in APPROVED, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | REJECTED | No_ACL | withdraw | ??? | 
+??? | Invalid transition: Document is in REJECTED, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | OBSOLETE | No_ACL | withdraw | ??? | 
+??? | Invalid transition: Document is in OBSOLETE, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | No_ACL | withdraw | ??? | ??? 
+| Invalid transition: Document is in DRAFT, but action 
+'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Contributor_READ | withdraw | 
+??? | ??? | Invalid transition: Document is in DRAFT, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Contributor_WRITE | withdraw 
+| ??? | ??? | Invalid transition: Document is in DRAFT, 
+but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Contributor_WRITE | withdraw 
+| ??? | ??? | Invalid transition: Document is in DRAFT, 
+but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | APPROVED | Contributor_WRITE | 
+withdraw | ??? | ??? | Invalid transition: Document is in 
+APPROVED, but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | REJECTED | Contributor_WRITE | 
+withdraw | ??? | ??? | Invalid transition: Document is in 
+REJECTED, but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | OBSOLETE | Contributor_WRITE | 
+withdraw | ??? | ??? | Invalid transition: Document is in 
+OBSOLETE, but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Contributor_WRITE | withdraw 
+| ??? | ??? | Invalid transition: Document is in DRAFT, 
+but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Viewer_WRITE | withdraw | ??? 
+| ??? | Invalid transition: Document is in DRAFT, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | APPROVED | Viewer_WRITE | withdraw | 
+??? | ??? | Invalid transition: Document is in APPROVED, 
+but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | REJECTED | Viewer_WRITE | withdraw | 
+??? | ??? | Invalid transition: Document is in REJECTED, 
+but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | OBSOLETE | Viewer_WRITE | withdraw | 
+??? | ??? | Invalid transition: Document is in OBSOLETE, 
+but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Viewer_WRITE | withdraw | ??? 
+| ??? | Invalid transition: Document is in DRAFT, but 
+action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | No_ACL | withdraw | ??? | ??? 
+| Invalid transition: Document is in DRAFT, but action 
+'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | ROOT | withdraw | ??? | ??? | 
+Invalid transition: Document is in DRAFT, but action 
+'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Contributor_WRITE | withdraw 
+| ??? | ??? | Invalid transition: Document is in DRAFT, 
+but action 'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | ROOT | withdraw | ??? | ??? | 
+Invalid transition: Document is in DRAFT, but action 
+'withdraw' requires SUBMITTED |
+| DMS Contributor | DRAFT | Viewer_WRITE | withdraw | ??? 
+| ??? | Invalid transition: Document is in DRAFT, but 
+action 'withdraw' requires SUBMITTED |
+
+

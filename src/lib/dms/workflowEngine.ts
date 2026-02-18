@@ -3,6 +3,8 @@ import { DocumentStatus } from "@prisma/client";
 import { AuthUser } from "@/lib/auth/auth-types";
 import { TRANSITION_MATRIX, WorkflowAction } from "./transition-matrix";
 import { createAuditLog } from "@/lib/audit";
+import { ReviewService } from "./services/ReviewService";
+import { PermissionService } from "./services/PermissionService";
 import {
     InvalidWorkflowActionError,
     DocumentNotFoundError,
@@ -13,12 +15,18 @@ import {
 } from "./errors";
 
 /**
- * Helper to validate permission against AuthUser object.
- * Throws if permission is missing.
+ * Maps workflow actions to required Folder Permissions.
+ * If an action isn't listed, it defaults to Global RBAC only (or handled specifically).
  */
-function checkPermission(user: AuthUser, permissionCode: string) {
-    if (!user.permissions?.includes(permissionCode)) {
-        throw new UnauthorizedWorkflowActionError(permissionCode);
+function getRequiredFolderPermission(action: WorkflowAction): "READ" | "WRITE" | "REVIEW" | null {
+    switch (action) {
+        case "submit": return "WRITE";   // Need write access to submit? Or just READ? Usually WRITE.
+        case "approve": return "REVIEW";
+        case "reject": return "REVIEW";
+        case "revise": return "WRITE";
+        case "withdraw": return "WRITE"; // Creator or Write access
+        case "obsolete": return "WRITE"; // System/Admin usually, but if folder perm allows...
+        default: return null;
     }
 }
 
@@ -28,9 +36,14 @@ function checkPermission(user: AuthUser, permissionCode: string) {
  * Determines the ACTUAL status of a document, factoring in expiry.
  * The database status might be 'APPROVED', but if expiryDate < now, it is effectively 'EXPIRED'.
  */
-export function getEffectiveDocumentStatus(document: { status: DocumentStatus, expiryDate: Date | null }): DocumentStatus | "EXPIRED" {
-    if (document.status === DocumentStatus.APPROVED && document.expiryDate && document.expiryDate < new Date()) {
-        return "EXPIRED";
+export function getEffectiveDocumentStatus(document: { status: DocumentStatus, expiryDate: Date | null, effectiveDate?: Date | null }): DocumentStatus | "EXPIRED" | "PENDING_EFFECTIVE" {
+    if (document.status === DocumentStatus.APPROVED) {
+        if (document.expiryDate && document.expiryDate < new Date()) {
+            return "EXPIRED";
+        }
+        if (document.effectiveDate && document.effectiveDate > new Date()) {
+            return "PENDING_EFFECTIVE";
+        }
     }
     return document.status;
 }
@@ -54,19 +67,50 @@ export async function transitionDocumentStatus(
         throw new InvalidWorkflowActionError(action);
     }
 
-    // 1. Permission Enforcement
-    checkPermission(user, transition.permission);
-
-    // 2. Transactional Status Update
-    return await prisma.$transaction(async (tx: any) => {
+    const execute = async (tx: any) => {
         // a. Load document with strict tenant scoping (Read Phase)
         const document = await tx.document.findUnique({
             where: { id: documentId, tenantId },
-            select: { status: true, expiryDate: true, title: true } // Optimization: Select only needed fields
+            select: {
+                status: true,
+                expiryDate: true,
+                title: true,
+                effectiveDate: true,
+                folderId: true,
+                createdById: true
+            }
         });
 
         if (!document) {
             throw new DocumentNotFoundError(documentId, tenantId);
+        }
+
+        // Perms: Check Folder/Creator logic before proceeding
+        let hasAccess = false;
+
+        // Special Case: Withdraw by Creator
+        if (action === "withdraw" && document.createdById === user.sub) {
+            hasAccess = true;
+        } else {
+            // General Permission Check (Folder -> Global)
+            const requiredFolderPerm = getRequiredFolderPermission(action);
+
+            if (requiredFolderPerm && document.folderId) {
+                // If folder exists, check Folder Permission with Global Fallback
+                hasAccess = await PermissionService.checkFolderAccess(
+                    user,
+                    document.folderId,
+                    requiredFolderPerm,
+                    transition.permission
+                );
+            } else {
+                // No folder or no specific folder action -> Global RBAC
+                hasAccess = user.permissions?.includes(transition.permission) || false;
+            }
+        }
+
+        if (!hasAccess) {
+            throw new UnauthorizedWorkflowActionError(transition.permission);
         }
 
         // b. Validate Effective Status
@@ -78,6 +122,8 @@ export async function transitionDocumentStatus(
         }
 
         // c. Validate current state matches Matrix requirement
+        // Note: For 'approve' in V2, document stays SUBMITTED until final approval.
+        // So we strictly check database status.
         if (document.status !== transition.from) {
             throw new InvalidTransitionError(action, document.status, transition.from);
         }
@@ -87,27 +133,67 @@ export async function transitionDocumentStatus(
             throw new Error("A comment is required when rejecting a document");
         }
 
-        // e. Execute Update (with STRICT Concurrency Control)
+        // --- V2 V INTERCEPTION START ---
+        // Check if this is a V2 document flow (has reviews)
+        // If "withdraw", we always allow V2 interception if status is SUBMITTED
+        // But for approve/reject, checking reviews existence is key.
+
+        // For 'withdraw', ReviewService handles it even if no reviews? 
+        // No, 'withdraw' is for "In Review". If no reviews exist, V1 SUBMITTED -> DRAFT is logic?
+        // V1 didn't have withdraw.
+        // If V1 SUBMITTED, can we withdraw? 
+        // Yes, if we added it to Matrix.
+        // But V1 SUBMITTED usually implies "Waiting for Admin".
+
+        const reviewCount = await tx.documentReview.count({
+            where: { documentId, tenantId }
+        });
+
+        if (reviewCount > 0 || action === "withdraw") {
+            if (action === "approve") {
+                // Delegate to ReviewService
+                const result = await ReviewService.submitReview(documentId, tenantId, user.sub, "APPROVE", comment);
+                return await tx.document.findUnique({ where: { id: documentId } });
+            }
+
+            if (action === "reject") {
+                // Delegate to ReviewService
+                await ReviewService.submitReview(documentId, tenantId, user.sub, "REJECT", comment);
+                return await tx.document.findUnique({ where: { id: documentId } });
+            }
+
+            if (action === "withdraw") {
+                // Delegate to ReviewService
+                // But ReviewService.withdrawReview expects Pending reviews?
+                // If V1 document (no reviews), ReviewService.withdrawReview might fail if it tries to update reviews?
+                // ReviewService.withdrawReview code:
+                // updateMany where status=PENDING.
+                // If count is 0, it just updates Doc to DRAFT.
+                // So it is safe to call even if no reviews exist.
+                await ReviewService.withdrawReview(documentId, tenantId, user.sub);
+                return await tx.document.findUnique({ where: { id: documentId } });
+            }
+        }
+        // --- V2 INTERCEPTION END ---
+
+        // e. Execute Update (V1 Flow / Default)
         // We use updateMany with the expected 'from' status in the WHERE clause.
-        // If the document was modified by another request between step "a" and now, count will be 0.
         const updateResult = await tx.document.updateMany({
             where: {
                 id: documentId,
                 tenantId: tenantId,
-                status: transition.from // Optimistic Lock: Must still be in 'from' state
+                status: transition.from
             },
             data: {
                 status: transition.to,
                 updatedById: user.sub,
-                updatedAt: new Date() // Force timestamps update
+                updatedAt: new Date()
             }
         });
 
         if (updateResult.count === 0) {
-            // Re-fetch to see why it failed (Deleted? Changed status?)
             const currentDoc = await tx.document.findUnique({ where: { id: documentId } });
             if (!currentDoc) throw new DocumentNotFoundError(documentId, tenantId);
-
             throw new StateMismatchError(documentId, transition.from, currentDoc.status);
         }
 
@@ -142,5 +228,12 @@ export async function transitionDocumentStatus(
 
         // Return the full updated document for the caller
         return await tx.document.findUnique({ where: { id: documentId } });
-    });
+    };
+
+    // Transaction Handling: Support both Client and TransactionClient (nested)
+    if (typeof prisma.$transaction === 'function') {
+        return await prisma.$transaction(execute);
+    } else {
+        return await execute(prisma);
+    }
 }

@@ -17,6 +17,8 @@ interface Document {
     id: string
     status: string
     effectiveStatus: string
+    createdById: number
+    effectivePermissions?: string[]
 }
 
 interface WorkflowActionsProps {
@@ -44,10 +46,11 @@ export function DmsWorkflowActions({ document, onSuccess }: WorkflowActionsProps
     }
 
     // 1. Get User Permissions
-    const userPermissions = user?.permissions || []
+    const userPermissions = document.effectivePermissions || user?.permissions || []
 
     // 2. Compute Available Actions
-    const actions = getAvailableWorkflowActions(document.effectiveStatus, userPermissions)
+    const isCreator = user?.id === document.createdById || user?.sub === document.createdById;
+    const actions = getAvailableWorkflowActions(document.effectiveStatus, userPermissions, isCreator)
 
     if (actions.length === 0) return null
 

@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model AuditLog {
@@ -12,37 +12,35 @@ model AuditLog {
   tenantId     Int
   actorUserId  Int?
   targetUserId Int?
-  entityType   String?  // e.g. "DOCUMENT", "FOLDER", "USER"
-  entityId     String?  // polymorphic ID
+  entityType   String? // e.g. "DOCUMENT", "FOLDER", "USER"
+  entityId     String? // polymorphic ID
   action       String
-  module       String?  // e.g. "DMS", "AUTH", "SYSTEM" (Future Proofing)
+  module       String? // e.g. "DMS", "AUTH", "SYSTEM" (Future Proofing)
   details      String?
-  metadata     Json?    // Structured data
+  metadata     Json? // Structured data
   ipAddress    String?
   createdAt    DateTime @default(now())
   actor        User?    @relation("AuditActor", fields: [actorUserId], references: [id])
   target       User?    @relation("AuditTarget", fields: [targetUserId], references: [id])
   tenant       Tenant   @relation(fields: [tenantId], references: [id])
 
-  @@index([action])
-  @@index([actorUserId])
-  @@index([targetUserId])
-  @@index([tenantId])
-  
-  // OPTIMIZED INDICES
-  // 1. Document History: Supports filtering by entity AND sorting by time.
-  // We include 'createdAt' to avoid a sort step in the DB.
-  // Replaces the previous [tenantId, entityType, entityId] index (prefix match).
-  @@index([tenantId, entityType, entityId, createdAt])
-
-  // 2. Module History: Supports "Show me all DMS activity" sorted by time.
-  @@index([tenantId, module, createdAt])
-
   // PARTITIONING STRATEGY (Comment Only):
   // For high-scale (>100M rows), verify PostgreSQL native partitioning.
   // Recommend partitioning by Range (createdAt) to facilitate efficient 
   // data retention (dropping old partitions) or List (tenantId) for strict isolation.
   // Current schema is efficient up to ~50M rows per table with proper indexing.
+
+  @@index([action])
+  @@index([actorUserId])
+  @@index([targetUserId])
+  @@index([tenantId])
+  // OPTIMIZED INDICES
+  // 1. Document History: Supports filtering by entity AND sorting by time.
+  // We include 'createdAt' to avoid a sort step in the DB.
+  // Replaces the previous [tenantId, entityType, entityId] index (prefix match).
+  @@index([tenantId, entityType, entityId, createdAt])
+  // 2. Module History: Supports "Show me all DMS activity" sorted by time.
+  @@index([tenantId, module, createdAt])
 }
 
 model MfaBackupCode {
@@ -104,17 +102,18 @@ model RefreshToken {
 }
 
 model Role {
-  id              Int              @id @default(autoincrement())
-  tenantId        Int
-  name            String
-  description     String?
-  isSystem        Boolean          @default(false)
-  requiresMfa     Boolean          @default(false)
-  isActive        Boolean          @default(true)
-  createdAt       DateTime         @default(now())
-  tenant          Tenant           @relation(fields: [tenantId], references: [id])
-  rolePermissions RolePermission[]
-  userRoles       UserRole[]
+  id                Int                @id @default(autoincrement())
+  tenantId          Int
+  name              String
+  description       String?
+  isSystem          Boolean            @default(false)
+  requiresMfa       Boolean            @default(false)
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  tenant            Tenant             @relation(fields: [tenantId], references: [id])
+  rolePermissions   RolePermission[]
+  userRoles         UserRole[]
+  folderPermissions FolderPermission[]
 
   @@unique([tenantId, name])
 }
@@ -145,22 +144,29 @@ model SecurityAlert {
 }
 
 model Tenant {
-  id        Int               @id @default(autoincrement())
-  code      String            @unique
-  name      String
-  isActive  Boolean           @default(true)
-  createdAt DateTime          @default(now())
-  auditLogs AuditLog[]
-  roles     Role[]
-  users     User[]
-  invites   UserInvite[]
-  folders   Folder[]
-  documents Document[]
-  versions  DocumentVersion[]
-  shares    ShareLink[]
-  workflows WorkflowHistory[]
-  documentTypes   DocumentType[]
+  id                Int                @id @default(autoincrement())
+  code              String             @unique
+  name              String
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  auditLogs         AuditLog[]
+  roles             Role[]
+  users             User[]
+  invites           UserInvite[]
+  folders           Folder[]
+  documents         Document[]
+  versions          DocumentVersion[]
+  shares            ShareLink[]
+  workflows         WorkflowHistory[]
+  documentTypes     DocumentType[]
   documentSequences DocumentSequence[]
+
+  // V2 Relations
+  documentReviews          DocumentReview[]
+  reviewReminderLogs       ReviewReminderLog[]
+  folderPermissions        FolderPermission[]
+  documentComments         DocumentComment[]
+  documentAcknowledgements DocumentAcknowledgement[]
 }
 
 model User {
@@ -194,6 +200,11 @@ model User {
   documentsCreated Document[]        @relation("DocumentCreatedBy")
   documentsUpdated Document[]        @relation("DocumentUpdatedBy")
   versionsCreated  DocumentVersion[] @relation("VersionCreatedBy")
+
+  // V2 Relations
+  documentReviews          DocumentReview[]
+  documentComments         DocumentComment[]
+  documentAcknowledgements DocumentAcknowledgement[]
 
   @@unique([tenantId, email])
 }
@@ -242,7 +253,8 @@ model Folder {
   parent   Folder?  @relation("FolderToFolder", fields: [parentId], references: [id])
   children Folder[] @relation("FolderToFolder")
 
-  documents Document[]
+  documents   Document[]
+  permissions FolderPermission[]
 
   @@unique([tenantId, parentId, name]) // Prevent duplicate folder names in same parent
   @@index([tenantId])
@@ -257,8 +269,9 @@ model Document {
   folderId String?
   tenantId Int
 
-  status     DocumentStatus @default(DRAFT)
-  expiryDate DateTime?
+  status        DocumentStatus @default(DRAFT)
+  expiryDate    DateTime?
+  effectiveDate DateTime?
 
   currentVersionId String?
 
@@ -273,26 +286,31 @@ model Document {
   folder    Folder? @relation(fields: [folderId], references: [id], onDelete: Restrict)
   createdBy User    @relation("DocumentCreatedBy", fields: [createdById], references: [id])
   updatedBy User?   @relation("DocumentUpdatedBy", fields: [updatedById], references: [id])
-  
-  type      DocumentType? @relation(fields: [typeId], references: [id])
-  typeId    String? 
+
+  type   DocumentType? @relation(fields: [typeId], references: [id])
+  typeId String?
 
   // New metadata
   documentNumber String? // Optional for migration, will be made required
-  
+
   versions       DocumentVersion[]
   currentVersion DocumentVersion?  @relation("CurrentVersion", fields: [currentVersionId], references: [id])
 
   workflowHistory WorkflowHistory[]
   shares          ShareLink[]
 
-  // Supersedence (New)
-  // Supersedence (New)
-  supersedesId    String?   @unique
-  supersedes      Document? @relation("Supersedes", fields: [supersedesId], references: [id])
-  supersededBy    Document? @relation("Supersedes")
+  // V2 Relations
+  reviews          DocumentReview[]
+  comments         DocumentComment[]
+  acknowledgements DocumentAcknowledgement[]
 
-  @@unique([tenantId, documentNumber]) 
+  // Supersedence (New)
+  // Supersedence (New)
+  supersedesId String?   @unique
+  supersedes   Document? @relation("Supersedes", fields: [supersedesId], references: [id])
+  supersededBy Document? @relation("Supersedes")
+
+  @@unique([tenantId, documentNumber])
   @@index([tenantId])
   @@index([tenantId, folderId])
   @@index([tenantId, status])
@@ -302,15 +320,15 @@ model Document {
 }
 
 model DocumentType {
-  id        String   @id @default(cuid())
-  name      String
-  tenantId  Int
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  tenantId    Int
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   updatedById Int?
 
-  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   documents Document[]
 
@@ -326,7 +344,7 @@ model DocumentSequence {
   current   Int      @default(0)
   updatedAt DateTime @updatedAt
 
-  tenant    Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   @@unique([tenantId, year])
 }
@@ -359,7 +377,8 @@ model DocumentVersion {
   document  Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   createdBy User     @relation("VersionCreatedBy", fields: [createdById], references: [id])
 
-  isCurrentFor Document[] @relation("CurrentVersion")
+  isCurrentFor     Document[]                @relation("CurrentVersion")
+  acknowledgements DocumentAcknowledgement[]
 
   @@unique([documentId, versionNumber])
   @@index([tenantId])
@@ -371,10 +390,10 @@ model ShareLink {
   documentId String
   tenantId   Int
 
-  token     String    @unique
-  expiresAt DateTime?
-  maxClicks Int?      // Max number of allowed accesses
-  clickCount Int      @default(0) // Current access count
+  token      String    @unique
+  expiresAt  DateTime?
+  maxClicks  Int? // Max number of allowed accesses
+  clickCount Int       @default(0) // Current access count
 
   createdById Int
   createdAt   DateTime @default(now())
@@ -406,4 +425,101 @@ model WorkflowHistory {
 
   @@index([tenantId])
   @@index([tenantId, documentId])
+}
+
+// --- DMS V2 Extensions ---
+
+model DocumentReview {
+  id             String       @id @default(uuid())
+  documentId     String
+  reviewerUserId Int
+  stageNumber    Int
+  status         ReviewStatus @default(PENDING)
+  reviewedAt     DateTime?
+  comment        String?
+  tenantId       Int
+  createdAt      DateTime     @default(now())
+
+  // Relations
+  tenant            Tenant              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  document          Document            @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  reviewer          User                @relation(fields: [reviewerUserId], references: [id])
+  ReviewReminderLog ReviewReminderLog[]
+
+  @@index([tenantId, documentId])
+  @@index([tenantId, reviewerUserId])
+}
+
+model ReviewReminderLog {
+  id               String   @id @default(uuid())
+  documentReviewId String
+  sentAt           DateTime @default(now())
+  tenantId         Int
+
+  // Relations
+  tenant Tenant         @relation(fields: [tenantId], references: [id])
+  review DocumentReview @relation(fields: [documentReviewId], references: [id], onDelete: Cascade)
+}
+
+
+model FolderPermission {
+  id         String               @id @default(uuid())
+  folderId   String
+  roleId     Int
+  permission FolderPermissionType
+  tenantId   Int
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  folder Folder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  @@index([tenantId, folderId])
+}
+
+
+model DocumentComment {
+  id         String   @id @default(uuid())
+  documentId String
+  userId     Int
+  content    String
+  tenantId   Int
+  createdAt  DateTime @default(now())
+
+  // Relations
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, documentId])
+}
+
+model DocumentAcknowledgement {
+  id             String   @id @default(uuid())
+  documentId     String
+  versionId      String
+  userId         Int
+  acknowledgedAt DateTime @default(now())
+  tenantId       Int
+
+  // Relations
+  tenant   Tenant          @relation(fields: [tenantId], references: [id])
+  document Document        @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  version  DocumentVersion @relation(fields: [versionId], references: [id])
+  user     User            @relation(fields: [userId], references: [id])
+
+  @@unique([tenantId, documentId, userId])
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum FolderPermissionType {
+  READ
+  WRITE
+  REVIEW
 }

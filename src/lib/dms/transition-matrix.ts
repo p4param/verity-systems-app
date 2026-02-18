@@ -4,7 +4,7 @@ import { DocumentStatus } from "@prisma/client";
 /**
  * Allowed workflow actions in the DMS module.
  */
-export type WorkflowAction = "submit" | "approve" | "reject" | "revise" | "obsolete";
+export type WorkflowAction = "submit" | "approve" | "reject" | "revise" | "obsolete" | "withdraw";
 
 /**
  * Represents a single state transition in the workflow.
@@ -47,6 +47,11 @@ export const TRANSITION_MATRIX: Record<WorkflowAction, Transition> = {
         to: DocumentStatus.OBSOLETE,
         permission: "DMS_DOCUMENT_OBSOLETE",
     },
+    withdraw: {
+        from: DocumentStatus.SUBMITTED,
+        to: DocumentStatus.DRAFT,
+        permission: "DMS_DOCUMENT_WITHDRAW", // Logic will also allow Creator to withdraw
+    },
 };
 
 /**
@@ -55,7 +60,7 @@ export const TRANSITION_MATRIX: Record<WorkflowAction, Transition> = {
  */
 export const ALLOWED_TRANSITIONS: Record<DocumentStatus, WorkflowAction[]> = {
     [DocumentStatus.DRAFT]: ["submit"],
-    [DocumentStatus.SUBMITTED]: ["approve", "reject"],
+    [DocumentStatus.SUBMITTED]: ["approve", "reject", "withdraw"],
     [DocumentStatus.REJECTED]: ["revise"],
     [DocumentStatus.APPROVED]: ["obsolete"],
     [DocumentStatus.OBSOLETE]: [],

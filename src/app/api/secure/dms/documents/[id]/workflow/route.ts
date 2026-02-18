@@ -16,7 +16,7 @@ export async function POST(
 ) {
     try {
         const { id: documentId } = await params;
-        const { action, comment } = await req.json();
+        const { action, comment, reviewers } = await req.json();
 
         // 1. Authenticate (Establish identity and tenant context)
         const user = await requirePermission(req, "DMS_VIEW");
@@ -27,7 +27,8 @@ export async function POST(
             user.tenantId,
             action,
             user,
-            comment
+            comment,
+            reviewers
         );
 
         return NextResponse.json(updatedDocument);

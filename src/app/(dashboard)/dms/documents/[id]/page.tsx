@@ -21,6 +21,9 @@ import { DmsVersionHistory } from "@/components/dms/VersionHistory"
 import { ShareDocumentModal } from "@/components/dms/ShareDocumentModal"
 import { EditDocumentModal } from "@/components/dms/EditDocumentModal" // Added
 import { DocumentAuditPanel } from "@/components/dms/DocumentAuditPanel"
+import { DocumentReviews } from "@/components/dms/DocumentReviews"
+import { DocumentComments } from "@/components/dms/DocumentComments"
+import { DocumentAcknowledgement } from "@/components/dms/DocumentAcknowledgement"
 
 interface DocumentDetail {
     id: string
@@ -38,6 +41,7 @@ interface DocumentDetail {
         id: string
         name: string
     }
+    createdById: number
     createdBy: {
         fullName: string
         email: string
@@ -62,7 +66,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
     const [error, setError] = useState<string | null>(null)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-    const [activeTab, setActiveTab] = useState<"about" | "versions" | "audit">("about")
+    const [activeTab, setActiveTab] = useState<"about" | "versions" | "audit" | "reviews" | "comments">("about")
 
     const canShare = usePermission("DMS_SHARE_CREATE")
     const canEdit = usePermission("DMS_DOCUMENT_EDIT")
@@ -225,6 +229,13 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                 {/* RIGHT COLUMN (1/3) - Metadata & History */}
                 <div className="space-y-4">
 
+                    {/* Acknowledgement Banner */}
+                    <DocumentAcknowledgement
+                        documentId={document.id}
+                        documentStatus={document.effectiveStatus}
+                        currentVersionId={document.currentVersion?.id}
+                    />
+
                     {/* Tabs Logic */}
                     <div className="flex items-center space-x-1 border-b">
                         <button
@@ -244,6 +255,24 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                                 }`}
                         >
                             Versions
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("reviews")}
+                            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px ${activeTab === "reviews"
+                                ? "border-primary text-primary"
+                                : "border-transparent text-muted-foreground hover:text-foreground"
+                                }`}
+                        >
+                            Reviews
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("comments")}
+                            className={`px-4 py-2 text-sm font-medium transition-colors border-b-2 -mb-px ${activeTab === "comments"
+                                ? "border-primary text-primary"
+                                : "border-transparent text-muted-foreground hover:text-foreground"
+                                }`}
+                        >
+                            Comments
                         </button>
                         <button
                             onClick={() => setActiveTab("audit")}
@@ -327,6 +356,25 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                                         onVersionUploaded={loadDocument}
                                     />
                                 </div>
+                            </div>
+                        )}
+
+                        {activeTab === "reviews" && (
+                            <div className="animate-in fade-in duration-200">
+                                <DocumentReviews
+                                    documentId={document.id}
+                                    // currentUserId not strictly needed if handled internally by component using useAuth?
+                                    // But DocumentReviews prop accepts it. We can fetch user from useAuth inside component?
+                                    // The page has access to user but we removed it from loadDocument.
+                                    // Component uses useAuth() so it's fine.
+                                    onReviewActionComplete={loadDocument}
+                                />
+                            </div>
+                        )}
+
+                        {activeTab === "comments" && (
+                            <div className="animate-in fade-in duration-200 h-[500px] border rounded-lg bg-card overflow-hidden">
+                                <DocumentComments documentId={document.id} />
                             </div>
                         )}
 

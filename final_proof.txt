@@ -1,0 +1,6 @@
+??????? Starting RBAC Validation Matrix...
+
+### RBAC Validation Results (Contributor as Creator in SUBMITTED status)
+
+| Role | Status | Folder ACL | Action | UI Visible | API Allowed | Details |
+|------|--------|------------|--------|------------|-------------|---------|

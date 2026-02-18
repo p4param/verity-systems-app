@@ -1,9 +1,33 @@
 import { NextResponse } from "next/server";
 import { prisma as db } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(req) {
     try {
+        const { searchParams } = new URL(req.url);
+        const permissionCode = searchParams.get("permission");
+
+        let where = {};
+
+        if (permissionCode) {
+            where = {
+                userRoles: {
+                    some: {
+                        role: {
+                            rolePermissions: {
+                                some: {
+                                    permission: {
+                                        code: permissionCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
         const users = await db.user.findMany({
+            where,
             orderBy: {
                 createdAt: "desc",
             },

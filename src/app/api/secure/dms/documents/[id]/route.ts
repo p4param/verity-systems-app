@@ -19,7 +19,7 @@ export async function GET(
         const { id } = await params;
         const user = await requirePermission(req, "DMS_DOCUMENT_READ");
 
-        const document = await DocumentService.getDocumentById(id, user.tenantId);
+        const document = await DocumentService.getDocumentById(id, user.tenantId, user);
 
         if (!document) {
             throw new DocumentNotFoundError(id, user.tenantId);

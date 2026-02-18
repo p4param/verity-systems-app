@@ -13,15 +13,18 @@ import {
 import { useAuth } from "@/lib/auth/auth-context"
 import { getAvailableWorkflowActions, UiWorkflowAction } from "@/lib/dms/ui-logic"
 import { RejectDocumentModal } from "./RejectDocumentModal"
+import { ReviewerSelectionModal } from "./ReviewerSelectionModal"
 
 interface DocumentHeaderActionsProps {
     document: {
         id: string
         status: string
         effectiveStatus: string
+        createdById: number
         currentVersion?: {
             id: string
         }
+        effectivePermissions?: string[]
     }
     onSuccess: () => void
 }
@@ -30,12 +33,23 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
     const { fetchWithAuth, user } = useAuth()
     const [loadingAction, setLoadingAction] = useState<string | null>(null)
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false)
+    const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
 
     // Helper to execute workflow transition
-    const executeWorkflow = async (action: string, comment?: string) => {
-        // Intercept REJECT action to show modal if no comment provided yet
+    const executeWorkflow = async (action: string, comment?: string, reviewers?: { userId: number, stage: number }[]) => {
+        // Intercept REJECT action
         if (action === "reject" && !comment) {
             setIsRejectModalOpen(true)
+            return
+        }
+
+        // Intercept SUBMIT action for Reviewer Selection (if not already coming from modal)
+        if (action === "submit" && !reviewers && !loadingAction) { // !loadingAction check to avoid recursion if we were clever, but here we just open modal
+            // Wait, if we just call executeWorkflow("submit") from button, we open modal.
+            // If we call from modal, we pass reviewers (possibly empty).
+            // But how to distinguish? 
+            // We can just set state and return.
+            setIsReviewModalOpen(true)
             return
         }
 
@@ -43,7 +57,7 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
             setLoadingAction(action)
             await fetchWithAuth(`/api/secure/dms/documents/${document.id}/workflow`, {
                 method: "POST",
-                body: JSON.stringify({ action, comment })
+                body: JSON.stringify({ action, comment, reviewers })
             })
             onSuccess()
         } catch (err: any) {
@@ -53,11 +67,12 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
         }
     }
 
-    // 1. Get User Permissions (as string array)
-    const userPermissions = user?.permissions || []
+    // 1. Get User Permissions (Prefer Effective Permissions from Folder ACLs)
+    const userPermissions = document.effectivePermissions || user?.permissions || []
 
     // 2. Compute Available Actions
-    const availableActions = getAvailableWorkflowActions(document.effectiveStatus, userPermissions)
+    const isCreator = (user?.id === document.createdById) || (user?.sub === document.createdById);
+    const availableActions = getAvailableWorkflowActions(document.effectiveStatus, userPermissions, isCreator)
 
     if (availableActions.length === 0) return null
 
@@ -69,6 +84,7 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
             case "reject": return <XCircle size={16} />
             case "revise": return <Edit3 size={16} />
             case "obsolete": return <Archive size={16} />
+            case "withdraw": return <RotateCcw size={16} />
             default: return <RotateCcw size={16} />
         }
     }
@@ -119,6 +135,23 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
                 onClose={() => setIsRejectModalOpen(false)}
                 onConfirm={async (comment) => {
                     await executeWorkflow("reject", comment)
+                }}
+            />
+
+            <ReviewerSelectionModal
+                isOpen={isReviewModalOpen}
+                onClose={() => setIsReviewModalOpen(false)}
+                onConfirm={async (reviewers) => {
+                    // Pass reviewers to executeWorkflow. 
+                    // IMPORTANT: We must NOT recurse into opening modal again.
+                    // Our logic in executeWorkflow checks (!reviewers). 
+                    // If we pass [], ![] is false. TRUE. 
+                    // Wait, ![] is false in JS? 
+                    // Boolean([]) is true. ![] is false.
+                    // So we are safe.
+                    // But if user cancels? We just close.
+                    // If user confirms with empty list [], we pass [].
+                    await executeWorkflow("submit", undefined, reviewers)
                 }}
             />
         </>
