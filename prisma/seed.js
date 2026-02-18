@@ -52,6 +52,7 @@ async function main() {
         { id: 35, code: 'DMS_SHARE_READ', description: 'Read/View share links' },
         { id: 36, code: 'DMS_SHARE_REVOKE', description: 'Revoke share links' },
         { id: 37, code: 'DMS_DOCUMENT_TYPE_MANAGE', description: 'Manage document types (CRUD)' },
+        { id: 38, code: 'DMS_AUDIT_EXPORT', description: 'Export DMS audit logs' },
     ]
 
     for (const perm of permissions) {

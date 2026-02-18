@@ -286,6 +286,12 @@ model Document {
   workflowHistory WorkflowHistory[]
   shares          ShareLink[]
 
+  // Supersedence (New)
+  // Supersedence (New)
+  supersedesId    String?   @unique
+  supersedes      Document? @relation("Supersedes", fields: [supersedesId], references: [id])
+  supersededBy    Document? @relation("Supersedes")
+
   @@unique([tenantId, documentNumber]) 
   @@index([tenantId])
   @@index([tenantId, folderId])

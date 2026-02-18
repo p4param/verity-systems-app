@@ -18,7 +18,7 @@ import { Modal } from "@/components/ui/Modal"
 
 interface ShareLink {
     id: string
-    accessKey: string
+    token: string
     expiresAt: string | null
     clickCount: number
     createdAt: string
@@ -79,7 +79,7 @@ export function ShareDocumentModal({ isOpen, onClose, document }: ShareDocumentM
             })
 
             setShares(prev => [newShare, ...prev])
-            setLastCreatedToken(newShare.accessKey)
+            setLastCreatedToken(newShare.token)
             setExpiresAt("")
         } catch (err: any) {
             setError(err.message || "Failed to create share link")

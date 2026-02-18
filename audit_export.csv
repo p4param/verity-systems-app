@@ -1,0 +1,1 @@
+eventId,timestampUtc,tenantId,module,entityType,entityId,documentNumber,action,previousState,newState,actorUserId,actorEmail,actorRole,ipAddress,metadataKey,metadataValue

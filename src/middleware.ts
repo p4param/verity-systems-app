@@ -37,7 +37,7 @@ export async function middleware(request: NextRequest) {
     // 1. Rate Limiting (Public Routes)
     // -------------------------------------------------------------------------
     if (pathname.startsWith('/api/public')) {
-        const ip = request.ip || 'anonymous';
+        const ip = (request as any).ip || request.headers.get("x-forwarded-for") || 'anonymous';
         const now = Date.now();
 
         const record = rateLimit.get(ip);

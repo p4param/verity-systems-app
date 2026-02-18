@@ -9,6 +9,7 @@ interface AuditLogParams {
     entityId?: string;
     action: string;
     details?: string;
+    module?: string;
     metadata?: Record<string, any>;
     ipAddress?: string;
 }
@@ -32,6 +33,7 @@ export async function createAuditLog(
                 entityType: params.entityType,
                 entityId: params.entityId,
                 action: params.action,
+                module: params.module,
                 details: params.details,
                 metadata: params.metadata || undefined,
                 ipAddress: params.ipAddress,

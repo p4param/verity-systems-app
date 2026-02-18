@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, Suspense } from "react"
 import { useRouter } from "next/navigation"
 import {
     PanelLeft,
@@ -12,6 +12,7 @@ import {
     Columns,
     ChevronDown,
     ChevronRight,
+    Loader2
 } from "lucide-react"
 import { FolderTree } from "@/components/dms/FolderTree"
 import { DmsDocumentList } from "@/components/dms/DocumentList"
@@ -62,7 +63,7 @@ export default function DmsDashboard() {
             try {
                 const saved = localStorage.getItem("dms-column-visibility")
                 if (saved) return JSON.parse(saved)
-            } catch {}
+            } catch { }
         }
         return {}
     })
@@ -70,7 +71,7 @@ export default function DmsDashboard() {
     useEffect(() => {
         try {
             localStorage.setItem("dms-column-visibility", JSON.stringify(columnVisibility))
-        } catch {}
+        } catch { }
     }, [columnVisibility])
 
     const canCreateDocument = usePermission("DMS_DOCUMENT_CREATE")
@@ -258,20 +259,22 @@ export default function DmsDashboard() {
                 </div>
 
                 <div className="flex-1 overflow-y-auto flex flex-col">
-                    <DmsDocumentList
-                        folderId={selectedFolderId}
-                        folderName={selectedFolderName}
-                        search={searchQuery}
-                        onDocumentSelect={handleDocumentSelect}
-                        onLoadComplete={setItemCount}
-                        isFilterOpen={isFilterOpen}
-                        onFilterOpenChange={setIsFilterOpen}
-                        onActiveFilterCountChange={setActiveFilterCount}
-                        columnVisibility={columnVisibility}
-                        onColumnVisibilityChange={setColumnVisibility}
-                        canCreate={canCreateDocument}
-                        onCreateClick={() => setIsCreateModalOpen(true)}
-                    />
+                    <Suspense fallback={<div className="flex justify-center p-8"><Loader2 className="animate-spin" /></div>}>
+                        <DmsDocumentList
+                            folderId={selectedFolderId}
+                            folderName={selectedFolderName}
+                            search={searchQuery}
+                            onDocumentSelect={handleDocumentSelect}
+                            onLoadComplete={setItemCount}
+                            isFilterOpen={isFilterOpen}
+                            onFilterOpenChange={setIsFilterOpen}
+                            onActiveFilterCountChange={setActiveFilterCount}
+                            columnVisibility={columnVisibility}
+                            onColumnVisibilityChange={setColumnVisibility}
+                            canCreate={canCreateDocument}
+                            onCreateClick={() => setIsCreateModalOpen(true)}
+                        />
+                    </Suspense>
                 </div>
 
                 {isSidebarOpen && (

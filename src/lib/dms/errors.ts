@@ -87,3 +87,23 @@ export class ShareLinkNotFoundError extends Error {
         this.name = "ShareLinkNotFoundError";
     }
 }
+
+/**
+ * Custom error thrown when a strict concurrency check fails during a state transition.
+ */
+export class StateMismatchError extends Error {
+    constructor(entityId: string, expectedStatus: string, actualStatus: string = "UNKNOWN") {
+        super(`State mismatch for ${entityId}: Expected ${expectedStatus}, but found ${actualStatus}. The document may have been modified by another process.`);
+        this.name = "StateMismatchError";
+    }
+}
+
+/**
+ * Custom error thrown when a business rule or invariant is violated.
+ */
+export class DomainViolationError extends Error {
+    constructor(message: string) {
+        super(`Domain Violation: ${message}`);
+        this.name = "DomainViolationError";
+    }
+}

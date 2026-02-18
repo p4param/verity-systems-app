@@ -43,11 +43,28 @@ export class VersionService {
 
         // 2. Validate document exists and belongs to tenant
         const document = await globalPrisma.document.findUnique({
-            where: { id: documentId, tenantId }
+            where: { id: documentId, tenantId },
+            select: { id: true, status: true, expiryDate: true, title: true } // Select needed fields
         });
 
         if (!document) {
             throw new DocumentNotFoundError(documentId, tenantId);
+        }
+
+        // 2.5. HARDENING: Status & Expiry Enforcement
+        const { getEffectiveDocumentStatus } = await import("@/lib/dms/workflowEngine");
+        const { DomainViolationError } = await import("@/lib/dms/errors");
+
+        const effectiveStatus = getEffectiveDocumentStatus(document);
+
+        if (effectiveStatus === "EXPIRED") {
+            throw new DomainViolationError("Cannot upload version to an EXPIRED document.");
+        }
+
+        // Only allow uploads in DRAFT or REJECTED states
+        const ALLOWED_UPLOAD_STATES = ["DRAFT", "REJECTED"];
+        if (!ALLOWED_UPLOAD_STATES.includes(document.status)) {
+            throw new DomainViolationError(`Version upload only allowed in DRAFT or REJECTED states. Current: ${document.status}`);
         }
 
         // 3. Determine next versionNumber

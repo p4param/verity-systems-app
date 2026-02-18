@@ -48,3 +48,15 @@ export const TRANSITION_MATRIX: Record<WorkflowAction, Transition> = {
         permission: "DMS_DOCUMENT_OBSOLETE",
     },
 };
+
+/**
+ * Static map of allowed transitions for quick lookup and validation.
+ * Key: Current Status -> Value: List of allowed Actions
+ */
+export const ALLOWED_TRANSITIONS: Record<DocumentStatus, WorkflowAction[]> = {
+    [DocumentStatus.DRAFT]: ["submit"],
+    [DocumentStatus.SUBMITTED]: ["approve", "reject"],
+    [DocumentStatus.REJECTED]: ["revise"],
+    [DocumentStatus.APPROVED]: ["obsolete"],
+    [DocumentStatus.OBSOLETE]: [],
+};

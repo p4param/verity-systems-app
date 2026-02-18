@@ -28,16 +28,21 @@ export class ShareService {
         return await db.$transaction(async (innerTx: any) => {
             // 1. Verify document exists and belongs to tenant
             const document = await innerTx.document.findUnique({
-                where: { id: documentId, tenantId }
+                where: { id: documentId, tenantId },
+                select: { id: true, title: true, status: true, expiryDate: true }
             });
 
             if (!document) {
                 throw new DocumentNotFoundError(documentId, tenantId);
             }
 
-            // 2. Status Guard: Only APPROVED documents can be shared
-            if (document.status !== DocumentStatus.APPROVED) {
-                throw new Error(`Only approved documents can be shared. Current status: ${document.status}`);
+            // 2. Status Guard: Only APPROVED documents can be shared (and not expired)
+            // Dynamic import to avoid circular dependency if workflowEngine imports ShareService (unlikely but safe)
+            const { getEffectiveDocumentStatus } = await import("@/lib/dms/workflowEngine");
+            const effectiveStatus = getEffectiveDocumentStatus(document);
+
+            if (effectiveStatus !== "APPROVED") { // This covers both non-APPROVED status and "EXPIRED"
+                throw new Error(`Only APPROVED and non-expired documents can be shared. Current status: ${effectiveStatus}`);
             }
 
             // 3. Generate secure random token
@@ -110,16 +115,11 @@ export class ShareService {
 
             // 3. HARDENING: Check Document Status & Expiry
             // Even if link is valid, document must still be APPROVED and not expired
-            if (link.document.status !== DocumentStatus.APPROVED) {
-                // We return null to mask existence? Or throw custom error? 
-                // For security (enumeration prevention), null/404 is often better, 
-                // but here generic "Expired/Invalid" message is safe enough.
-                console.warn(`[ShareService] Blocked access to non-APPROVED document ${link.documentId} via share ${token}`);
-                return null;
-            }
+            const { getEffectiveDocumentStatus } = await import("@/lib/dms/workflowEngine");
+            const effectiveStatus = getEffectiveDocumentStatus(link.document);
 
-            if (link.document.expiryDate && link.document.expiryDate < new Date()) {
-                console.warn(`[ShareService] Blocked access to EXPIRED document ${link.documentId} via share ${token}`);
+            if (effectiveStatus !== "APPROVED") {
+                console.warn(`[ShareService] Blocked access to document ${link.documentId} (Effective Status: ${effectiveStatus}) via share ${token}`);
                 return null;
             }
 

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState, useCallback, Suspense } from "react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import {
@@ -55,7 +55,7 @@ interface UserOption {
     email: string
 }
 
-export default function DmsAuditPage() {
+function AuditContent() {
     const { fetchWithAuth } = useAuth()
     const router = useRouter()
     const pathname = usePathname()
@@ -503,5 +503,13 @@ export default function DmsAuditPage() {
                 )}
             </div>
         </div>
+    )
+}
+
+export default function DmsAuditPage() {
+    return (
+        <Suspense fallback={<div className="flex items-center justify-center p-8"><Loader2 className="animate-spin mr-2" /> Loading...</div>}>
+            <AuditContent />
+        </Suspense>
     )
 }
