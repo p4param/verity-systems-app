@@ -12,10 +12,16 @@ interface Review {
     status: "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED"
     reviewedAt: string | null
     comment: string | null
+    documentId: string
     reviewer: {
         id: number
         fullName: string
         email: string
+    }
+    document?: {
+        id: string
+        documentNumber: string | null
+        title: string
     }
 }
 
@@ -77,88 +83,141 @@ export function DocumentReviews({ documentId, currentUserId, onReviewActionCompl
         return <div className="p-4 text-center text-muted-foreground italic text-sm">No reviews active.</div>
     }
 
-    // Group by Stage
-    const stages = reviews.reduce((acc, review) => {
-        const stage = review.stageNumber
-        if (!acc[stage]) acc[stage] = []
-        acc[stage].push(review)
+    // Group by Document (Version), then by Stage
+    const reviewsByDoc = reviews.reduce((acc, review) => {
+        const docKey = review.document?.documentNumber || "Current"
+        if (!acc[docKey]) acc[docKey] = []
+        acc[docKey].push(review)
         return acc
-    }, {} as Record<number, Review[]>)
+    }, {} as Record<string, Review[]>)
 
-    return (
-        <div className="space-y-4">
-            {Object.keys(stages).sort().map((stageStr) => {
-                const stage = parseInt(stageStr)
-                const stageReviews = stages[stage]
+    // Sort document keys (assuming localized sorting or just handling strings)
+    // Actually, backend sorts by createdAt desc, so we can just iterate.
+    // Better: Helper to render a group of reviews
+    const renderStageGroups = (docReviews: Review[]) => {
+        const stages = docReviews.reduce((acc, review) => {
+            const stage = review.stageNumber
+            if (!acc[stage]) acc[stage] = []
+            acc[stage].push(review)
+            return acc
+        }, {} as Record<number, Review[]>)
 
-                return (
-                    <div key={stage} className="border rounded-md p-3 bg-card">
-                        <h4 className="text-xs font-bold uppercase text-muted-foreground mb-2">Stage {stage}</h4>
-                        <div className="space-y-2">
-                            {stageReviews.map((review) => {
-                                const isMyReview = currentUserId === review.reviewerUserId
-                                const isPending = review.status === "PENDING"
+        return Object.keys(stages).sort().map((stageStr) => {
+            const stage = parseInt(stageStr)
+            const stageReviews = stages[stage]
 
-                                return (
-                                    <div key={review.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 rounded hover:bg-muted/50 transition-colors">
-                                        <div className="flex items-center gap-3">
-                                            {/* Avatar / Name */}
-                                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
-                                                {review.reviewer.fullName.charAt(0)}
-                                            </div>
-                                            <div className="text-sm">
-                                                <div className="font-medium">{review.reviewer.fullName}</div>
-                                                <div className="text-xs text-muted-foreground flex items-center gap-1">
-                                                    {review.status === "APPROVED" && <span className="text-green-600 flex items-center gap-1"><CheckCircle size={10} /> Approved</span>}
-                                                    {review.status === "REJECTED" && <span className="text-red-600 flex items-center gap-1"><XCircle size={10} /> Rejected</span>}
-                                                    {review.status === "PENDING" && <span className="text-orange-600 flex items-center gap-1"><Clock size={10} /> Pending</span>}
-                                                    {review.status === "CANCELLED" && <span className="text-gray-500 flex items-center gap-1"><AlertCircle size={10} /> Cancelled</span>}
+            return (
+                <div key={stage} className="border rounded-md p-3 bg-card mt-2">
+                    <h5 className="text-xs font-bold uppercase text-muted-foreground mb-2">Stage {stage}</h5>
+                    <div className="space-y-2">
+                        {stageReviews.map((review) => {
+                            const isMyReview = currentUserId === review.reviewerUserId
+                            const isPending = review.status === "PENDING"
+                            // Use review.document?.id to check if it's the CURRENT document context or an old one?
+                            // Actually, action buttons should only appear if the review is for the CURRENT document ID being viewed?
+                            // No, if I am viewing a NEW revision, I shouldn't be able to approve an OLD revision's pending review (which should be cancelled anyway).
+                            // But let's be safe: match documentId.
+                            const isCurrentDoc = review.documentId === documentId;
 
-                                                    {review.reviewedAt && (
-                                                        <span>• {new Date(review.reviewedAt).toLocaleDateString()}</span>
-                                                    )}
-                                                </div>
+                            return (
+                                <div key={review.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-2 rounded hover:bg-muted/50 transition-colors">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-bold">
+                                            {review.reviewer.fullName.charAt(0)}
+                                        </div>
+                                        <div className="text-sm">
+                                            <div className="font-medium">{review.reviewer.fullName}</div>
+                                            <div className="text-xs text-muted-foreground flex items-center gap-1">
+                                                {review.status === "APPROVED" && <span className="text-green-600 flex items-center gap-1"><CheckCircle size={10} /> Approved</span>}
+                                                {review.status === "REJECTED" && <span className="text-red-600 flex items-center gap-1"><XCircle size={10} /> Rejected</span>}
+                                                {review.status === "PENDING" && <span className="text-orange-600 flex items-center gap-1"><Clock size={10} /> Pending</span>}
+                                                {review.status === "CANCELLED" && <span className="text-gray-500 flex items-center gap-1"><AlertCircle size={10} /> Cancelled</span>}
+
+                                                {review.reviewedAt && (
+                                                    <span>• {new Date(review.reviewedAt).toLocaleDateString()}</span>
+                                                )}
                                             </div>
                                         </div>
-
-                                        {/* Actions for Reviewer */}
-                                        {isMyReview && isPending && (
-                                            <div className="flex items-center gap-2 mt-2 sm:mt-0">
-                                                <button
-                                                    onClick={() => {
-                                                        const c = prompt("Optional Comment for Approval:")
-                                                        handleAction("approve", c || undefined)
-                                                    }}
-                                                    disabled={!!actionLoading}
-                                                    className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded shadow-sm disabled:opacity-50"
-                                                >
-                                                    {actionLoading === "approve" ? <Loader2 className="animate-spin w-3 h-3" /> : <CheckCircle className="w-3 h-3 mr-1 inline" />}
-                                                    Approve
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        const c = prompt("Reason for Rejection (Required):")
-                                                        if (c) handleAction("reject", c)
-                                                    }}
-                                                    disabled={!!actionLoading}
-                                                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded shadow-sm disabled:opacity-50"
-                                                >
-                                                    {actionLoading === "reject" ? <Loader2 className="animate-spin w-3 h-3" /> : <XCircle className="w-3 h-3 mr-1 inline" />}
-                                                    Reject
-                                                </button>
-                                            </div>
-                                        )}
-
-                                        {/* Display Comment if any */}
-                                        {!isPending && review.comment && (
-                                            <div className="text-xs text-muted-foreground italic border-l-2 pl-2 mt-1 sm:mt-0 sm:ml-4 max-w-xs truncate" title={review.comment}>
-                                                "{review.comment}"
-                                            </div>
-                                        )}
                                     </div>
-                                )
-                            })}
+
+                                    {/* Actions: Only for Current User, Pending Status, AND Current Document Context */}
+                                    {isMyReview && isPending && isCurrentDoc && (
+                                        <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                                            <button
+                                                onClick={() => {
+                                                    const c = prompt("Optional Comment for Approval:")
+                                                    handleAction("approve", c || undefined)
+                                                }}
+                                                disabled={!!actionLoading}
+                                                className="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded shadow-sm disabled:opacity-50"
+                                            >
+                                                {actionLoading === "approve" ? <Loader2 className="animate-spin w-3 h-3" /> : <CheckCircle className="w-3 h-3 mr-1 inline" />}
+                                                Approve
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    const c = prompt("Reason for Rejection (Required):")
+                                                    if (c) handleAction("reject", c)
+                                                }}
+                                                disabled={!!actionLoading}
+                                                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-medium rounded shadow-sm disabled:opacity-50"
+                                            >
+                                                {actionLoading === "reject" ? <Loader2 className="animate-spin w-3 h-3" /> : <XCircle className="w-3 h-3 mr-1 inline" />}
+                                                Reject
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {!isPending && review.comment && (
+                                        <div className="text-xs text-muted-foreground italic border-l-2 pl-2 mt-1 sm:mt-0 sm:ml-4 max-w-xs truncate" title={review.comment}>
+                                            "{review.comment}"
+                                        </div>
+                                    )}
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            )
+        })
+    }
+
+    // Identify the unique document numbers (preserving order from backend)
+    // Used Set to dedup if needed, but reduce above handles keys.
+    // However, Object.keys ordering is not guaranteed.
+    // Let's iterate the `reviews` array to find unique docs in order.
+    const uniqueDocs = new Set<string>();
+    const docOrder: string[] = [];
+    reviews.forEach(r => {
+        const key = r.document?.documentNumber || "Unknown";
+        if (!uniqueDocs.has(key)) {
+            uniqueDocs.add(key);
+            docOrder.push(key);
+        }
+    });
+
+    return (
+        <div className="space-y-6">
+            {docOrder.map(docNum => {
+                const docReviews = reviewsByDoc[docNum];
+                const doc = docReviews[0].document; // Get metadata from first review
+                const isCurrentContext = docReviews.some(r => r.documentId === documentId);
+
+                return (
+                    <div key={docNum} className={`space-y-2 ${!isCurrentContext ? "opacity-75" : ""}`}>
+                        <div className="flex items-center gap-2 border-b pb-1">
+                            <h3 className="text-sm font-semibold text-foreground">
+                                {isCurrentContext ? "Current Version" : `Document #${docNum}`}
+                            </h3>
+                            {!isCurrentContext && (
+                                <span className="text-xs text-muted-foreground px-2 py-0.5 bg-muted rounded-full">
+                                    Historical
+                                </span>
+                            )}
+                            {/* Debug info: {doc?.title} */}
                         </div>
+
+                        {renderStageGroups(docReviews)}
                     </div>
                 )
             })}

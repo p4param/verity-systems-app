@@ -37,6 +37,15 @@ export async function POST(
         return NextResponse.json(newRevision, { status: 201 });
 
     } catch (error: any) {
+        // Intercept Domain Violation for Superseded
+        if (error.message && error.message.includes("already been superseded")) {
+            return NextResponse.json({
+                error: {
+                    code: "DOCUMENT_ALREADY_SUPERSEDED",
+                    message: error.message
+                }
+            }, { status: 409 });
+        }
         return handleApiError(error);
     }
 }

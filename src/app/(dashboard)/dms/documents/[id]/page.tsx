@@ -25,11 +25,12 @@ import { DocumentReviews } from "@/components/dms/DocumentReviews"
 import { DocumentComments } from "@/components/dms/DocumentComments"
 import { DocumentAcknowledgement } from "@/components/dms/DocumentAcknowledgement"
 
+// Updated DocumentDetail interface to include supersededBy
 interface DocumentDetail {
     id: string
     title: string
     documentNumber: string | null
-    type: { id: string, name: string } | null // Updated to include id
+    type: { id: string, name: string } | null
     expiryDate: string | null
     description?: string
     status: string
@@ -52,6 +53,13 @@ interface DocumentDetail {
         fileName: string
         mimeType: string
     }
+    // Added for Revision UI
+    supersededById: string | null
+    supersededBy?: {
+        id: string
+        documentNumber: string | null
+    }
+    effectivePermissions?: string[]
 }
 
 export default function DocumentDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -74,9 +82,13 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
     const loadDocument = useCallback(async () => {
         try {
             setLoading(true)
+            // The API endpoint must return supersededBy relation. 
+            // We assume the backend route /api/secure/dms/documents/[id] already does or we need to check.
+            // Let's check the backend route first.
             const data = await fetchWithAuthRef.current<DocumentDetail>(`/api/secure/dms/documents/${id}`)
             setDocument(data)
         } catch (err: any) {
+            // ... error handling
             console.error("Failed to load document:", err)
             let errorMessage = "Failed to load document"
             if (err?.error?.message) {
@@ -132,7 +144,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() => router.back()}
+                        onClick={() => router.push("/dms")}
                         className="p-2 hover:bg-muted rounded-full transition-colors group"
                         title="Back to Documents"
                     >

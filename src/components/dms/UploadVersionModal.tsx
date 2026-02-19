@@ -107,6 +107,13 @@ export function UploadVersionModal({ isOpen, onClose, documentId, onSuccess }: U
             }
         >
             <div className="space-y-4">
+                <div className="bg-amber-50 border border-amber-200 rounded p-2 flex gap-2 items-center text-amber-800 text-sm">
+                    {/* <AlertCircle size={14} className="shrink-0" /> */}
+                    <p className="italic">
+                        “Approved documents are recommended to be published in PDF format.”
+                    </p>
+                </div>
+
                 <p className="text-sm text-muted-foreground">
                     Select a new file to create a new version of this document. Older versions will be preserved in the history.
                     Max file size: <span className="font-semibold">10MB</span>.

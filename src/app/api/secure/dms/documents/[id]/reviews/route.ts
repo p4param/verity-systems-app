@@ -17,7 +17,9 @@ export async function GET(
         const user = await requirePermission(req, "DMS_VIEW");
         // View permission is enough to see reviews? Yes.
 
-        const reviews = await ReviewService.getReviews(id, user.tenantId);
+        // View permission is enough to see reviews? Yes.
+        // Use getReviewHistory to include ancestor reviews
+        const reviews = await ReviewService.getReviewHistory(id, user.tenantId);
         return NextResponse.json(reviews);
     } catch (error: any) {
         return handleApiError(error);

@@ -22,7 +22,8 @@ export interface UiWorkflowAction {
 export function getAvailableWorkflowActions(
     status: DocumentStatus | string,
     userPermissions: string[] = [],
-    isCreator: boolean = false
+    isCreator: boolean = false,
+    isSuperseded: boolean = false
 ): UiWorkflowAction[] {
     const actions: UiWorkflowAction[] = [];
 
@@ -81,7 +82,7 @@ export function getAvailableWorkflowActions(
 
     // 4. APPROVED -> Obsolete OR Revise
     if (status === "APPROVED") {
-        if (userPermissions.includes("DMS_DOCUMENT_OBSOLETE")) {
+        if (userPermissions.includes("DMS_DOCUMENT_OBSOLETE") && !isSuperseded) {
             actions.push({
                 action: "obsolete",
                 label: "Mark Obsolete",

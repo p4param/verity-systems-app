@@ -157,6 +157,12 @@ export class DocumentService {
                 },
                 type: {
                     select: { id: true, name: true }
+                },
+                supersededBy: {
+                    select: {
+                        id: true,
+                        documentNumber: true
+                    }
                 }
             }
         });

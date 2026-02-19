@@ -74,7 +74,10 @@ export async function transitionDocumentStatus(
                 title: true,
                 effectiveDate: true,
                 folderId: true,
-                createdById: true
+                createdById: true,
+                supersedesId: true, // Added for obsolete logic
+                supersededById: true, // Added for Manual Obsolete Logic
+                documentNumber: true // Added for audit log
             }
         });
 
@@ -128,6 +131,22 @@ export async function transitionDocumentStatus(
         // d. Business Logic: Rejection requires a comment
         if (action === "reject" && !comment) {
             throw new Error("A comment is required when rejecting a document");
+        }
+
+        // e. Business Logic: Manual Obsolete Rules
+        if (action === "obsolete") {
+            // Rule 1: Must be APPROVED
+            if (document.status !== "APPROVED") {
+                throw new DomainViolationError("Only APPROVED documents can be marked as OBSOLETE.");
+            }
+
+            // Rule 2: Must NOT be Superseded
+            // If supersededById is set, a newer version (Draft or Approved) exists.
+            // The system handles obsolescence automatically upon approval of the revision.
+            // Manual obsolescence would break the chain or create an orphan revision state.
+            if ((document as any).supersededById) {
+                throw new DomainViolationError("Cannot obsolete a document that has already been superseded by a newer revision.");
+            }
         }
 
         // --- V2 V INTERCEPTION START ---
@@ -193,6 +212,50 @@ export async function transitionDocumentStatus(
             if (!currentDoc) throw new DocumentNotFoundError(documentId, tenantId);
             throw new StateMismatchError(documentId, transition.from, currentDoc.status);
         }
+
+        // --- AUTOMATIC OBSOLETE LOGIC START ---
+        // If approving a revision, auto-obsolete the previous document
+        if (action === "approve" && document.supersedesId) {
+            const previousDoc = await tx.document.findUnique({
+                where: { id: document.supersedesId }
+            });
+
+            // Guard 1: Validate Previous & Cross-Tenant Protection
+            if (previousDoc && previousDoc.tenantId === tenantId && previousDoc.status === "APPROVED") {
+
+                // Guard 2: Conditional Update (Optimistic Locking / ID+Status check)
+                const obsoleteResult = await tx.document.updateMany({
+                    where: {
+                        id: document.supersedesId,
+                        tenantId: tenantId,
+                        status: "APPROVED"
+                    },
+                    data: {
+                        status: "OBSOLETE",
+                        updatedById: user.sub,
+                        updatedAt: new Date()
+                    }
+                });
+
+                if (obsoleteResult.count === 1) {
+                    // Log Automatic Obsoletion
+                    await createAuditLog({
+                        tenantId,
+                        actorUserId: user.sub,
+                        entityType: "DOCUMENT",
+                        entityId: document.supersedesId,
+                        action: "DMS.DOCUMENT_OBSOLETED_AUTO",
+                        details: `Automatically obsoleted by approval of revision ${document.documentNumber || documentId}`,
+                        metadata: {
+                            reason: "Manual Revision Approval",
+                            newVersionId: documentId,
+                            newDocumentNumber: document.documentNumber
+                        }
+                    }, tx);
+                }
+            }
+        }
+        // --- AUTOMATIC OBSOLETE LOGIC END ---
 
         // f. Log to Workflow History
         await tx.workflowHistory.create({

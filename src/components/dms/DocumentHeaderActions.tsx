@@ -84,9 +84,25 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
 
     // 2. Compute Available Actions
     const isCreator = (user?.id === document.createdById) || (user?.sub === document.createdById);
-    const availableActions = getAvailableWorkflowActions(document.effectiveStatus, userPermissions, isCreator)
 
-    if (availableActions.length === 0) return null
+    // NEW LOGIC: Check for Superseded State
+    const supersededBy = (document as any).supersededBy;
+    const isSuperseded = document.effectiveStatus === "APPROVED" && !!supersededBy;
+
+    const availableActions = getAvailableWorkflowActions(
+        document.effectiveStatus,
+        userPermissions,
+        isCreator,
+        isSuperseded // Pass the new parameter
+    )
+
+    // Filter out "revise" if superseded
+    const filteredActions = availableActions.filter(a => {
+        if (isSuperseded && a.action === "revise") return false;
+        return true;
+    });
+
+    if (filteredActions.length === 0 && !isSuperseded) return null
 
     // Helper to render icon
     const getIcon = (action: string) => {
@@ -116,7 +132,19 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
     return (
         <>
             <div className="flex items-center gap-2 animate-in fade-in slide-in-from-right-2 duration-300">
-                {availableActions.map((action) => (
+                {/* Render Superseded Badge if applicable */}
+                {isSuperseded && (
+                    <a
+                        href={`/dms/documents/${supersededBy.id}`}
+                        className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-md bg-purple-100 text-purple-800 border border-purple-200 hover:bg-purple-200 transition-colors"
+                        title={`Go to Revision ${supersededBy.documentNumber}`}
+                    >
+                        <Edit3 size={16} className="text-purple-600" />
+                        <span>Superseded by {supersededBy.documentNumber}</span>
+                    </a>
+                )}
+
+                {filteredActions.map((action) => (
                     <button
                         key={action.action}
                         onClick={() => executeWorkflow(action.action)}

@@ -299,4 +299,28 @@ export class ReviewService {
             ]
         });
     }
+    /**
+     * Retrieves review history for a document and all its ancestors.
+     */
+    static async getReviewHistory(documentId: string, tenantId: number) {
+        // Dynamic import to avoid circular dependency
+        const { DocumentService } = await import("@/services/dms/document-service");
+        const ancestorIds = await DocumentService.getAncestorDocumentIds(documentId, tenantId);
+
+        return await prisma.documentReview.findMany({
+            where: {
+                documentId: { in: ancestorIds },
+                tenantId
+            },
+            include: {
+                reviewer: { select: { id: true, fullName: true, email: true } },
+                document: { select: { id: true, documentNumber: true, status: true, title: true } }
+            },
+            orderBy: [
+                { document: { createdAt: 'desc' } }, // Newest document version first
+                { stageNumber: 'asc' },
+                { reviewer: { fullName: 'asc' } }
+            ]
+        });
+    }
 }
