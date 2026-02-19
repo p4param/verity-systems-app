@@ -386,7 +386,12 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
 
                         {activeTab === "comments" && (
                             <div className="animate-in fade-in duration-200 h-[500px] border rounded-lg bg-card overflow-hidden">
-                                <DocumentComments documentId={document.id} />
+                                <div className="animate-in fade-in duration-200 h-[500px] border rounded-lg bg-card overflow-hidden">
+                                    <DocumentComments
+                                        documentId={document.id}
+                                        readOnly={document.effectiveStatus === "APPROVED" || document.effectiveStatus === "OBSOLETE"}
+                                    />
+                                </div>
                             </div>
                         )}
 

@@ -18,7 +18,7 @@ interface DocumentCommentsProps {
     documentId: string
 }
 
-export function DocumentComments({ documentId }: DocumentCommentsProps) {
+export function DocumentComments({ documentId, readOnly = false }: { documentId: string, readOnly?: boolean }) {
     const { fetchWithAuth, user } = useAuth()
     const [comments, setComments] = useState<Comment[]>([])
     const [loading, setLoading] = useState(true)
@@ -29,9 +29,10 @@ export function DocumentComments({ documentId }: DocumentCommentsProps) {
         try {
             setLoading(true)
             const data = await fetchWithAuth<Comment[]>(`/api/secure/dms/documents/${documentId}/comments`)
-            setComments(data)
+            setComments(Array.isArray(data) ? data : [])
         } catch (err) {
             console.error("Failed to load comments", err)
+            setComments([])
         } finally {
             setLoading(false)
         }
@@ -71,16 +72,19 @@ export function DocumentComments({ documentId }: DocumentCommentsProps) {
                 {loading ? (
                     <div className="flex justify-center py-4"><Loader2 className="animate-spin text-muted-foreground" /></div>
                 ) : comments.length === 0 ? (
-                    <p className="text-center text-xs text-muted-foreground italic py-4">No comments yet.</p>
+                    <div className="text-center py-8 space-y-2">
+                        <p className="text-sm text-muted-foreground italic">No comments yet.</p>
+                        {!readOnly && <p className="text-xs text-muted-foreground">Start the discussion below.</p>}
+                    </div>
                 ) : (
                     comments.map(comment => (
                         <div key={comment.id} className="flex gap-3 text-sm">
                             <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs shrink-0">
-                                {comment.user.fullName.charAt(0)}
+                                {comment.user?.fullName?.charAt(0) || "?"}
                             </div>
                             <div className="flex-1 space-y-1">
                                 <div className="flex items-center justify-between">
-                                    <span className="font-medium text-foreground">{comment.user.fullName}</span>
+                                    <span className="font-medium text-foreground">{comment.user?.fullName || "Unknown User"}</span>
                                     <span className="text-xs text-muted-foreground">{new Date(comment.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 <p className="text-muted-foreground whitespace-pre-wrap">{comment.content}</p>
@@ -90,24 +94,32 @@ export function DocumentComments({ documentId }: DocumentCommentsProps) {
                 )}
             </div>
 
-            <form onSubmit={handleSubmit} className="p-4 border-t bg-card mt-auto">
-                <div className="flex gap-2">
-                    <input
-                        type="text"
-                        placeholder="Add a comment..."
-                        className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                    />
-                    <button
-                        type="submit"
-                        disabled={submitting || !newComment.trim()}
-                        className="p-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 transition-colors"
-                    >
-                        {submitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
-                    </button>
-                </div>
-            </form>
+            <div className="p-4 border-t bg-card mt-auto">
+                {readOnly ? (
+                    <div className="text-center text-xs text-muted-foreground bg-muted/30 p-2 rounded">
+                        Commenting is disabled for this document status.
+                    </div>
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        <div className="flex gap-2">
+                            <input
+                                type="text"
+                                placeholder="Add a comment..."
+                                className="flex-1 px-3 py-2 text-sm border rounded-md focus:outline-none focus:ring-1 focus:ring-primary"
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                            />
+                            <button
+                                type="submit"
+                                disabled={submitting || !newComment.trim()}
+                                className="p-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                            >
+                                {submitting ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                            </button>
+                        </div>
+                    </form>
+                )}
+            </div>
         </div>
     )
 }

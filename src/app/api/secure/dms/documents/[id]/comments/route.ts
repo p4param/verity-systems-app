@@ -31,14 +31,10 @@ export async function POST(
 ) {
     try {
         const { id } = await params;
-        const user = await requirePermission(req, "DMS_DOCUMENT_COMMENT"); // Need specific permission? Or just VIEW?
-        // Usually anyone with read access can comment? Or restricted?
-        // Let's assume DMS_DOCUMENT_COMMENT permission exists or use generic DMS_VIEW and check in service?
-        // Service just checks doc status.
-        // Let's enforce DMS_VIEW for now, but usually commenting implies some interaction. 
-        // I'll stick to DMS_VIEW + Service Logic.
-        // Actually, preventing spam might require a permission. 
-        // But for this task, I'll use DMS_VIEW.
+        const user = await requirePermission(req, "DMS_VIEW");
+
+        // Service enforces business rules (comment content, doc status).
+        // Since DMS_DOCUMENT_COMMENT does not exist, we rely on DMS_VIEW access.
 
         const { content } = await req.json();
 
