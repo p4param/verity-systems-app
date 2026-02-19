@@ -162,9 +162,22 @@ export class VersionService {
      * Retrieves full version history for a specific document.
      */
     static async listVersions(documentId: string, tenantId: number) {
+        // Fetch all ancestor documents to show complete history
+        // Use require to avoid circular dependency issues if any, though importing DocumentService is cleaner
+        const { DocumentService } = await import("./document-service");
+        const ancestorIds = await DocumentService.getAncestorDocumentIds(documentId, tenantId);
+        console.log(`[DEBUG] listVersions for ${documentId}, Ancestors: ${ancestorIds.join(', ')}`);
+
         return await globalPrisma.documentVersion.findMany({
-            where: { documentId, tenantId },
-            orderBy: { versionNumber: "desc" },
+            where: {
+                documentId: { in: ancestorIds },
+                tenantId
+            },
+            orderBy: {
+                createdAt: "desc" // Sort by creation time to interleave properly, or versionNumber if purely linear
+                // VersionNumber restarts at 1 for each new document. 
+                // So sorting by createdAt desc gives the most recent first across all documents.
+            },
             select: {
                 id: true,
                 versionNumber: true,
@@ -175,7 +188,14 @@ export class VersionService {
                 createdBy: {
                     select: { fullName: true, email: true }
                 },
-                storageKey: true
+                storageKey: true,
+                document: {
+                    select: {
+                        id: true,
+                        documentNumber: true,
+                        status: true
+                    }
+                }
             }
         });
     }

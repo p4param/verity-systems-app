@@ -55,6 +55,18 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
 
         try {
             setLoadingAction(action)
+
+            if (action === "revise") {
+                const newDoc = await fetchWithAuth(`/api/secure/dms/documents/${document.id}/revise`, {
+                    method: "POST"
+                })
+                // fetchWithAuth returns parsed JSON, so we use it directly
+                if (newDoc.id) {
+                    window.location.href = `/dms/documents/${newDoc.id}`
+                    return
+                }
+            }
+
             await fetchWithAuth(`/api/secure/dms/documents/${document.id}/workflow`, {
                 method: "POST",
                 body: JSON.stringify({ action, comment, reviewers })

@@ -41,6 +41,19 @@ export async function GET(
             return NextResponse.json({ downloadUrl });
         }
 
+        // Handle File Download Request (Explicit Attachment)
+        if (action === "download" && versionId) {
+            const version = await VersionService.getVersionById(versionId, user.tenantId, documentId);
+
+            if (!version) {
+                return NextResponse.json({ message: "Version not found" }, { status: 404 });
+            }
+
+            // Generate signed URL with fileName to force attachment
+            const downloadUrl = await StorageService.getDownloadUrl(version.storageKey, 3600, version.fileName);
+            return NextResponse.json({ downloadUrl });
+        }
+
         // Default: List History
         const history = await VersionService.listVersions(documentId, user.tenantId);
         return NextResponse.json(history);

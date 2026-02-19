@@ -478,4 +478,32 @@ export class DocumentService {
             return { success: true };
         });
     }
+
+    /**
+     * getAncestorDocumentIds
+     * 
+     * Recursively traverses supersedesId to find all ancestor documents.
+     * Returns an array including the current documentId and all ancestors.
+     */
+    static async getAncestorDocumentIds(documentId: string, tenantId: number): Promise<string[]> {
+        const ancestors: string[] = [documentId];
+        let currentId = documentId;
+
+        // Limiting depth to avoid infinite loops (though schema prevents cycles)
+        for (let i = 0; i < 50; i++) {
+            const doc = await globalPrisma.document.findUnique({
+                where: { id: currentId, tenantId },
+                select: { supersedesId: true }
+            });
+
+            if (!doc || !doc.supersedesId) {
+                break;
+            }
+
+            ancestors.push(doc.supersedesId);
+            currentId = doc.supersedesId;
+        }
+
+        return ancestors;
+    }
 }

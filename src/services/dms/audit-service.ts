@@ -27,12 +27,16 @@ export class AuditService {
     }: GetDocumentAuditLogsParams) {
         const skip = (page - 1) * limit;
 
+        // Fetch Ancestor IDs for unified history
+        const { DocumentService } = await import("./document-service");
+        const ancestorIds = await DocumentService.getAncestorDocumentIds(documentId, tenantId);
+
         // Fetch Total Count
         const total = await prisma.auditLog.count({
             where: {
                 tenantId,
                 entityType: "DOCUMENT",
-                entityId: documentId
+                entityId: { in: ancestorIds }
             }
         });
 
@@ -41,7 +45,7 @@ export class AuditService {
             where: {
                 tenantId,
                 entityType: "DOCUMENT",
-                entityId: documentId
+                entityId: { in: ancestorIds }
             },
             include: {
                 actor: {
@@ -69,7 +73,9 @@ export class AuditService {
                 actorName: log.actor?.fullName || "System/Unknown",
                 actorEmail: log.actor?.email,
                 createdAt: log.createdAt,
-                ipAddress: log.ipAddress
+                ipAddress: log.ipAddress,
+                entityId: log.entityId,
+                entityType: log.entityType
             })),
             total,
             page,

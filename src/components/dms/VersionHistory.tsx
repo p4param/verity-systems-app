@@ -1,5 +1,7 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+
 import React, { useState, useEffect, useCallback } from "react"
 import {
     History,
@@ -19,21 +21,27 @@ interface Version {
     versionNumber: number
     fileName: string
     mimeType: string
-    sizeBytes: number
+    fileSize: number
     createdAt: string
     createdBy: {
         fullName: string
+    }
+    document: {
+        id: string
+        documentNumber: string
+        status: string
     }
 }
 
 interface VersionHistoryProps {
     documentId: string
     documentStatus: string
-    onVersionUploaded: () => void
+    onVersionUploaded?: () => void
 }
 
 export function DmsVersionHistory({ documentId, documentStatus, onVersionUploaded }: VersionHistoryProps) {
     const { fetchWithAuth, user } = useAuth()
+    const router = useRouter()
     const [versions, setVersions] = useState<Version[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
@@ -83,7 +91,10 @@ export function DmsVersionHistory({ documentId, documentStatus, onVersionUploade
 
     const handleUploadSuccess = () => {
         loadVersions()
-        onVersionUploaded() // Notify parent to refresh metadata
+        router.refresh()
+        if (onVersionUploaded) {
+            onVersionUploaded()
+        }
     }
 
     if (loading && versions.length === 0) {
@@ -121,47 +132,71 @@ export function DmsVersionHistory({ documentId, documentStatus, onVersionUploade
                 )}
             </div>
 
-            <div className="border rounded-md divide-y bg-background">
+            <div className="border rounded-md bg-background overflow-hidden">
                 {versions.length === 0 ? (
                     <div className="p-6 text-center text-sm text-muted-foreground italic">
                         No versions uploaded yet.
                     </div>
                 ) : (
-                    versions.map((version) => (
-                        <div key={version.id} className="p-3 flex items-center justify-between group hover:bg-muted/30 transition-colors">
-                            <div className="flex items-start gap-3">
-                                <div className="p-2 bg-muted rounded">
-                                    <FileText size={16} className="text-muted-foreground" />
-                                </div>
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-mono text-sm font-semibold">v{version.versionNumber}</span>
-                                        <span className="text-sm truncate max-w-[200px]">{version.fileName}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
-                                        <span>{(version.sizeBytes / 1024).toFixed(1)} KB</span>
-                                        <span>•</span>
-                                        <span>{new Date(version.createdAt).toLocaleString()}</span>
-                                        <span>•</span>
-                                        <span>by {version.createdBy.fullName}</span>
-                                    </div>
-                                </div>
-                            </div>
+                    versions.map((version, index) => {
+                        // Check if we need a revision header
+                        // Show header if:
+                        // 1. First item
+                        // 2. Document ID changed from previous item
+                        const showHeader = index === 0 || version.document?.id !== versions[index - 1].document?.id;
+                        const isCurrentDoc = version.document?.id === documentId;
 
-                            <button
-                                onClick={() => handleDownload(version)}
-                                disabled={downloadingId === version.id}
-                                className="p-2 rounded hover:bg-muted text-muted-foreground hover:text-primary transition-all"
-                                title="Download"
-                            >
-                                {downloadingId === version.id ? (
-                                    <Loader2 size={16} className="animate-spin" />
-                                ) : (
-                                    <Download size={16} />
+                        return (
+                            <React.Fragment key={version.id}>
+                                {showHeader && (
+                                    <div className="bg-muted/40 p-2 px-3 text-xs font-semibold text-muted-foreground border-b flex items-center justify-between">
+                                        <span>
+                                            REVISION {version.document?.documentNumber || "UNKNOWN"}
+                                        </span>
+                                        <span className={`px-1.5 py-0.5 rounded text-[10px] uppercase border ${isCurrentDoc
+                                            ? "bg-primary/10 text-primary border-primary/20"
+                                            : "bg-muted text-muted-foreground border-muted-foreground/20"
+                                            }`}>
+                                            {isCurrentDoc ? "Current" : version.document?.status || "Archived"}
+                                        </span>
+                                    </div>
                                 )}
-                            </button>
-                        </div>
-                    ))
+                                <div className="p-3 flex items-center justify-between group hover:bg-muted/30 transition-colors border-b last:border-b-0">
+                                    <div className="flex items-start gap-3">
+                                        <div className="p-2 bg-muted rounded">
+                                            <FileText size={16} className="text-muted-foreground" />
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-mono text-sm font-semibold">v{version.versionNumber}</span>
+                                                <span className="text-sm truncate max-w-[200px]">{version.fileName}</span>
+                                            </div>
+                                            <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
+                                                <span>{((version.fileSize || 0) / 1024).toFixed(1)} KB</span>
+                                                <span>•</span>
+                                                <span>{new Date(version.createdAt).toLocaleString()}</span>
+                                                <span>•</span>
+                                                <span>by {version.createdBy.fullName}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => handleDownload(version)}
+                                        disabled={downloadingId === version.id}
+                                        className="p-2 rounded hover:bg-muted text-muted-foreground hover:text-primary transition-all"
+                                        title="Download"
+                                    >
+                                        {downloadingId === version.id ? (
+                                            <Loader2 size={16} className="animate-spin" />
+                                        ) : (
+                                            <Download size={16} />
+                                        )}
+                                    </button>
+                                </div>
+                            </React.Fragment>
+                        )
+                    })
                 )}
             </div>
 

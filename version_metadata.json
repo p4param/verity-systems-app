@@ -1,0 +1,18 @@
+{
+  "id": "cmlrx086c000d3zj0wjst8ik3",
+  "versionNumber": 1,
+  "fileName": "handbook_v1.pdf",
+  "fileSize": 512000,
+  "mimeType": "application/pdf",
+  "createdAt": "2026-02-18T10:54:23.844Z",
+  "createdBy": {
+    "fullName": "System Administrator",
+    "email": "admin@example.com"
+  },
+  "storageKey": "1/cmlrx085t000b3zj0krv88yw4/v1.pdf",
+  "document": {
+    "id": "cmlrx085t000b3zj0krv88yw4",
+    "documentNumber": null,
+    "status": "APPROVED"
+  }
+}

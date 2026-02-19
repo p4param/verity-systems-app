@@ -79,7 +79,7 @@ export function getAvailableWorkflowActions(
         }
     }
 
-    // 4. APPROVED -> Obsolete
+    // 4. APPROVED -> Obsolete OR Revise
     if (status === "APPROVED") {
         if (userPermissions.includes("DMS_DOCUMENT_OBSOLETE")) {
             actions.push({
@@ -87,6 +87,14 @@ export function getAvailableWorkflowActions(
                 label: "Mark Obsolete",
                 variant: "secondary",
                 requiredPermission: "DMS_DOCUMENT_OBSOLETE"
+            });
+        }
+        if (userPermissions.includes("DMS_DOCUMENT_CREATE")) {
+            actions.push({
+                action: "revise",
+                label: "Create Revision",
+                variant: "primary",
+                requiredPermission: "DMS_DOCUMENT_CREATE"
             });
         }
     }

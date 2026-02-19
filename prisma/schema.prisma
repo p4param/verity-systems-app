@@ -304,12 +304,18 @@ model Document {
   comments         DocumentComment[]
   acknowledgements DocumentAcknowledgement[]
 
-  // Supersedence (New)
-  // Supersedence (New)
-  supersedesId String?   @unique
+  // Supersedence
+  supersedesId String?
   supersedes   Document? @relation("Supersedes", fields: [supersedesId], references: [id])
-  supersededBy Document? @relation("Supersedes")
+  
+  supersededById String? @unique
+  supersededBy   Document? @relation("SupersededBy", fields: [supersededById], references: [id])
+  
+  // Reverse relations for the above (since they are self-relations)
+  childrenSuperseding Document[] @relation("Supersedes") 
+  parentSuperseded    Document?  @relation("SupersededBy")
 
+  @@unique([tenantId, supersedesId])
   @@unique([tenantId, documentNumber])
   @@index([tenantId])
   @@index([tenantId, folderId])
@@ -461,7 +467,6 @@ model ReviewReminderLog {
   review DocumentReview @relation(fields: [documentReviewId], references: [id], onDelete: Cascade)
 }
 
-
 model FolderPermission {
   id         String               @id @default(uuid())
   folderId   String
@@ -476,7 +481,6 @@ model FolderPermission {
 
   @@index([tenantId, folderId])
 }
-
 
 model DocumentComment {
   id         String   @id @default(uuid())
