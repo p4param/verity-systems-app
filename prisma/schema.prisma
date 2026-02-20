@@ -363,22 +363,27 @@ enum DocumentStatus {
   OBSOLETE
 }
 
+enum ContentMode {
+  FILE
+  INLINE
+}
+
 model DocumentVersion {
   id         String @id @default(cuid())
   documentId String
   tenantId   Int
 
   versionNumber Int
-  fileName      String
-  fileSize      Int
-  mimeType      String
+  fileName      String?
+  fileSize      Int?
+  mimeType      String?
 
-  storageKey String // tenantId/documentId/version.ext
+  storageKey String? // tenantId/documentId/version.ext (Required for FILE or generated PDF)
   
   // V3 Additions
-  contentType String  @default("FILE") // FILE | INLINE
+  contentMode ContentMode @default(FILE)
   contentJson Json?
-  isFrozen    Boolean @default(false)
+  isFrozen    Boolean     @default(false)
 
   createdById Int
   createdAt   DateTime @default(now())

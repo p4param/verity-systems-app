@@ -120,6 +120,9 @@ export class VersionService {
                     fileSize: fileBuffer.byteLength,
                     mimeType,
                     storageKey: uploadResult.storageKey,
+                    contentMode: "FILE",
+                    contentJson: null,
+                    isFrozen: false,
                     createdById: user.sub,
                 }
             });
@@ -140,12 +143,13 @@ export class VersionService {
                 entityType: "VERSION",
                 entityId: version.id, // Using version ID as entity ID
                 action: "DMS.VERSION_CREATE",
-                details: `Created version ${nextVersionNumber} for document ${documentId}. Key: ${uploadResult.storageKey}`,
+                details: `Created version ${nextVersionNumber} for document ${documentId} (FILE mode). Key: ${uploadResult.storageKey}`,
                 metadata: {
                     versionNumber: nextVersionNumber,
                     documentId,
                     title: document.title, // Include title for audit display
-                    fileName: originalFileName
+                    fileName: originalFileName,
+                    contentMode: "FILE"
                 }
             }, tx);
 
@@ -153,6 +157,105 @@ export class VersionService {
         }, {
             maxWait: 5000, // Wait max 5s for a connection
             timeout: 20000 // Transaction can run for up to 20s (fixes P2028 on slow uploads/locks)
+        });
+    }
+
+    /**
+     * saveInlineVersion
+     * 
+     * Saves a new document version with INLINE content (JSON).
+     * Enforces Rule 1 & 2.
+     */
+    static async saveInlineVersion(params: {
+        tenantId: number;
+        documentId: string;
+        contentJson: any;
+        user: AuthUser;
+    }) {
+        const { tenantId, documentId, contentJson, user } = params;
+
+        // 1. Validate document
+        const document = await globalPrisma.document.findUnique({
+            where: { id: documentId, tenantId },
+            select: { id: true, status: true, title: true }
+        });
+
+        if (!document) {
+            throw new DocumentNotFoundError(documentId, tenantId);
+        }
+
+        // 2. Governance: Check status (Must be DRAFT or REJECTED)
+        const ALLOWED_STATES = ["DRAFT", "REJECTED"];
+        if (!ALLOWED_STATES.includes(document.status)) {
+            const { DomainViolationError } = await import("@/lib/dms/errors");
+            throw new DomainViolationError(`Inline content can only be saved in DRAFT or REJECTED states. Current: ${document.status}`);
+        }
+
+        // 3. Determine next versionNumber
+        const lastVersion = await globalPrisma.documentVersion.findFirst({
+            where: { documentId, tenantId },
+            orderBy: { versionNumber: "desc" },
+            select: { versionNumber: true, isFrozen: true, contentMode: true }
+        });
+
+        // Rule: Cannot switch contentMode in the SAME version if frozen (handled by version increment)
+        // Rule 2: Primary content can be edited ONLY IF doc.status = DRAFT AND version.isFrozen = false
+        // However, we usually create a NEW version or update the LATEST if it's a DRAFT?
+        // In this system, every "Save" seems to create a new version number? 
+        // Based on uploadNewVersion, it ALWAYS increments. 
+        // If we want "Drafting" to happen in place, we might need a different logic.
+        // But the prompt says "For each DocumentVersion: Exactly ONE primary content... Freeze on submission".
+        // This implies when you are in DRAFT status, you might have multiple versions.
+
+        const nextVersionNumber = (lastVersion?.versionNumber || 0) + 1;
+
+        return await globalPrisma.$transaction(async (tx: any) => {
+            // Check for race condition
+            const existingVersion = await tx.documentVersion.findFirst({
+                where: { documentId, tenantId, versionNumber: nextVersionNumber }
+            });
+            if (existingVersion) throw new VersionConflictError(documentId, nextVersionNumber);
+
+            // 4. Create record
+            const version = await tx.documentVersion.create({
+                data: {
+                    documentId,
+                    tenantId,
+                    versionNumber: nextVersionNumber,
+                    contentMode: "INLINE",
+                    contentJson,
+                    storageKey: null, // PDF snapshot generated on approval
+                    isFrozen: false,
+                    createdById: user.sub,
+                }
+            });
+
+            // 5. Update document pointer
+            await tx.document.update({
+                where: { id: documentId, tenantId },
+                data: {
+                    currentVersionId: version.id,
+                    updatedById: user.sub
+                }
+            });
+
+            // 6. Audit Log
+            await createAuditLog({
+                tenantId,
+                actorUserId: user.sub,
+                entityType: "VERSION",
+                entityId: version.id,
+                action: "DMS.VERSION_CREATE",
+                details: `Created version ${nextVersionNumber} for document ${documentId} (INLINE mode).`,
+                metadata: {
+                    versionNumber: nextVersionNumber,
+                    documentId,
+                    title: document.title,
+                    contentMode: "INLINE"
+                }
+            }, tx);
+
+            return version;
         });
     }
 

@@ -7,7 +7,8 @@ import {
     AlertCircle,
     CheckCircle2,
     Calendar,
-    Tag
+    Tag,
+    Edit3
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { Modal } from "@/components/ui/Modal"
@@ -32,6 +33,7 @@ export function CreateDocumentModal({ isOpen, onClose, folderId, onSuccess }: Cr
     const [typeId, setTypeId] = useState("")
     const [selectedFolderId, setSelectedFolderId] = useState(folderId || "")
     const [selectedFolderName, setSelectedFolderName] = useState("")
+    const [contentMode, setContentMode] = useState<"FILE" | "INLINE">("FILE")
 
     // Data State
     const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([])
@@ -107,6 +109,13 @@ export function CreateDocumentModal({ isOpen, onClose, folderId, onSuccess }: Cr
                 })
             })
 
+            if (contentMode === "INLINE") {
+                await fetchWithAuth(`/api/secure/dms/documents/${document.id}/inline`, {
+                    method: "POST",
+                    body: JSON.stringify({ contentJson: "" })
+                })
+            }
+
             setSuccess(true)
             setTimeout(() => {
                 onSuccess(document.id)
@@ -178,8 +187,43 @@ export function CreateDocumentModal({ isOpen, onClose, folderId, onSuccess }: Cr
         >
             <form onSubmit={handleCreate} className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                    Define the initial metadata for your document. You can upload files and start the workflow after creation.
+                    Define the initial metadata for your document. You can choose to upload files or use the integrated editor.
                 </p>
+
+                {/* Content Mode Selection */}
+                <div className="space-y-2">
+                    <label className="text-sm font-medium">Document Source Mode</label>
+                    <div className="grid grid-cols-2 gap-4">
+                        <button
+                            type="button"
+                            onClick={() => setContentMode("FILE")}
+                            className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${contentMode === "FILE"
+                                ? "border-primary bg-primary/5 text-primary"
+                                : "border-muted bg-background text-muted-foreground hover:border-muted-foreground/50"
+                                }`}
+                        >
+                            <FilePlus size={24} />
+                            <div className="text-center">
+                                <span className="text-sm font-semibold">File Upload</span>
+                                <p className="text-[10px] opacity-80">PDF, Images, DOCX</p>
+                            </div>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setContentMode("INLINE")}
+                            className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${contentMode === "INLINE"
+                                ? "border-primary bg-primary/5 text-primary"
+                                : "border-muted bg-background text-muted-foreground hover:border-muted-foreground/50"
+                                }`}
+                        >
+                            <Edit3 size={24} />
+                            <div className="text-center">
+                                <span className="text-sm font-semibold">Inline Editor</span>
+                                <p className="text-[10px] opacity-80">Text/JSON content</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2 col-span-2">

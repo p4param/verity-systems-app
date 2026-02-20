@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { ReviewStatus, DocumentStatus } from "@prisma/client";
 import { createAuditLog } from "@/lib/audit";
 import { AuthUser } from "@/lib/auth/auth-types";
+import { ApprovalService } from "./ApprovalService";
 
 export class ReviewService {
     /**
@@ -152,21 +153,8 @@ export class ReviewService {
                     // If we are here, it means all were APPROVED (or cancelled, but cancelled usually implies rejection).
                     // Double check we don't have mixed states if we allowed concurrent stages.
 
-                    // Transition Document to APPROVED
-                    await tx.document.update({
-                        where: { id: documentId },
-                        data: { status: DocumentStatus.APPROVED },
-                    });
-
-                    await createAuditLog({
-                        tenantId,
-                        actorUserId: reviewerUserId, // The last reviewer triggers approval
-                        entityType: "DOCUMENT",
-                        entityId: documentId,
-                        action: "DMS.DOCUMENT_APPROVED",
-                        details: "All reviews completed. Document APPROVED.",
-                        module: "DMS"
-                    }, tx);
+                    // Transition Document to APPROVED via centralized service
+                    await ApprovalService.finalizeDocumentApproval(tx, documentId, tenantId, reviewerUserId);
 
                     return { status: "APPROVED" };
                 }

@@ -13,6 +13,8 @@ import {
     StateMismatchError,
     DomainViolationError
 } from "./errors";
+import { PdfService } from "@/services/dms/pdf-service";
+import { ApprovalService } from "./services/ApprovalService";
 
 /**
  * Maps workflow actions to required Folder Permissions.
@@ -193,24 +195,28 @@ export async function transitionDocumentStatus(
         // --- V2 INTERCEPTION END ---
 
         // e. Execute Update (V1 Flow / Default)
-        // We use updateMany with the expected 'from' status in the WHERE clause.
-        const updateResult = await tx.document.updateMany({
-            where: {
-                id: documentId,
-                tenantId: tenantId,
-                status: transition.from
-            },
-            data: {
-                status: transition.to,
-                updatedById: user.sub,
-                updatedAt: new Date()
-            }
-        });
+        if (action === "approve") {
+            await ApprovalService.finalizeDocumentApproval(tx, documentId, tenantId, user.sub);
+        } else {
+            // We use updateMany with the expected 'from' status in the WHERE clause.
+            const updateResult = await tx.document.updateMany({
+                where: {
+                    id: documentId,
+                    tenantId: tenantId,
+                    status: transition.from
+                },
+                data: {
+                    status: transition.to,
+                    updatedById: user.sub,
+                    updatedAt: new Date()
+                }
+            });
 
-        if (updateResult.count === 0) {
-            const currentDoc = await tx.document.findUnique({ where: { id: documentId } });
-            if (!currentDoc) throw new DocumentNotFoundError(documentId, tenantId);
-            throw new StateMismatchError(documentId, transition.from, currentDoc.status);
+            if (updateResult.count === 0) {
+                const currentDoc = await tx.document.findUnique({ where: { id: documentId } });
+                if (!currentDoc) throw new DocumentNotFoundError(documentId, tenantId);
+                throw new StateMismatchError(documentId, transition.from, currentDoc.status);
+            }
         }
 
         // --- FREEZE VERSION ON SUBMISSION START ---

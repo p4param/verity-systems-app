@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Loader2, AlertCircle, Download, FileX, RefreshCw } from "lucide-react"
+import { Loader2, AlertCircle, Download, FileX, RefreshCw, Edit3 } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
@@ -13,6 +13,10 @@ interface DocumentViewerProps {
     mimeType?: string | null
     effectiveStatus: string
     fileName?: string
+    contentMode?: "FILE" | "INLINE"
+    contentJson?: any | null
+    onEdit?: () => void
+    canEdit?: boolean
 }
 
 interface ViewerState {
@@ -30,7 +34,11 @@ export function DocumentViewer({
     currentVersionId,
     mimeType,
     effectiveStatus,
-    fileName = "document"
+    fileName = "document",
+    contentMode = "FILE",
+    contentJson,
+    onEdit,
+    canEdit = false
 }: DocumentViewerProps) {
     const { fetchWithAuth } = useAuth()
     const fetchWithAuthRef = React.useRef(fetchWithAuth)
@@ -188,6 +196,59 @@ export function DocumentViewer({
     const isImage = cleanMime.startsWith("image/")
 
     // --- Render Content ---
+    if (contentMode === "INLINE") {
+        return (
+            <Card className="flex flex-col overflow-hidden bg-white border border-gray-200 h-full min-h-[600px] shadow-sm">
+                <div className="flex-1 bg-white p-6 overflow-auto font-sans leading-relaxed">
+                    {contentJson ? (
+                        <div className="prose prose-sm max-w-none">
+                            {typeof contentJson === 'string' ? (
+                                <p className="whitespace-pre-wrap">{contentJson}</p>
+                            ) : (
+                                <pre className="bg-gray-50 p-4 rounded-md text-xs">
+                                    {JSON.stringify(contentJson, null, 2)}
+                                </pre>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+                            <AlertCircle className="h-8 w-8 mb-2" />
+                            <p>No content has been saved for this inline document.</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer for INLINE mode */}
+                <div className="p-4 border-t bg-gray-50 flex justify-between items-center">
+                    {canEdit && onEdit ? (
+                        <button
+                            onClick={onEdit}
+                            className="text-sm font-medium text-blue-600 flex items-center gap-2 hover:text-blue-800 transition-colors"
+                        >
+                            <Edit3 className="h-4 w-4" />
+                            <span>Edit Inline Content</span>
+                        </button>
+                    ) : (
+                        <div className="text-sm font-medium text-gray-500 flex items-center gap-2">
+                            <Edit3 className="h-4 w-4" />
+                            Inline Editor Content
+                        </div>
+                    )}
+                    {effectiveStatus === "APPROVED" && state.signedUrl && (
+                        <Button
+                            variant="outline"
+                            onClick={() => window.open(state.signedUrl!, '_blank')}
+                            className="gap-2 text-xs h-8"
+                        >
+                            <Download className="h-3 w-3" />
+                            View PDF Snapshot
+                        </Button>
+                    )}
+                </div>
+            </Card>
+        )
+    }
+
     return (
         <Card className="flex flex-col overflow-hidden bg-white border border-gray-200 h-full min-h-[600px] shadow-sm">
             {/* Toolbar (Optional, currently just for structure) */}

@@ -138,7 +138,8 @@ export class DocumentService {
                         fileSize: true,
                         isFrozen: true,
                         attachments: true,
-                        contentType: true
+                        contentMode: true,
+                        contentJson: true
                     }
                 },
                 versions: {
@@ -340,7 +341,7 @@ export class DocumentService {
                 where,
                 include: {
                     currentVersion: {
-                        select: { id: true, fileName: true, versionNumber: true }
+                        select: { id: true, fileName: true, versionNumber: true, contentMode: true }
                     },
                     createdBy: {
                         select: { fullName: true, email: true }

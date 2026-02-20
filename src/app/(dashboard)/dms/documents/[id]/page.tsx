@@ -25,6 +25,7 @@ import { DocumentReviews } from "@/components/dms/DocumentReviews"
 import { DocumentComments } from "@/components/dms/DocumentComments"
 import { DocumentAcknowledgement } from "@/components/dms/DocumentAcknowledgement"
 import { DocumentAttachments } from "@/components/dms/DocumentAttachments"
+import { EditInlineContentModal } from "@/components/dms/EditInlineContentModal"
 
 // Updated DocumentDetail interface to include supersededBy
 interface DocumentDetail {
@@ -51,12 +52,13 @@ interface DocumentDetail {
     currentVersion?: {
         id: string
         versionNumber: number
-        fileName: string
-        mimeType: string
+        fileName: string | null
+        mimeType: string | null
+        contentMode: "FILE" | "INLINE"
+        contentJson: any | null
         isFrozen?: boolean
         attachments?: any[]
     }
-    // Added for Revision UI
     supersededById: string | null
     supersededBy?: {
         id: string
@@ -77,6 +79,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
     const [error, setError] = useState<string | null>(null)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+    const [isInlineEditModalOpen, setIsInlineEditModalOpen] = useState(false)
     const [activeTab, setActiveTab] = useState<"about" | "versions" | "audit" | "reviews" | "comments">("about")
 
     const canShare = usePermission("DMS_SHARE_CREATE")
@@ -235,8 +238,12 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                             documentId={document.id}
                             currentVersionId={document.currentVersion?.id}
                             mimeType={document.currentVersion?.mimeType}
-                            fileName={document.currentVersion?.fileName}
+                            fileName={document.currentVersion?.fileName || "document"}
                             effectiveStatus={document.effectiveStatus}
+                            contentMode={document.currentVersion?.contentMode}
+                            contentJson={document.currentVersion?.contentJson}
+                            onEdit={() => setIsInlineEditModalOpen(true)}
+                            canEdit={isEditable && document.currentVersion?.contentMode === "INLINE"}
                         />
                     </div>
 
@@ -351,7 +358,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                                     <div className="grid grid-cols-2 gap-2">
                                         <span className="text-muted-foreground">Format</span>
                                         <span className="font-medium text-right truncate">
-                                            {document.currentVersion?.fileName.split('.').pop()?.toUpperCase() || '-'}
+                                            {document.currentVersion?.fileName ? document.currentVersion.fileName.split('.').pop()?.toUpperCase() : (document.currentVersion?.contentMode === 'INLINE' ? 'EDITOR' : '-')}
                                         </span>
                                     </div>
                                     <div className="pt-2 border-t mt-2">
@@ -438,6 +445,17 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
                     document={document}
+                    onSuccess={loadDocument}
+                />
+            )}
+
+            {/* Inline Content Edit Modal */}
+            {document && (
+                <EditInlineContentModal
+                    isOpen={isInlineEditModalOpen}
+                    onClose={() => setIsInlineEditModalOpen(false)}
+                    documentId={document.id}
+                    currentContent={document.currentVersion?.contentJson}
                     onSuccess={loadDocument}
                 />
             )}
