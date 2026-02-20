@@ -213,6 +213,23 @@ export async function transitionDocumentStatus(
             throw new StateMismatchError(documentId, transition.from, currentDoc.status);
         }
 
+        // --- FREEZE VERSION ON SUBMISSION START ---
+        if (action === "submit") {
+            // Find current version to freeze
+            const docWithVersion = await tx.document.findUnique({
+                where: { id: documentId, tenantId },
+                select: { currentVersionId: true }
+            });
+
+            if (docWithVersion?.currentVersionId) {
+                await tx.documentVersion.update({
+                    where: { id: docWithVersion.currentVersionId, tenantId },
+                    data: { isFrozen: true }
+                });
+            }
+        }
+        // --- FREEZE VERSION ON SUBMISSION END ---
+
         // --- AUTOMATIC OBSOLETE LOGIC START ---
         // If approving a revision, auto-obsolete the previous document
         if (action === "approve" && document.supersedesId) {

@@ -135,7 +135,10 @@ export class DocumentService {
                         versionNumber: true,
                         fileName: true,
                         mimeType: true,
-                        fileSize: true
+                        fileSize: true,
+                        isFrozen: true,
+                        attachments: true,
+                        contentType: true
                     }
                 },
                 versions: {
@@ -143,7 +146,8 @@ export class DocumentService {
                     include: {
                         createdBy: {
                             select: { fullName: true, email: true }
-                        }
+                        },
+                        attachments: true
                     }
                 },
                 folder: {

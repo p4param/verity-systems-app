@@ -24,6 +24,7 @@ import { DocumentAuditPanel } from "@/components/dms/DocumentAuditPanel"
 import { DocumentReviews } from "@/components/dms/DocumentReviews"
 import { DocumentComments } from "@/components/dms/DocumentComments"
 import { DocumentAcknowledgement } from "@/components/dms/DocumentAcknowledgement"
+import { DocumentAttachments } from "@/components/dms/DocumentAttachments"
 
 // Updated DocumentDetail interface to include supersededBy
 interface DocumentDetail {
@@ -52,6 +53,8 @@ interface DocumentDetail {
         versionNumber: number
         fileName: string
         mimeType: string
+        isFrozen?: boolean
+        attachments?: any[]
     }
     // Added for Revision UI
     supersededById: string | null
@@ -236,6 +239,22 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                             effectiveStatus={document.effectiveStatus}
                         />
                     </div>
+
+                    {/* Attachments Section */}
+                    {document.currentVersion && (
+                        <div className="p-6 bg-card border rounded-lg shadow-sm space-y-4">
+                            <DocumentAttachments
+                                documentId={document.id}
+                                version={{
+                                    id: document.currentVersion.id,
+                                    isFrozen: document.currentVersion.isFrozen || false,
+                                    attachments: document.currentVersion.attachments || []
+                                }}
+                                documentStatus={document.status}
+                                onRefresh={loadDocument}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 {/* RIGHT COLUMN (1/3) - Metadata & History */}

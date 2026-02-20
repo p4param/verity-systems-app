@@ -374,6 +374,11 @@ model DocumentVersion {
   mimeType      String
 
   storageKey String // tenantId/documentId/version.ext
+  
+  // V3 Additions
+  contentType String  @default("FILE") // FILE | INLINE
+  contentJson Json?
+  isFrozen    Boolean @default(false)
 
   createdById Int
   createdAt   DateTime @default(now())
@@ -385,10 +390,27 @@ model DocumentVersion {
 
   isCurrentFor     Document[]                @relation("CurrentVersion")
   acknowledgements DocumentAcknowledgement[]
+  attachments      DocumentVersionAttachment[]
 
   @@unique([documentId, versionNumber])
   @@index([tenantId])
   @@index([tenantId, documentId])
+}
+
+model DocumentVersionAttachment {
+  id          String   @id @default(uuid())
+  versionId   String
+  tenantId    Int
+  fileName    String
+  storageKey  String
+  mimeType    String
+  fileSize    Int
+  createdById String
+  createdAt   DateTime @default(now())
+
+  version     DocumentVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, versionId])
 }
 
 model ShareLink {

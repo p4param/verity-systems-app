@@ -102,22 +102,64 @@ export class RevisionService {
                     updatedById: user.sub,
 
                     // Linkage
-                    // topLevelId removed as it is not in schema
                     supersedesId: originalDoc.id
                 }
             });
 
-            // 6. Update Original Document (Mark as Superseded)
-            // Note: status remains APPROVED until the new one is APPROVED? 
-            // Or does original become OBSOLETE immediately?
-            // "Approved document cannot be modified" -> "Original remains immutable".
-            // "Superseded by" is a meta-field, effectively not changing the content/status yet.
-            // Usually, the original stays APPROVED until the new one takes over.
-            // The prompt says "Original remains immutable". 
-            // BUT "Update original: supersededById = newDocument.id".
-            // This is a linkage update, technically a modification, but allowed system-side.
+            // 6. Clone Version Content & Attachments
+            const currentVersion = await tx.documentVersion.findUnique({
+                where: { id: originalDoc.currentVersionId as string, tenantId },
+                include: { attachments: true }
+            });
 
-            // Using update directly since we are in a transaction
+            let newVersionId: string | undefined = undefined;
+
+            if (currentVersion) {
+                // Determine next versionNumber for the NEW document (it starts at 1)
+                const nextVersionNumber = 1;
+
+                // Create new version for the revision
+                const newVersion = await tx.documentVersion.create({
+                    data: {
+                        documentId: newDoc.id,
+                        tenantId,
+                        versionNumber: nextVersionNumber,
+                        fileName: currentVersion.fileName,
+                        fileSize: currentVersion.fileSize,
+                        mimeType: currentVersion.mimeType,
+                        storageKey: currentVersion.storageKey,
+                        contentType: currentVersion.contentType,
+                        contentJson: currentVersion.contentJson,
+                        isFrozen: false, // New revision is NOT frozen
+                        createdById: user.sub,
+                    }
+                });
+
+                newVersionId = newVersion.id;
+
+                // Update new document pointer
+                await tx.document.update({
+                    where: { id: newDoc.id, tenantId },
+                    data: { currentVersionId: newVersion.id }
+                });
+
+                // Clone Attachments
+                if (currentVersion.attachments.length > 0) {
+                    await tx.documentVersionAttachment.createMany({
+                        data: currentVersion.attachments.map((att: any) => ({
+                            versionId: newVersion.id,
+                            tenantId,
+                            fileName: att.fileName,
+                            storageKey: att.storageKey,
+                            mimeType: att.mimeType,
+                            fileSize: att.fileSize,
+                            createdById: user.sub.toString(), // Ensure string
+                        }))
+                    });
+                }
+            }
+
+            // 7. Update Original Document (Mark as Superseded)
             await tx.document.update({
                 where: { id: originalDoc.id },
                 data: {
@@ -125,22 +167,23 @@ export class RevisionService {
                 }
             });
 
-            // 7. Audit Log
+            // 8. Audit Log
             await createAuditLog({
                 tenantId,
                 actorUserId: user.sub,
                 entityType: "DOCUMENT",
                 entityId: newDoc.id,
-                action: "DMS.REVISION_CREATED", // Ensure this action string is valid or added to DB enum
-                details: `Created revision ${newDoc.documentNumber} superseding ${originalDoc.documentNumber}`,
+                action: "DMS.REVISION_CREATED",
+                details: `Created revision ${newDoc.documentNumber} superseding ${originalDoc.documentNumber}. Cloned content and ${currentVersion?.attachments.length || 0} attachments.`,
                 metadata: {
                     originalDocumentId: originalDoc.id,
                     newDocumentId: newDoc.id,
+                    clonedAttachmentsCount: currentVersion?.attachments.length || 0,
                     mapping: `${originalDoc.documentNumber} -> ${newDoc.documentNumber}`
                 }
-            }, tx); // Pass tx to audit log to ensure it's part of transaction
+            }, tx);
 
-            return newDoc;
+            return { ...newDoc, currentVersionId: newVersionId };
         });
     }
 }

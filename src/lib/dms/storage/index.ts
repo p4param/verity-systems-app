@@ -127,4 +127,20 @@ export class StorageService {
     static async fileExists(key: string): Promise<boolean> {
         return await this.getProvider().exists(key);
     }
+
+    /**
+     * Generates a secure, tenant-scoped storage key for attachments.
+     * Format: tenantId/documentId/versionId/attachmentId.extension
+     */
+    static generateAttachmentKey(params: {
+        tenantId: number;
+        documentId: string;
+        versionId: string;
+        attachmentId: string;
+        extension: string;
+    }): string {
+        const { tenantId, documentId, versionId, attachmentId, extension } = params;
+        const ext = extension.startsWith(".") ? extension.slice(1) : extension;
+        return `${tenantId}/${documentId}/${versionId}/${attachmentId}.${ext}`;
+    }
 }

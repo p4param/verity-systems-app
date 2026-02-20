@@ -15,7 +15,8 @@ const ALLOWED_MIME_TYPES: Record<string, string[]> = {
     "application/pdf": [".pdf"],
     "image/png": [".png"],
     "image/jpeg": [".jpg", ".jpeg"],
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"]
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [".docx"],
+    "text/plain": [".txt"]
 };
 
 /**
