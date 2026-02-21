@@ -9,7 +9,8 @@ import {
     InvalidWorkflowActionError,
     FolderNotEmptyError,
     DocumentLockedError,
-    ShareLinkExpiredError
+    ShareLinkExpiredError,
+    DomainViolationError
 } from "./errors";
 import {
     FileTooLargeError,
@@ -64,7 +65,8 @@ export function handleApiError(error: any) {
         error instanceof MimeTypeMismatchError ||
         error instanceof InvalidMimeTypeError ||
         error instanceof InvalidFileNameError ||
-        error instanceof ShareLinkExpiredError
+        error instanceof ShareLinkExpiredError ||
+        error instanceof DomainViolationError
     ) {
         status = 400;
     }

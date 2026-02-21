@@ -13,6 +13,7 @@ export interface CreateDocumentParams {
     folderId?: string | null;
     expiryDate?: Date;
     typeId?: string;
+    contentMode?: "FILE" | "STRUCTURED";
     tenantId: number;
     user: AuthUser;
 }
@@ -36,7 +37,7 @@ export class DocumentService {
      * Requires folderId as per rules.
      */
     static async createDocument(params: CreateDocumentParams, tx?: any) {
-        const { title, description, folderId, expiryDate, typeId, tenantId, user } = params;
+        const { title, description, folderId, expiryDate, typeId, contentMode, tenantId, user } = params;
         const db = tx || globalPrisma;
 
         return await db.$transaction(async (innerTx: any) => {
@@ -115,7 +116,7 @@ export class DocumentService {
             }, innerTx);
 
             return document;
-        });
+        }, { timeout: 30_000 });
     }
 
     /**
@@ -441,7 +442,7 @@ export class DocumentService {
                 ...updatedDocument,
                 effectiveStatus: resolveEffectiveStatus(updatedDocument)
             };
-        });
+        }, { timeout: 30_000 });
     }
 
     /**
@@ -487,7 +488,7 @@ export class DocumentService {
             }, innerTx);
 
             return { success: true };
-        });
+        }, { timeout: 30_000 });
     }
 
     /**

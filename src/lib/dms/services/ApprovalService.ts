@@ -7,7 +7,7 @@ export class ApprovalService {
      * finalizeDocumentApproval
      * 
      * Centralized logic for finalizing document approval.
-     * Includes Rule 4: PDF Snapshot generation for INLINE documents.
+     * Includes Rule 4: PDF Snapshot generation for STRUCTURED documents.
      */
     static async finalizeDocumentApproval(
         tx: any,
@@ -29,10 +29,10 @@ export class ApprovalService {
 
         const version = doc.currentVersion;
 
-        // 2. Rule 4: PDF Snapshot Generation for INLINE
-        if (version.contentMode === "INLINE") {
+        // 2. Rule 4: PDF Snapshot Generation for STRUCTURED
+        if (version.contentMode === "STRUCTURED") {
             if (!version.contentJson) {
-                throw new Error(`Fatal: INLINE document ${documentId} has no contentJson.`);
+                throw new Error(`Fatal: STRUCTURED document ${documentId} has no contentJson.`);
             }
 
             // Generate and upload PDF
@@ -67,7 +67,7 @@ export class ApprovalService {
             entityType: "DOCUMENT",
             entityId: documentId,
             action: "DMS.DOCUMENT_APPROVED",
-            details: `Document APPROVED. Content Mode: ${version.contentMode}. ${version.contentMode === "INLINE" ? "Generated PDF snapshot." : ""}`,
+            details: `Document APPROVED. Content Mode: ${version.contentMode}. ${version.contentMode === "STRUCTURED" ? "Generated PDF snapshot." : ""}`,
             module: "DMS"
         }, tx);
 

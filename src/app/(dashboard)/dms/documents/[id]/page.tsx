@@ -25,7 +25,7 @@ import { DocumentReviews } from "@/components/dms/DocumentReviews"
 import { DocumentComments } from "@/components/dms/DocumentComments"
 import { DocumentAcknowledgement } from "@/components/dms/DocumentAcknowledgement"
 import { DocumentAttachments } from "@/components/dms/DocumentAttachments"
-import { EditInlineContentModal } from "@/components/dms/EditInlineContentModal"
+import { EditStructuredContentModal } from "@/components/dms/EditStructuredContentModal"
 
 // Updated DocumentDetail interface to include supersededBy
 interface DocumentDetail {
@@ -54,7 +54,7 @@ interface DocumentDetail {
         versionNumber: number
         fileName: string | null
         mimeType: string | null
-        contentMode: "FILE" | "INLINE"
+        contentMode: "FILE" | "STRUCTURED"
         contentJson: any | null
         isFrozen?: boolean
         attachments?: any[]
@@ -79,22 +79,18 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
     const [error, setError] = useState<string | null>(null)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-    const [isInlineEditModalOpen, setIsInlineEditModalOpen] = useState(false)
+    const [isStructuredEditModalOpen, setIsStructuredEditModalOpen] = useState(false)
     const [activeTab, setActiveTab] = useState<"about" | "versions" | "audit" | "reviews" | "comments">("about")
 
     const canShare = usePermission("DMS_SHARE_CREATE")
     const canEdit = usePermission("DMS_DOCUMENT_EDIT")
 
-    const loadDocument = useCallback(async () => {
+    const loadDocument = useCallback(async (silent = false) => {
         try {
-            setLoading(true)
-            // The API endpoint must return supersededBy relation. 
-            // We assume the backend route /api/secure/dms/documents/[id] already does or we need to check.
-            // Let's check the backend route first.
+            if (!silent) setLoading(true)
             const data = await fetchWithAuthRef.current<DocumentDetail>(`/api/secure/dms/documents/${id}`)
             setDocument(data)
         } catch (err: any) {
-            // ... error handling
             console.error("Failed to load document:", err)
             let errorMessage = "Failed to load document"
             if (err?.error?.message) {
@@ -106,7 +102,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
             }
             setError(errorMessage)
         } finally {
-            setLoading(false)
+            if (!silent) setLoading(false)
         }
     }, [id])
 
@@ -242,8 +238,8 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                             effectiveStatus={document.effectiveStatus}
                             contentMode={document.currentVersion?.contentMode}
                             contentJson={document.currentVersion?.contentJson}
-                            onEdit={() => setIsInlineEditModalOpen(true)}
-                            canEdit={isEditable && document.currentVersion?.contentMode === "INLINE"}
+                            onEdit={() => setIsStructuredEditModalOpen(true)}
+                            canEdit={isEditable && document.currentVersion?.contentMode === "STRUCTURED"}
                         />
                     </div>
 
@@ -358,7 +354,7 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                                     <div className="grid grid-cols-2 gap-2">
                                         <span className="text-muted-foreground">Format</span>
                                         <span className="font-medium text-right truncate">
-                                            {document.currentVersion?.fileName ? document.currentVersion.fileName.split('.').pop()?.toUpperCase() : (document.currentVersion?.contentMode === 'INLINE' ? 'EDITOR' : '-')}
+                                            {document.currentVersion?.fileName ? document.currentVersion.fileName.split('.').pop()?.toUpperCase() : (document.currentVersion?.contentMode === 'STRUCTURED' ? 'EDITOR' : '-')}
                                         </span>
                                     </div>
                                     <div className="pt-2 border-t mt-2">
@@ -449,14 +445,15 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                 />
             )}
 
-            {/* Inline Content Edit Modal */}
+            {/* Structured Content Edit Modal */}
             {document && (
-                <EditInlineContentModal
-                    isOpen={isInlineEditModalOpen}
-                    onClose={() => setIsInlineEditModalOpen(false)}
+                <EditStructuredContentModal
+                    isOpen={isStructuredEditModalOpen}
+                    onClose={() => setIsStructuredEditModalOpen(false)}
                     documentId={document.id}
                     currentContent={document.currentVersion?.contentJson}
                     onSuccess={loadDocument}
+                    frozen={document.currentVersion?.isFrozen ?? false}
                 />
             )}
         </div>

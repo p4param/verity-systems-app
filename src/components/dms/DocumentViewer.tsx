@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useAuth } from "@/lib/auth/auth-context"
+import { TipTapEditor } from "./TipTapEditor"
 
 interface DocumentViewerProps {
     documentId: string
@@ -13,7 +14,7 @@ interface DocumentViewerProps {
     mimeType?: string | null
     effectiveStatus: string
     fileName?: string
-    contentMode?: "FILE" | "INLINE"
+    contentMode?: "FILE" | "STRUCTURED"
     contentJson?: any | null
     onEdit?: () => void
     canEdit?: boolean
@@ -196,29 +197,25 @@ export function DocumentViewer({
     const isImage = cleanMime.startsWith("image/")
 
     // --- Render Content ---
-    if (contentMode === "INLINE") {
+    if (contentMode === "STRUCTURED") {
         return (
             <Card className="flex flex-col overflow-hidden bg-white border border-gray-200 h-full min-h-[600px] shadow-sm">
-                <div className="flex-1 bg-white p-6 overflow-auto font-sans leading-relaxed">
+                <div className="flex-1 overflow-auto">
                     {contentJson ? (
-                        <div className="prose prose-sm max-w-none">
-                            {typeof contentJson === 'string' ? (
-                                <p className="whitespace-pre-wrap">{contentJson}</p>
-                            ) : (
-                                <pre className="bg-gray-50 p-4 rounded-md text-xs">
-                                    {JSON.stringify(contentJson, null, 2)}
-                                </pre>
-                            )}
-                        </div>
+                        <TipTapEditor
+                            initialContent={contentJson}
+                            onChange={() => { }}
+                            editable={false}
+                        />
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+                        <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
                             <AlertCircle className="h-8 w-8 mb-2" />
-                            <p>No content has been saved for this inline document.</p>
+                            <p>No content has been saved for this structured document.</p>
                         </div>
                     )}
                 </div>
 
-                {/* Footer for INLINE mode */}
+                {/* Footer for STRUCTURED mode */}
                 <div className="p-4 border-t bg-gray-50 flex justify-between items-center">
                     {canEdit && onEdit ? (
                         <button
@@ -231,7 +228,7 @@ export function DocumentViewer({
                     ) : (
                         <div className="text-sm font-medium text-gray-500 flex items-center gap-2">
                             <Edit3 className="h-4 w-4" />
-                            Inline Editor Content
+                            Structured Editor Content
                         </div>
                     )}
                     {effectiveStatus === "APPROVED" && state.signedUrl && (

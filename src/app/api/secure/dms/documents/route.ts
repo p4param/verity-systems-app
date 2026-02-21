@@ -94,6 +94,7 @@ export async function POST(req: Request) {
             folderId: body.folderId,
             expiryDate: body.expiryDate ? new Date(body.expiryDate) : undefined,
             typeId: body.typeId,
+            contentMode: body.contentMode,
             tenantId: user.tenantId,
             user
         });

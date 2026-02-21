@@ -366,6 +366,7 @@ enum DocumentStatus {
 enum ContentMode {
   FILE
   INLINE
+  STRUCTURED
 }
 
 model DocumentVersion {

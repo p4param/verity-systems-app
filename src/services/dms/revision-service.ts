@@ -184,6 +184,6 @@ export class RevisionService {
             }, tx);
 
             return { ...newDoc, currentVersionId: newVersionId };
-        });
+        }, { timeout: 30_000 });
     }
 }

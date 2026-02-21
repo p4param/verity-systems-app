@@ -41,7 +41,7 @@ export class AttachmentService {
 
             if (!document) throw new DocumentNotFoundError(documentId, tenantId);
 
-            const version = await tx.documentVersion.findUnique({
+            const version = await tx.documentVersion.findFirst({
                 where: { id: versionId, tenantId, documentId },
                 select: { isFrozen: true, id: true }
             });
@@ -127,7 +127,7 @@ export class AttachmentService {
             }, tx);
 
             return updatedAttachment;
-        });
+        }, { timeout: 30_000 });
     }
 
     /**
@@ -154,7 +154,7 @@ export class AttachmentService {
 
             if (!document) throw new DocumentNotFoundError(documentId, tenantId);
 
-            const version = await tx.documentVersion.findUnique({
+            const version = await tx.documentVersion.findFirst({
                 where: { id: versionId, tenantId, documentId },
                 select: { isFrozen: true }
             });
@@ -169,7 +169,7 @@ export class AttachmentService {
                 throw new DomainViolationError("This version is frozen. No modifications allowed.");
             }
 
-            const attachment = await tx.documentVersionAttachment.findUnique({
+            const attachment = await tx.documentVersionAttachment.findFirst({
                 where: { id: attachmentId, tenantId, versionId }
             });
 
@@ -197,6 +197,6 @@ export class AttachmentService {
             }, tx);
 
             return { success: true };
-        });
+        }, { timeout: 30_000 });
     }
 }

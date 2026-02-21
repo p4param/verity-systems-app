@@ -23,7 +23,7 @@ interface DocumentHeaderActionsProps {
         createdById: number
         currentVersion?: {
             id: string
-            contentMode?: "FILE" | "INLINE"
+            contentMode?: "FILE" | "STRUCTURED"
             contentJson?: any | null
         }
         effectivePermissions?: string[]

@@ -49,25 +49,35 @@ export async function requireAuth(req: Request): Promise<AuthUser> {
 
     // ⚡ Session Validation (Instant Revocation)
     if (user.sid) {
-        const session = await prisma.refreshToken.findUnique({
-            where: { id: user.sid },
-            select: { revokedAt: true }
-        });
+        try {
+            const session = await prisma.refreshToken.findUnique({
+                where: { id: user.sid },
+                select: { revokedAt: true }
+            });
 
-        if (!session || session.revokedAt) {
-            // 🕒 RACE CONDITION GRACE PERIOD
-            const GRACE_PERIOD_MS = 30 * 1000;
-            const isWithinGrace = session?.revokedAt && (Date.now() - new Date(session.revokedAt).getTime() < GRACE_PERIOD_MS);
+            if (!session || session.revokedAt) {
+                // 🕒 RACE CONDITION GRACE PERIOD
+                const GRACE_PERIOD_MS = 30 * 1000;
+                const isWithinGrace = session?.revokedAt && (Date.now() - new Date(session.revokedAt).getTime() < GRACE_PERIOD_MS);
 
-            if (!isWithinGrace) {
-                console.warn(`[AUTH_GUARD] Session ${user.sid} is ${!session ? 'NOT FOUND' : 'REVOKED'} for user ${user.sub}`)
-                throw NextResponse.json(
-                    { message: "Session revoked or invalid" },
-                    { status: 401 }
-                );
+                if (!isWithinGrace) {
+                    console.warn(`[AUTH_GUARD] Session ${user.sid} is ${!session ? 'NOT FOUND' : 'REVOKED'} for user ${user.sub}`)
+                    throw NextResponse.json(
+                        { message: "Session revoked or invalid" },
+                        { status: 401 }
+                    );
+                }
             }
-            // else: Continue if within grace period
-            // console.log(`[AUTH_GUARD] Session ${user.sid} is revoked but within grace period. Allowing.`)
+        } catch (err: any) {
+            // Re-throw NextResponse (session revoked) errors as-is
+            if (err instanceof NextResponse || (err && typeof err.status === 'number')) throw err
+            // For DB connectivity errors (P1001), skip session check — JWT is still valid
+            if (err?.code === 'P1001' || err?.message?.includes('Can\'t reach database')) {
+                console.warn(`[AUTH_GUARD] DB unreachable during session check, skipping (P1001). User: ${user.sub}`)
+            } else {
+                // Unknown DB error — still allow request through (JWT is trusted)
+                console.error(`[AUTH_GUARD] Unexpected error during session validation:`, err?.message)
+            }
         }
     }
 

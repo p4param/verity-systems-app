@@ -9,9 +9,19 @@ interface ModalProps {
     title: React.ReactNode
     children: React.ReactNode
     footer?: React.ReactNode
+    size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full'
+    noPadding?: boolean
 }
 
-export function Modal({ isOpen, onClose, title, children, footer }: ModalProps) {
+export function Modal({ isOpen, onClose, title, children, footer, size = 'md', noPadding = false }: ModalProps) {
+    const sizeClasses: Record<string, string> = {
+        sm: 'max-w-sm',
+        md: 'max-w-lg',
+        lg: 'max-w-2xl',
+        xl: 'max-w-4xl',
+        '2xl': 'max-w-6xl',
+        full: 'max-w-[95vw]',
+    }
     // Close on Escape key
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
@@ -32,7 +42,7 @@ export function Modal({ isOpen, onClose, title, children, footer }: ModalProps) 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm animate-in fade-in duration-200">
             <div
-                className="w-full max-w-lg bg-card border rounded-lg shadow-lg animate-in zoom-in-95 duration-200"
+                className={`w-full ${sizeClasses[size]} bg-card border rounded-lg shadow-lg animate-in zoom-in-95 duration-200 flex flex-col ${size === 'full' ? 'h-[92vh]' : 'max-h-[85vh]'}`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
@@ -47,7 +57,7 @@ export function Modal({ isOpen, onClose, title, children, footer }: ModalProps) 
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
+                <div className={`overflow-y-auto flex-1 ${noPadding ? '' : 'p-6'}`}>
                     {children}
                 </div>
 

@@ -5,9 +5,9 @@ import { handleApiError } from "@/lib/dms/api-error-handler";
 import { VersionService } from "@/services/dms/version-service";
 
 /**
- * POST /api/secure/dms/documents/[id]/inline
+ * POST /api/secure/dms/documents/[id]/structured
  * 
- * Saves inline JSON content for a document, creating a new version or updating the current draft version.
+ * Saves structured JSON content for a document, creating a new version or updating the current draft version.
  */
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
@@ -15,7 +15,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         const user = await requirePermission(req, "DMS_DOCUMENT_EDIT");
         const body = await req.json();
 
-        const version = await VersionService.saveInlineVersion({
+        const version = await VersionService.saveStructuredVersion({
             tenantId: user.tenantId,
             documentId: id,
             contentJson: body.contentJson,

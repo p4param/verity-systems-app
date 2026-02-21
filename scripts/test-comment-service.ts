@@ -33,11 +33,14 @@ async function main() {
     // Mock AuthUser
     const authUser = {
         sub: user.id,
+        id: user.id,
         email: user.email,
         fullName: user.fullName,
         tenantId: user.tenantId,
         roles: [],
-        permissions: []
+        roleIds: [],
+        permissions: [],
+        mfaEnabled: false
     };
 
     // 3. Add Comment

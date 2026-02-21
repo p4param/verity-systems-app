@@ -118,7 +118,7 @@ export default function PublicSharePage({ params }: { params: Promise<{ token: s
             <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl">
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden border">
                     {/* Document Header */}
-                    <div className="p-8 border-b bg-gradient-to-br from-white to-gray-50">
+                    <div className="p-8 border-b bg-linear-to-br from-white to-gray-50">
                         <div className="flex items-start justify-between gap-6">
                             <div className="space-y-4">
                                 <div className="p-3 bg-blue-50 text-blue-600 rounded-lg inline-flex">

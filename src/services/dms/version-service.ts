@@ -8,7 +8,7 @@ import {
     // StorageUploadFailedError, // Handled by StorageService now
     VersionConflictError
 } from "@/lib/dms/storage/errors";
-import { DocumentNotFoundError } from "@/lib/dms/errors";
+import { DocumentNotFoundError, DomainViolationError } from "@/lib/dms/errors";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -42,7 +42,7 @@ export class VersionService {
         }
 
         // 2. Validate document exists and belongs to tenant
-        const document = await globalPrisma.document.findUnique({
+        const document = await globalPrisma.document.findFirst({
             where: { id: documentId, tenantId },
             select: { id: true, status: true, expiryDate: true, title: true } // Select needed fields
         });
@@ -155,108 +155,124 @@ export class VersionService {
 
             return version;
         }, {
-            maxWait: 5000, // Wait max 5s for a connection
-            timeout: 20000 // Transaction can run for up to 20s (fixes P2028 on slow uploads/locks)
+            maxWait: 5000,
+            timeout: 30000
         });
     }
 
     /**
-     * saveInlineVersion
+     * saveStructuredVersion
      * 
-     * Saves a new document version with INLINE content (JSON).
+     * Saves a new document version with STRUCTURED content (JSON).
      * Enforces Rule 1 & 2.
      */
-    static async saveInlineVersion(params: {
+    static async saveStructuredVersion(params: {
         tenantId: number;
         documentId: string;
         contentJson: any;
         user: AuthUser;
     }) {
-        const { tenantId, documentId, contentJson, user } = params;
+        const { tenantId: tid, documentId: did, contentJson, user } = params;
 
         // 1. Validate document
-        const document = await globalPrisma.document.findUnique({
-            where: { id: documentId, tenantId },
-            select: { id: true, status: true, title: true }
+        const document = await globalPrisma.document.findFirst({
+            where: { id: did, tenantId: tid },
+            select: { id: true, status: true, title: true, currentVersionId: true }
         });
 
         if (!document) {
-            throw new DocumentNotFoundError(documentId, tenantId);
+            throw new DocumentNotFoundError(did, tid);
         }
 
         // 2. Governance: Check status (Must be DRAFT or REJECTED)
         const ALLOWED_STATES = ["DRAFT", "REJECTED"];
         if (!ALLOWED_STATES.includes(document.status)) {
-            const { DomainViolationError } = await import("@/lib/dms/errors");
-            throw new DomainViolationError(`Inline content can only be saved in DRAFT or REJECTED states. Current: ${document.status}`);
+            throw new DomainViolationError(`Structured content can only be saved in DRAFT or REJECTED states. Current: ${document.status}`);
         }
 
-        // 3. Determine next versionNumber
-        const lastVersion = await globalPrisma.documentVersion.findFirst({
-            where: { documentId, tenantId },
-            orderBy: { versionNumber: "desc" },
-            select: { versionNumber: true, isFrozen: true, contentMode: true }
-        });
-
-        // Rule: Cannot switch contentMode in the SAME version if frozen (handled by version increment)
-        // Rule 2: Primary content can be edited ONLY IF doc.status = DRAFT AND version.isFrozen = false
-        // However, we usually create a NEW version or update the LATEST if it's a DRAFT?
-        // In this system, every "Save" seems to create a new version number? 
-        // Based on uploadNewVersion, it ALWAYS increments. 
-        // If we want "Drafting" to happen in place, we might need a different logic.
-        // But the prompt says "For each DocumentVersion: Exactly ONE primary content... Freeze on submission".
-        // This implies when you are in DRAFT status, you might have multiple versions.
-
-        const nextVersionNumber = (lastVersion?.versionNumber || 0) + 1;
-
         return await globalPrisma.$transaction(async (tx: any) => {
-            // Check for race condition
-            const existingVersion = await tx.documentVersion.findFirst({
-                where: { documentId, tenantId, versionNumber: nextVersionNumber }
-            });
-            if (existingVersion) throw new VersionConflictError(documentId, nextVersionNumber);
+            // 3. Find the current draft version (if any)
+            const currentVersion = document.currentVersionId
+                ? await tx.documentVersion.findFirst({
+                    where: { id: document.currentVersionId, documentId: did, tenantId: tid },
+                    select: { id: true, isFrozen: true, versionNumber: true }
+                })
+                : null;
 
-            // 4. Create record
+            // 4a. If there's an existing unfrozen draft version → UPDATE it in-place
+            if (currentVersion && !currentVersion.isFrozen) {
+                const updated = await tx.documentVersion.update({
+                    where: { id: currentVersion.id },
+                    data: {
+                        contentJson,
+                        contentMode: "STRUCTURED",
+                    }
+                });
+
+                // Touch document timestamp
+                await tx.document.update({
+                    where: { id: did },
+                    data: { updatedById: user.sub }
+                });
+
+                await createAuditLog({
+                    tenantId: tid,
+                    actorUserId: user.sub,
+                    entityType: "VERSION",
+                    entityId: updated.id,
+                    action: "DMS.VERSION_CONTENT_UPDATED",
+                    details: `Updated structured content for version ${currentVersion.versionNumber} of document ${did}.`,
+                    metadata: { versionNumber: currentVersion.versionNumber, documentId: did }
+                }, tx);
+
+                return updated;
+            }
+
+            // 4b. No current version, or frozen → CREATE a new version
+            const lastVersion = await tx.documentVersion.findFirst({
+                where: { documentId: did, tenantId: tid },
+                orderBy: { versionNumber: "desc" },
+                select: { versionNumber: true }
+            });
+            const nextVersionNumber = (lastVersion?.versionNumber || 0) + 1;
+
+            // Race condition guard
+            const conflict = await tx.documentVersion.findFirst({
+                where: { documentId: did, tenantId: tid, versionNumber: nextVersionNumber }
+            });
+            if (conflict) throw new VersionConflictError(did, nextVersionNumber);
+
             const version = await tx.documentVersion.create({
                 data: {
-                    documentId,
-                    tenantId,
+                    documentId: did,
+                    tenantId: tid,
                     versionNumber: nextVersionNumber,
-                    contentMode: "INLINE",
+                    contentMode: "STRUCTURED",
                     contentJson,
-                    storageKey: null, // PDF snapshot generated on approval
+                    storageKey: null,
                     isFrozen: false,
                     createdById: user.sub,
                 }
             });
 
-            // 5. Update document pointer
+            // Update document pointer
             await tx.document.update({
-                where: { id: documentId, tenantId },
-                data: {
-                    currentVersionId: version.id,
-                    updatedById: user.sub
-                }
+                where: { id: did },
+                data: { currentVersionId: version.id, updatedById: user.sub }
             });
 
-            // 6. Audit Log
             await createAuditLog({
-                tenantId,
+                tenantId: tid,
                 actorUserId: user.sub,
                 entityType: "VERSION",
                 entityId: version.id,
                 action: "DMS.VERSION_CREATE",
-                details: `Created version ${nextVersionNumber} for document ${documentId} (INLINE mode).`,
-                metadata: {
-                    versionNumber: nextVersionNumber,
-                    documentId,
-                    title: document.title,
-                    contentMode: "INLINE"
-                }
+                details: `Created version ${nextVersionNumber} for document ${did} (STRUCTURED mode).`,
+                metadata: { versionNumber: nextVersionNumber, documentId: did, title: document.title, contentMode: "STRUCTURED" }
             }, tx);
 
             return version;
-        });
+        }, { timeout: 30_000 });
     }
 
     /**

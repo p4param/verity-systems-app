@@ -33,7 +33,7 @@ export function CreateDocumentModal({ isOpen, onClose, folderId, onSuccess }: Cr
     const [typeId, setTypeId] = useState("")
     const [selectedFolderId, setSelectedFolderId] = useState(folderId || "")
     const [selectedFolderName, setSelectedFolderName] = useState("")
-    const [contentMode, setContentMode] = useState<"FILE" | "INLINE">("FILE")
+    const [contentMode, setContentMode] = useState<"FILE" | "STRUCTURED">("FILE")
 
     // Data State
     const [documentTypes, setDocumentTypes] = useState<DocumentType[]>([])
@@ -105,14 +105,17 @@ export function CreateDocumentModal({ isOpen, onClose, folderId, onSuccess }: Cr
                     description,
                     folderId: selectedFolderId,
                     typeId: typeId || undefined,
-                    expiryDate: expiryDate ? new Date(expiryDate) : undefined
+                    expiryDate: expiryDate ? new Date(expiryDate) : undefined,
+                    contentMode
                 })
             })
 
-            if (contentMode === "INLINE") {
-                await fetchWithAuth(`/api/secure/dms/documents/${document.id}/inline`, {
+            if (contentMode === "STRUCTURED") {
+                // Send a valid empty TipTap JSON doc as the initial version
+                const emptyDoc = { type: "doc", content: [{ type: "paragraph" }] };
+                await fetchWithAuth(`/api/secure/dms/documents/${document.id}/structured`, {
                     method: "POST",
-                    body: JSON.stringify({ contentJson: "" })
+                    body: JSON.stringify({ contentJson: emptyDoc })
                 })
             }
 
@@ -210,16 +213,16 @@ export function CreateDocumentModal({ isOpen, onClose, folderId, onSuccess }: Cr
                         </button>
                         <button
                             type="button"
-                            onClick={() => setContentMode("INLINE")}
-                            className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${contentMode === "INLINE"
+                            onClick={() => setContentMode("STRUCTURED")}
+                            className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-all ${contentMode === "STRUCTURED"
                                 ? "border-primary bg-primary/5 text-primary"
                                 : "border-muted bg-background text-muted-foreground hover:border-muted-foreground/50"
                                 }`}
                         >
                             <Edit3 size={24} />
                             <div className="text-center">
-                                <span className="text-sm font-semibold">Inline Editor</span>
-                                <p className="text-[10px] opacity-80">Text/JSON content</p>
+                                <span className="text-sm font-semibold">Structured</span>
+                                <p className="text-[10px] opacity-80">Author in Editor</p>
                             </div>
                         </button>
                     </div>
