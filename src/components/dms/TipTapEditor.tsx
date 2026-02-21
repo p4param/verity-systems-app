@@ -20,7 +20,7 @@ import { Subscript } from '@tiptap/extension-subscript'
 import { CharacterCount } from '@tiptap/extension-character-count'
 import { TaskList } from '@tiptap/extension-task-list'
 import { TaskItem } from '@tiptap/extension-task-item'
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, forwardRef, useImperativeHandle } from 'react'
 import {
     Bold, Italic, Underline as UnderlineIcon, Strikethrough,
     Superscript as SuperscriptIcon, Subscript as SubscriptIcon,
@@ -635,7 +635,7 @@ export interface TipTapEditorProps {
     lastSaved?: Date | null
 }
 
-export function TipTapEditor({
+export const TipTapEditor = forwardRef<any, TipTapEditorProps>(({
     initialContent,
     onChange,
     editable = true,
@@ -643,7 +643,7 @@ export function TipTapEditor({
     placeholder = 'Start authoring your document…',
     saving = false,
     lastSaved = null,
-}: TipTapEditorProps) {
+}: TipTapEditorProps, ref) => {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
@@ -712,6 +712,20 @@ export function TipTapEditor({
             }
         }
     }, [editor, initialContent, editable])
+
+    // Expose scroll method to parent
+    useImperativeHandle(ref, () => ({
+        scrollToBlock: (index: number) => {
+            if (!editor) return
+            // The EditorContent component renders the tiptap editor. 
+            // We search for the child index within the tiptap element.
+            const editorDom = editor.view.dom
+            const node = editorDom.children[index]
+            if (node) {
+                node.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }
+        }
+    }))
 
     // Sync editable flag
     useEffect(() => {
@@ -789,4 +803,6 @@ export function TipTapEditor({
             `}</style>
         </div>
     )
-}
+})
+
+TipTapEditor.displayName = 'TipTapEditor'

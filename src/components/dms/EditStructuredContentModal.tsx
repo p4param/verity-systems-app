@@ -103,6 +103,8 @@ export function EditStructuredContentModal({
         setContent(newContent)
     }
 
+    const editorRef = useRef<any>(null)
+
     return (
         <Modal
             isOpen={isOpen}
@@ -163,7 +165,10 @@ export function EditStructuredContentModal({
             {/* Full-screen body: outline sidebar + editor canvas */}
             <div className="flex h-full overflow-hidden">
                 {/* Outline Sidebar */}
-                <DocumentOutline contentJson={content} />
+                <DocumentOutline
+                    contentJson={content}
+                    onHeadingClick={(index) => editorRef.current?.scrollToBlock(index)}
+                />
 
                 {/* Editor Area */}
                 <div className="flex-1 overflow-hidden flex flex-col">
@@ -178,6 +183,7 @@ export function EditStructuredContentModal({
                     )}
                     <div className="flex-1 overflow-hidden">
                         <TipTapEditor
+                            ref={editorRef}
                             initialContent={content}
                             onChange={handleContentChange}
                             editable={!frozen}
