@@ -1,6 +1,6 @@
 "use client"
 
-import { useEditor, EditorContent, Editor } from '@tiptap/react'
+import { useEditor, EditorContent, Editor, Extension } from '@tiptap/react'
 import { Node } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import { Table } from '@tiptap/extension-table'
@@ -79,6 +79,47 @@ const PageBreakNode = Node.create({
     },
 })
 
+// Custom extension for Font Size
+const FontSize = Extension.create({
+    name: 'fontSize',
+    addOptions() {
+        return {
+            types: ['textStyle'],
+        }
+    },
+    addGlobalAttributes() {
+        return [
+            {
+                types: this.options.types,
+                attributes: {
+                    fontSize: {
+                        default: null,
+                        parseHTML: element => element.style.fontSize.replace(/px$/, ''),
+                        renderHTML: attributes => {
+                            if (!attributes.fontSize) {
+                                return {}
+                            }
+                            return {
+                                style: `font-size: ${attributes.fontSize}px`,
+                            }
+                        },
+                    },
+                },
+            },
+        ]
+    },
+    addCommands(): any {
+        return {
+            setFontSize: (fontSize: string) => ({ chain }: any) => {
+                return chain().setMark('textStyle', { fontSize }).run()
+            },
+            unsetFontSize: () => ({ chain }: any) => {
+                return chain().setMark('textStyle', { fontSize: null }).run()
+            },
+        }
+    },
+})
+
 // ─── Link validation helper ────────────────────────────────────────────────────
 function isSafeUrl(url: string): boolean {
     try {
@@ -132,7 +173,8 @@ function HomeTab({ editor }: { editor: Editor }) {
 
     const applyFontSize = (size: string) => {
         setFontSize(size)
-        editor.chain().focus().setMark('textStyle', { fontSize: size + 'px' }).run()
+        if (size) (editor.chain().focus() as any).setFontSize(size).run()
+        else (editor.chain().focus() as any).unsetFontSize().run()
     }
 
     return (
@@ -636,6 +678,7 @@ export function TipTapEditor({
             }),
             Placeholder.configure({ placeholder }),
             PageBreakNode,
+            FontSize,
         ],
         content: initialContent,
         editable,
@@ -679,9 +722,7 @@ export function TipTapEditor({
     const charCount = editor?.storage.characterCount?.characters() ?? 0
 
     return (
-        <div className={`flex flex-col border rounded-md overflow-hidden bg-white shadow-sm ${!editable ? 'opacity-95' : ''}`}
-            style={{ minHeight: 500 }}>
-
+        <div className={`flex flex-col border rounded-md overflow-hidden bg-white shadow-sm h-full ${!editable ? 'opacity-95' : ''}`}>
             {/* Frozen Banner — only shown when version is explicitly frozen */}
             {frozen && (
                 <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border-b border-amber-200 text-amber-700 text-xs font-medium">
@@ -696,7 +737,7 @@ export function TipTapEditor({
             )}
 
             {/* Editor Canvas */}
-            <div className="flex-1 overflow-auto custom-editor" style={{ minHeight: 400 }}>
+            <div className="flex-1 overflow-auto custom-editor">
                 <EditorContent editor={editor} />
             </div>
 

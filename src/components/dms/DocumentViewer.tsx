@@ -200,7 +200,7 @@ export function DocumentViewer({
     if (contentMode === "STRUCTURED") {
         return (
             <Card className="flex flex-col overflow-hidden bg-white border border-gray-200 h-full min-h-[600px] shadow-sm">
-                <div className="flex-1 overflow-auto">
+                <div className="flex-1 overflow-hidden">
                     {contentJson ? (
                         <TipTapEditor
                             initialContent={contentJson}

@@ -176,7 +176,7 @@ export function EditStructuredContentModal({
                             </p>
                         </div>
                     )}
-                    <div className="flex-1 overflow-auto">
+                    <div className="flex-1 overflow-hidden">
                         <TipTapEditor
                             initialContent={content}
                             onChange={handleContentChange}
