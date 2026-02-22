@@ -14,10 +14,16 @@
 
 - [x] Fix Audit Page "Entity" Column Display <!-- id: 8 -->
     - [x] Add missing `entityType`, `entityId`, `metadata` to `FolderService` (create/update/delete) <!-- id: 9 -->
-    - [x] Add missing `entityType`, `entityId`, `metadata` to `DocumentService` (update/delete) <!-- id: 10 -->
-    - [x] Add missing `entityType`, `entityId`, `metadata` to `VersionService` & `ShareService` <!-- id: 11 -->
-- [x] Fix Version Upload Timeout (P2028) <!-- id: 12 -->
-    - [x] Increase transaction timeout to 20s in `VersionService` <!-- id: 13 -->
-- [x] Fix Share Link Creation Error <!-- id: 14 -->
-    - [x] Rename `accessKey` to `token` in `ShareService` to match Schema <!-- id: 15 -->
-    - [x] Update `ShareDocumentModal` to use `token` from API response <!-- id: 16 -->
+    - [x] Add missing `entityType`, `entityId`, `metadata` to `DocumentService` (update/delete) <!-- [x] Part 4: Permissions
+    - [x] Add `LEGAL_HOLD_VIEW`, `LEGAL_HOLD_CREATE`, `LEGAL_HOLD_ATTACH`, `LEGAL_HOLD_RELEASE` to `permission-codes.ts`
+    - [x] Update seeding scripts to include new permissions
+- [x] Part 5: Retention & Expiry Integration
+    - [x] Modify `getEffectiveDocumentStatus` to respect `isUnderLegalHold`
+    - [x] Ensure document retention jobs skip held documents
+- [x] Part 6: Audit Events
+    - [x] Update `audit-formatter.ts` for new Legal Hold event types
+- [/] Part 7: UI Implementation
+    - [x] Admin console page for Legal Holds
+    - [x] Document detail indicator/badge
+    - [ ] Target attachment/release UI details
+- [ ] Part 8: Comprehensive Testing

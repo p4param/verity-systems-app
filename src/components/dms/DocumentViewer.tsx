@@ -1,12 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { Loader2, AlertCircle, Download, FileX, RefreshCw, Edit3 } from "lucide-react"
+import { Loader2, AlertCircle, FileX, RefreshCw, FileText } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useAuth } from "@/lib/auth/auth-context"
-import { TipTapEditor } from "./TipTapEditor"
+import dynamic from "next/dynamic"
+
+const DocumentPdfViewer = dynamic(() => import("./DocumentPdfViewer").then(mod => ({ default: mod.DocumentPdfViewer })), { ssr: false })
+const DocumentImagePreview = dynamic(() => import("./DocumentImagePreview").then(mod => ({ default: mod.DocumentImagePreview })), { ssr: false })
 
 interface DocumentViewerProps {
     documentId: string
@@ -18,19 +20,26 @@ interface DocumentViewerProps {
     contentJson?: any | null
     onEdit?: () => void
     canEdit?: boolean
+    initialPreviewSource?: {
+        type: PreviewType,
+        url: string | null
+    } | null
 }
 
+type PreviewType = "PDF" | "IMAGE" | "UNSUPPORTED"
+
 interface ViewerState {
-    signedUrl: string | null
+    previewUrl: string | null
+    previewType: PreviewType
     isLoading: boolean
+    isRendering: boolean
     error: string | null
     fetchedAt: number | null
 }
 
 const REFRESH_INTERVAL_MS = 4 * 60 * 1000 // 4 minutes
-const SIGNED_URL_EXPIRY_S = 300 // 5 minutes (default)
 
-export function DocumentViewer({
+export const DocumentViewer = React.memo(function DocumentViewer({
     documentId,
     currentVersionId,
     mimeType,
@@ -39,289 +48,263 @@ export function DocumentViewer({
     contentMode = "FILE",
     contentJson,
     onEdit,
-    canEdit = false
+    canEdit = false,
+    initialPreviewSource
 }: DocumentViewerProps) {
     const { fetchWithAuth } = useAuth()
     const fetchWithAuthRef = React.useRef(fetchWithAuth)
     React.useEffect(() => { fetchWithAuthRef.current = fetchWithAuth }, [fetchWithAuth])
 
     const [state, setState] = React.useState<ViewerState>({
-        signedUrl: null,
-        isLoading: false,
+        previewUrl: initialPreviewSource?.url || null,
+        previewType: initialPreviewSource?.type || "UNSUPPORTED",
+        isLoading: !initialPreviewSource && !!currentVersionId,
+        isRendering: !!initialPreviewSource?.url,
         error: null,
-        fetchedAt: null
+        fetchedAt: initialPreviewSource ? Date.now() : null
     })
 
     const isMounted = React.useRef(true)
-    const hasSignedUrl = React.useRef(false)
+    const isExpired = effectiveStatus === "EXPIRED" || effectiveStatus === "OBSOLETE"
 
     React.useEffect(() => {
         isMounted.current = true
-        return () => {
-            isMounted.current = false
-        }
+        return () => { isMounted.current = false }
     }, [])
 
-    React.useEffect(() => {
-        hasSignedUrl.current = !!state.signedUrl
-    }, [state.signedUrl])
-
-    const fetchSignedUrl = React.useCallback(async (silent = false) => {
-        if (!currentVersionId) return
+    const resolveSource = React.useCallback(async (silent = false) => {
+        if (!documentId || !currentVersionId) {
+            console.log(`[DocumentViewer] Skipping resolve: doc=${documentId}, version=${currentVersionId}`);
+            if (isMounted.current) {
+                setState(prev => ({ ...prev, isLoading: false }));
+            }
+            return;
+        }
 
         if (!silent) {
             setState(prev => ({ ...prev, isLoading: true, error: null }))
         }
 
         try {
-            const data = await fetchWithAuthRef.current<{ downloadUrl: string }>(
-                `/api/secure/dms/documents/${documentId}/versions?action=view&versionId=${currentVersionId}`
-            )
+            const url = `/api/secure/dms/documents/${documentId}/versions/${currentVersionId}/source-p`;
+            console.log(`[DocumentViewer] Resolving source: ${url}`);
+
+            // Call the authoritative preview-source resolver
+            const response = await fetchWithAuthRef.current<{
+                type: PreviewType,
+                url: string | null,
+                message?: string
+            }>(url);
 
             if (isMounted.current) {
-                setState({
-                    signedUrl: data.downloadUrl,
-                    isLoading: false,
-                    error: null,
-                    fetchedAt: Date.now()
-                })
+                console.log(`[DocumentViewer] Resolved: type=${response.type}, hasUrl=${!!response.url}`);
+                if (response.url) {
+                    setState({
+                        previewUrl: response.url,
+                        previewType: response.type,
+                        isLoading: false,
+                        isRendering: true,
+                        error: null,
+                        fetchedAt: Date.now()
+                    })
+                } else if (response.type === "UNSUPPORTED") {
+                    setState(prev => ({
+                        ...prev,
+                        isLoading: false,
+                        previewType: "UNSUPPORTED",
+                        error: null
+                    }))
+                } else {
+                    setState(prev => ({
+                        ...prev,
+                        isLoading: false,
+                        error: response.message || "Preview not available for this version"
+                    }))
+                }
             }
         } catch (err: any) {
-            console.error("[DocumentViewer] Fetch error:", err)
+            console.error(`[DocumentViewer] Failed to resolve source for doc=${documentId}, version=${currentVersionId}:`, err);
             if (isMounted.current) {
                 setState(prev => ({
                     ...prev,
                     isLoading: false,
-                    error: silent ? null : (err.message || "Failed to load document")
+                    error: err.message || "Failed to load document preview"
                 }))
             }
         }
     }, [documentId, currentVersionId])
 
     React.useEffect(() => {
-        if (effectiveStatus === "EXPIRED") {
-            setState(prev => ({ ...prev, signedUrl: null, error: null }))
+        if (isExpired) {
+            setState(prev => ({ ...prev, previewUrl: null, error: null }))
             return
         }
 
+        // If we have an initial source and currentVersionId matches what we expect?
+        // Actually, resolveSource handles skip if null.
+        // We only want to trigger resolveSource if we DON'T have an initial URL or if currentVersionId changed.
         if (currentVersionId) {
-            fetchSignedUrl()
+            if (!state.previewUrl || state.error) {
+                resolveSource()
+            }
         } else {
-            setState(prev => ({ ...prev, signedUrl: null, isLoading: false }))
+            setState(prev => ({ ...prev, previewUrl: null, isLoading: false }))
         }
-    }, [currentVersionId, effectiveStatus, fetchSignedUrl])
+    }, [currentVersionId, isExpired, resolveSource])
 
+    // Periodic refresh for signed URLs
     React.useEffect(() => {
-        if (effectiveStatus === "EXPIRED") return
-        if (!currentVersionId) return
+        if (effectiveStatus === "EXPIRED" || !currentVersionId) return
 
         const timer = setInterval(() => {
-            if (hasSignedUrl.current) {
-                fetchSignedUrl(true)
+            if (state.previewUrl) {
+                resolveSource(true)
             }
         }, REFRESH_INTERVAL_MS)
 
         return () => clearInterval(timer)
-    }, [currentVersionId, effectiveStatus, fetchSignedUrl])
+    }, [currentVersionId, effectiveStatus, resolveSource, state.previewUrl])
 
-    // --- State: Expired ---
-    if (effectiveStatus === "OBSOLETE" || effectiveStatus === "EXPIRED") { // Assuming 'EXPIRED' maps to 'OBSOLETE' or is a computed status
-        // If logic explicitly uses "EXPIRED" string, keep it. 
-        // Assuming "OBSOLETE" is the enum value in schema but UI might pass "EXPIRED".
-    }
+    // --- RENDER HELPERS ---
 
-    // Strict check on effectiveStatus as passed prop
-    const isExpired = effectiveStatus === "EXPIRED" || effectiveStatus === "OBSOLETE"
-
-    if (isExpired) {
+    if (isExpired && contentMode === "FILE") {
         return (
             <Card className="flex flex-col items-center justify-center h-[500px] bg-gray-50 border-dashed">
                 <FileX className="h-16 w-16 text-gray-300 mb-4" />
                 <h3 className="text-lg font-medium text-gray-900">Document Expired</h3>
                 <p className="text-sm text-gray-500 mt-2 text-center max-w-sm">
                     This document version is no longer active.
-                    <br />You cannot view the preview.
+                    <br />Access to the original file is restricted.
                 </p>
-                {/* Optional: Check if download is allowed for expired docs */}
             </Card>
         )
     }
 
-    // --- State: No Version ---
     if (!currentVersionId) {
         return (
             <Card className="flex flex-col items-center justify-center h-[500px] bg-gray-50 border-dashed">
                 <div className="p-4 rounded-full bg-gray-100 mb-4">
                     <FileX className="h-8 w-8 text-gray-400" />
                 </div>
-                <h3 className="text-lg font-medium text-gray-900">No Version Uploaded</h3>
-                <p className="text-sm text-gray-500 mt-2">
-                    Upload a file to see the preview here.
-                </p>
+                <h3 className="text-lg font-medium text-gray-900">No Content</h3>
+                <p className="text-sm text-gray-500 mt-2">Upload a file or add content to see preview.</p>
             </Card>
         )
     }
 
-    // --- State: Loading ---
-    if (state.isLoading && !state.signedUrl) {
+    if (state.isLoading && !state.previewUrl) {
         return (
             <Card className="flex flex-col items-center justify-center h-[600px] bg-white">
                 <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
-                <p className="text-sm text-gray-500">Loading preview...</p>
+                <p className="text-sm text-gray-500">Initializing secure preview...</p>
             </Card>
         )
     }
 
-    // --- State: Error ---
     if (state.error) {
         return (
             <Card className="flex flex-col items-center justify-center h-[500px] bg-red-50 border-red-100">
                 <AlertCircle className="h-12 w-12 text-red-400 mb-4" />
                 <h3 className="text-lg font-medium text-red-900">Preview Failed</h3>
-                <p className="text-sm text-red-600 mt-2 mb-6 max-w-sm text-center">
-                    {state.error}
-                </p>
-                <Button onClick={() => fetchSignedUrl()} variant="outline" className="gap-2">
-                    <RefreshCw className="h-4 w-4" />
-                    Retry
+                <p className="text-sm text-red-600 mt-2 mb-6 max-w-sm text-center">{state.error}</p>
+                <Button onClick={() => resolveSource()} variant="outline" className="gap-2 font-bold text-xs uppercase">
+                    <RefreshCw className="h-3 w-3" />
+                    Retry Load
                 </Button>
             </Card>
         )
     }
 
-    // --- Determine Viewer Type ---
-    const cleanMime = mimeType?.toLowerCase() || ""
-    const isPdf = cleanMime === "application/pdf"
+    const showGlobalLoading = state.isLoading || state.isRendering;
 
-    // Support common image formats
-    const isImage = cleanMime.startsWith("image/")
-
-    // --- Render Content ---
-    if (contentMode === "STRUCTURED") {
-        return (
-            <Card className="flex flex-col overflow-hidden bg-white border border-gray-200 h-full min-h-[600px] shadow-sm">
-                <div className="flex-1 overflow-hidden">
-                    {contentJson ? (
-                        <TipTapEditor
-                            initialContent={contentJson}
-                            onChange={() => { }}
-                            editable={false}
-                        />
-                    ) : (
-                        <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
-                            <AlertCircle className="h-8 w-8 mb-2" />
-                            <p>No content has been saved for this structured document.</p>
-                        </div>
-                    )}
-                </div>
-
-                {/* Footer for STRUCTURED mode */}
-                <div className="p-4 border-t bg-gray-50 flex justify-between items-center">
-                    {canEdit && onEdit ? (
-                        <button
-                            onClick={onEdit}
-                            className="text-sm font-medium text-blue-600 flex items-center gap-2 hover:text-blue-800 transition-colors"
-                        >
-                            <Edit3 className="h-4 w-4" />
-                            <span>Edit Inline Content</span>
-                        </button>
-                    ) : (
-                        <div className="text-sm font-medium text-gray-500 flex items-center gap-2">
-                            <Edit3 className="h-4 w-4" />
-                            Structured Editor Content
-                        </div>
-                    )}
-                    {effectiveStatus === "APPROVED" && state.signedUrl && (
-                        <Button
-                            variant="outline"
-                            onClick={() => window.open(state.signedUrl!, '_blank')}
-                            className="gap-2 text-xs h-8"
-                        >
-                            <Download className="h-3 w-3" />
-                            View PDF Snapshot
-                        </Button>
-                    )}
-                </div>
-            </Card>
-        )
-    }
+    // --- MAIN RENDERING LOGIC ---
 
     return (
-        <Card className="flex flex-col overflow-hidden bg-white border border-gray-200 h-full min-h-[600px] shadow-sm">
-            {/* Toolbar (Optional, currently just for structure) */}
-
-            <div className="flex-1 bg-gray-100 relative overflow-auto flex items-center justify-center min-h-[500px]">
-                {state.signedUrl && (
+        <Card className="flex flex-col overflow-hidden bg-gray-100 border-none h-full min-h-[600px] shadow-lg relative">
+            <div className="flex-1 overflow-hidden relative">
+                {state.previewUrl ? (
                     <>
-                        {isPdf ? (
-                            <object
-                                data={state.signedUrl}
-                                type="application/pdf"
-                                className="w-full h-full min-h-[600px]"
-                            >
-                                <div className="flex flex-col items-center justify-center h-full p-8 text-center">
-                                    <FileX className="h-12 w-12 text-gray-400 mb-4" />
-                                    <h3 className="text-lg font-medium text-gray-900 mb-2">PDF preview not supported in this browser</h3>
-                                    <p className="text-sm text-gray-500 mb-4">You can download the file to view it.</p>
-                                    <a
-                                        href={state.signedUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
-                                    >
-                                        <Download className="h-4 w-4" />
-                                        Open PDF
-                                    </a>
-                                </div>
-                            </object>
-                        ) : isImage ? (
-                            <div className="w-full h-full flex items-center justify-center p-4">
-                                <img
-                                    src={state.signedUrl}
-                                    alt="Preview"
-                                    className="max-w-full max-h-[800px] object-contain shadow-lg rounded-sm bg-white"
-                                    onError={(e) => {
-                                        console.error("Image load failed", e)
-                                        e.currentTarget.style.display = 'none'
-                                        setState(prev => ({ ...prev, error: "Failed to load image" }))
-                                    }}
-                                />
-                            </div>
-                        ) : (
-                            <div className="text-center p-8">
-                                <div className="p-4 rounded-full bg-gray-200 inline-block mb-4">
-                                    <FileX className="h-8 w-8 text-gray-500" />
-                                </div>
-                                <h3 className="text-lg font-medium text-gray-900">Preview Not Available</h3>
-                                <p className="text-sm text-gray-500 mt-2 mb-6">
-                                    This file type ({cleanMime || "unknown"}) cannot be previewed.
+                        {showGlobalLoading && (
+                            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm">
+                                <Loader2 className="h-10 w-10 text-primary animate-spin mb-4" />
+                                <p className="text-sm font-bold text-gray-500 uppercase tracking-widest animate-pulse">
+                                    {state.isLoading ? "Authorizing..." : "Rendering..."}
                                 </p>
                             </div>
                         )}
+                        {state.previewType === "PDF" ? (
+                            <DocumentPdfViewer
+                                fileUrl={state.previewUrl}
+                                zoom={1.0}
+                                documentId={documentId}
+                                versionId={currentVersionId}
+                                onLoadComplete={() => setState(s => ({ ...s, isRendering: false }))}
+                            />
+                        ) : state.previewType === "IMAGE" ? (
+                            <DocumentImagePreview
+                                imageUrl={state.previewUrl}
+                                canDownload={true}
+                                onDownload={() => {
+                                    const downloadUrl = `/api/secure/dms/documents/${documentId}/versions/${currentVersionId}/download`
+                                    window.open(downloadUrl, '_blank')
+                                }}
+                                onLoadComplete={() => setState(s => ({ ...s, isRendering: false }))}
+                            />
+                        ) : (
+                            <UnsupportedPreview mimeType={mimeType} documentId={documentId} currentVersionId={currentVersionId} />
+                        )}
                     </>
+                ) : (
+                    <UnsupportedPreview mimeType={mimeType} documentId={documentId} currentVersionId={currentVersionId} />
                 )}
             </div>
 
-            {/* Footer / Download Action */}
-            <div className="p-4 border-t bg-white flex justify-between items-center">
-                <div className="text-sm text-gray-500">
-                    {fileName}
+            {/* Footer Status Bar */}
+            <div className="px-4 py-3 border-t bg-white flex justify-between items-center shrink-0">
+                <div className="flex items-center gap-3">
+                    <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+                    <span className="text-[11px] font-black uppercase tracking-widest text-gray-500">
+                        {contentMode === "STRUCTURED" ? "Structured Canvas" : `Secure File Preview (${state.previewType})`}
+                    </span>
+                    <span className="text-xs text-gray-300 font-mono hidden sm:inline">{fileName}</span>
                 </div>
 
-                <Button
-                    variant="outline"
-                    disabled={!state.signedUrl}
-                    onClick={() => {
-                        if (state.signedUrl) {
-                            window.open(state.signedUrl, '_blank', 'noopener,noreferrer')
-                        }
-                    }}
-                    className="gap-2"
-                >
-                    <Download className="h-4 w-4" />
-                    Download File
-                </Button>
+                {contentMode === "STRUCTURED" && canEdit && onEdit && (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={onEdit}
+                        className="text-xs font-bold text-blue-600 hover:text-blue-700 hover:bg-blue-50 gap-2 h-8 px-4"
+                    >
+                        <FileText className="h-3.5 w-3.5" />
+                        Edit Content
+                    </Button>
+                )}
             </div>
         </Card>
+    )
+})
+
+function UnsupportedPreview({ mimeType, documentId, currentVersionId }: { mimeType?: string | null, documentId: string, currentVersionId: string }) {
+    return (
+        <div className="flex flex-col items-center justify-center h-full p-12 text-center bg-white rounded-xl mx-8 my-8 shadow-sm">
+            <div className="p-8 rounded-full bg-gray-50 border border-gray-100 mb-8 shadow-inner">
+                <FileX className="h-16 w-16 text-gray-200" />
+            </div>
+            <h3 className="text-2xl font-black text-gray-900 tracking-tight uppercase">Preview Unavailable</h3>
+            <p className="text-sm text-gray-500 mt-4 max-w-sm mx-auto leading-relaxed">
+                The format (<strong>{mimeType || "unknown"}</strong>) does not support in-browser previewing.
+            </p>
+            <Button
+                variant="outline"
+                onClick={() => {
+                    const downloadUrl = `/api/secure/dms/documents/${documentId}/versions/${currentVersionId}/download`
+                    window.open(downloadUrl, '_blank')
+                }}
+                className="mt-10 gap-2 border-2 font-bold px-8 h-12 rounded-xl hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
+            >
+                Download to View Locally
+            </Button>
+        </div>
     )
 }

@@ -29,12 +29,13 @@ interface DocumentReviewsProps {
     documentId: string
     currentUserId?: number
     onReviewActionComplete?: () => void
+    initialReviews?: Review[]
 }
 
-export function DocumentReviews({ documentId, currentUserId, onReviewActionComplete }: DocumentReviewsProps) {
+export function DocumentReviews({ documentId, currentUserId, onReviewActionComplete, initialReviews }: DocumentReviewsProps) {
     const { fetchWithAuth } = useAuth()
-    const [reviews, setReviews] = useState<Review[]>([])
-    const [loading, setLoading] = useState(true)
+    const [reviews, setReviews] = useState<Review[]>(initialReviews || [])
+    const [loading, setLoading] = useState(!initialReviews)
     const [actionLoading, setActionLoading] = useState<string | null>(null)
     const [error, setError] = useState<string | null>(null)
 
@@ -51,8 +52,10 @@ export function DocumentReviews({ documentId, currentUserId, onReviewActionCompl
     }, [documentId, fetchWithAuth])
 
     useEffect(() => {
-        loadReviews()
-    }, [loadReviews])
+        if (!initialReviews) {
+            loadReviews()
+        }
+    }, [loadReviews, initialReviews])
 
     const handleAction = async (action: "approve" | "reject", comment?: string) => {
         try {

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useCallback, useRef, use } from "react"
+import React, { useEffect, useState, useCallback, useRef, use, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import {
     ArrowLeft,
@@ -10,7 +10,9 @@ import {
     Share2,
     Loader2,
     AlertTriangle,
-    Edit3 // Added
+    Edit3,
+    Plus,
+    AlertCircle
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { usePermission } from "@/lib/auth/use-permission"
@@ -26,6 +28,10 @@ import { DocumentComments } from "@/components/dms/DocumentComments"
 import { DocumentAcknowledgement } from "@/components/dms/DocumentAcknowledgement"
 import { DocumentAttachments } from "@/components/dms/DocumentAttachments"
 import { EditStructuredContentModal } from "@/components/dms/EditStructuredContentModal"
+import { ApplyLegalHoldModal } from "@/components/dms/ApplyLegalHoldModal"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Modal } from "@/components/ui/Modal"
 
 // Updated DocumentDetail interface to include supersededBy
 interface DocumentDetail {
@@ -65,6 +71,11 @@ interface DocumentDetail {
         documentNumber: string | null
     }
     effectivePermissions?: string[]
+    isReviewer?: boolean
+    canApproveOnBehalf?: boolean
+    previewSource?: { type: string, url: string | null } | null
+    reviews?: any[]
+    isUnderLegalHold?: boolean // V3
 }
 
 export default function DocumentDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -78,12 +89,22 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [isShareModalOpen, setIsShareModalOpen] = useState(false)
+    const [isLegalHoldModalOpen, setIsLegalHoldModalOpen] = useState(false)
     const [isEditModalOpen, setIsEditModalOpen] = useState(false)
     const [isStructuredEditModalOpen, setIsStructuredEditModalOpen] = useState(false)
     const [activeTab, setActiveTab] = useState<"about" | "versions" | "audit" | "reviews" | "comments">("about")
 
     const canShare = usePermission("DMS_SHARE_CREATE")
     const canEdit = usePermission("DMS_DOCUMENT_EDIT")
+
+    // Stable callback - won't change unless component unmounts
+    const openStructuredEdit = useCallback(() => setIsStructuredEditModalOpen(true), [])
+
+    // Stable object reference for DocumentViewer - only recomputes when previewSource actually changes
+    const previewSource = useMemo(() => (document as any)?.previewSource ?? null, [
+        (document as any)?.previewSource?.type,
+        (document as any)?.previewSource?.url
+    ])
 
     const loadDocument = useCallback(async (silent = false) => {
         try {
@@ -110,6 +131,10 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
         loadDocument()
     }, [loadDocument])
 
+    const toggleLegalHoldModal = useCallback(() => {
+        setIsLegalHoldModalOpen(true)
+    }, [])
+
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center h-[50vh] space-y-4">
@@ -119,20 +144,14 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
         )
     }
 
-    if (error || !document) {
+    if (!document) {
         return (
             <div className="flex flex-col items-center justify-center h-[50vh] space-y-4">
-                <div className="p-4 bg-destructive/10 text-destructive rounded-full">
-                    <AlertTriangle size={32} />
-                </div>
-                <h2 className="text-xl font-semibold">Unable to load document</h2>
-                <p className="text-muted-foreground">{error || "Document not found or access denied."}</p>
-                <button
-                    onClick={() => router.push("/dms")}
-                    className="btn-secondary mt-4"
-                >
-                    Return to Dashboard
-                </button>
+                <AlertCircle size={32} className="text-destructive" />
+                <p className="text-sm text-muted-foreground">{error || "Document not found"}</p>
+                <Button variant="outline" onClick={() => router.push("/dms")}>
+                    Back to Documents
+                </Button>
             </div>
         )
     }
@@ -165,6 +184,12 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                                 </button>
                             )}
                             <StatusBadge status={document.effectiveStatus} />
+                            {document.isUnderLegalHold && (
+                                <Badge className="bg-amber-500 text-white hover:bg-amber-600 border-none gap-1 py-1">
+                                    <Shield size={14} className="fill-current" />
+                                    <span>Legal Hold</span>
+                                </Badge>
+                            )}
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                             {document.documentNumber && (
@@ -198,6 +223,16 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                         >
                             <Share2 size={16} />
                             <span>Share</span>
+                        </button>
+                    )}
+
+                    {!document.isUnderLegalHold && (
+                        <button
+                            onClick={toggleLegalHoldModal}
+                            className="inline-flex items-center gap-2 px-3 py-1.5 border rounded-md border-amber-500/50 text-amber-600 hover:bg-amber-500/10 text-sm font-medium transition-colors"
+                        >
+                            <Shield size={16} />
+                            <span>Apply Hold</span>
                         </button>
                     )}
                 </div>
@@ -238,26 +273,29 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                             effectiveStatus={document.effectiveStatus}
                             contentMode={document.currentVersion?.contentMode}
                             contentJson={document.currentVersion?.contentJson}
-                            onEdit={() => setIsStructuredEditModalOpen(true)}
+                            onEdit={openStructuredEdit}
                             canEdit={isEditable && document.currentVersion?.contentMode === "STRUCTURED"}
+                            initialPreviewSource={previewSource}
                         />
                     </div>
 
                     {/* Attachments Section */}
-                    {document.currentVersion && (
-                        <div className="p-6 bg-card border rounded-lg shadow-sm space-y-4">
-                            <DocumentAttachments
-                                documentId={document.id}
-                                version={{
-                                    id: document.currentVersion.id,
-                                    isFrozen: document.currentVersion.isFrozen || false,
-                                    attachments: document.currentVersion.attachments || []
-                                }}
-                                documentStatus={document.status}
-                                onRefresh={loadDocument}
-                            />
-                        </div>
-                    )}
+                    {
+                        document.currentVersion && (
+                            <div className="p-6 bg-card border rounded-lg shadow-sm space-y-4">
+                                <DocumentAttachments
+                                    documentId={document.id}
+                                    version={{
+                                        id: document.currentVersion.id,
+                                        isFrozen: document.currentVersion.isFrozen || false,
+                                        attachments: document.currentVersion.attachments || []
+                                    }}
+                                    documentStatus={document.status}
+                                    onRefresh={loadDocument}
+                                />
+                            </div>
+                        )
+                    }
                 </div>
 
                 {/* RIGHT COLUMN (1/3) - Metadata & History */}
@@ -375,87 +413,107 @@ export default function DocumentDetailPage({ params }: { params: Promise<{ id: s
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        )
+                        }
 
-                        {activeTab === "versions" && (
-                            <div className="p-5 bg-card border rounded-lg shadow-sm space-y-4 animate-in fade-in duration-200">
-                                {/* <div className="flex items-center gap-2 font-medium  pb-2 text-foreground">
+                        {
+                            activeTab === "versions" && (
+                                <div className="p-5 bg-card border rounded-lg shadow-sm space-y-4 animate-in fade-in duration-200">
+                                    {/* <div className="flex items-center gap-2 font-medium  pb-2 text-foreground">
                                     <Shield size={16} />
                                     <h3>Version History</h3>
                                 </div> */}
-                                <div className="">
-                                    <DmsVersionHistory
+                                    <div className="">
+                                        <DmsVersionHistory
+                                            documentId={document.id}
+                                            documentStatus={document.effectiveStatus}
+                                            onVersionUploaded={loadDocument}
+                                        />
+                                    </div>
+                                </div>
+                            )
+                        }
+
+                        {
+                            activeTab === "reviews" && (
+                                <div className="animate-in fade-in duration-200">
+                                    <DocumentReviews
                                         documentId={document.id}
-                                        documentStatus={document.effectiveStatus}
-                                        onVersionUploaded={loadDocument}
+                                        initialReviews={document.reviews}
+                                        onReviewActionComplete={loadDocument}
                                     />
                                 </div>
-                            </div>
-                        )}
+                            )
+                        }
 
-                        {activeTab === "reviews" && (
-                            <div className="animate-in fade-in duration-200">
-                                <DocumentReviews
+                        {activeTab === "comments" && (
+                            <div className="animate-in fade-in duration-200 h-[500px] border rounded-lg bg-card overflow-hidden">
+                                <DocumentComments
                                     documentId={document.id}
-                                    // currentUserId not strictly needed if handled internally by component using useAuth?
-                                    // But DocumentReviews prop accepts it. We can fetch user from useAuth inside component?
-                                    // The page has access to user but we removed it from loadDocument.
-                                    // Component uses useAuth() so it's fine.
-                                    onReviewActionComplete={loadDocument}
+                                    readOnly={document.effectiveStatus === "APPROVED" || document.effectiveStatus === "OBSOLETE"}
                                 />
                             </div>
                         )}
 
-                        {activeTab === "comments" && (
-                            <div className="animate-in fade-in duration-200 h-[500px] border rounded-lg bg-card overflow-hidden">
-                                <div className="animate-in fade-in duration-200 h-[500px] border rounded-lg bg-card overflow-hidden">
-                                    <DocumentComments
-                                        documentId={document.id}
-                                        readOnly={document.effectiveStatus === "APPROVED" || document.effectiveStatus === "OBSOLETE"}
-                                    />
+                        {
+                            activeTab === "audit" && (
+                                <div className="animate-in fade-in duration-200">
+                                    <DocumentAuditPanel documentId={document.id} />
                                 </div>
-                            </div>
-                        )}
-
-                        {activeTab === "audit" && (
-                            <div className="animate-in fade-in duration-200">
-                                <DocumentAuditPanel documentId={document.id} />
-                            </div>
-                        )}
+                            )
+                        }
                     </div>
                 </div>
             </div>
 
             {/* Share Modal */}
-            {document && (
-                <ShareDocumentModal
-                    isOpen={isShareModalOpen}
-                    onClose={() => setIsShareModalOpen(false)}
-                    document={document}
-                />
-            )}
+            {
+                document && (
+                    <ShareDocumentModal
+                        isOpen={isShareModalOpen}
+                        onClose={() => setIsShareModalOpen(false)}
+                        document={document}
+                    />
+                )
+            }
 
             {/* Edit Modal */}
-            {document && (
-                <EditDocumentModal
-                    isOpen={isEditModalOpen}
-                    onClose={() => setIsEditModalOpen(false)}
-                    document={document}
-                    onSuccess={loadDocument}
-                />
-            )}
+            {
+                document && (
+                    <EditDocumentModal
+                        isOpen={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        document={document}
+                        onSuccess={loadDocument}
+                    />
+                )
+            }
 
             {/* Structured Content Edit Modal */}
-            {document && (
-                <EditStructuredContentModal
-                    isOpen={isStructuredEditModalOpen}
-                    onClose={() => setIsStructuredEditModalOpen(false)}
-                    documentId={document.id}
-                    currentContent={document.currentVersion?.contentJson}
-                    onSuccess={loadDocument}
-                    frozen={document.currentVersion?.isFrozen ?? false}
-                />
-            )}
+            {
+                document && (
+                    <EditStructuredContentModal
+                        isOpen={isStructuredEditModalOpen}
+                        onClose={() => setIsStructuredEditModalOpen(false)}
+                        documentId={document.id}
+                        currentContent={document.currentVersion?.contentJson}
+                        onSuccess={loadDocument}
+                        frozen={document.currentVersion?.isFrozen ?? false}
+                    />
+                )
+            }
+            {/* Legal Hold Modal */}
+            <ApplyLegalHoldModal
+                isOpen={isLegalHoldModalOpen}
+                onClose={() => setIsLegalHoldModalOpen(false)}
+                targetType="DOCUMENT"
+                targetId={document?.id || ""}
+                targetName={document?.title || ""}
+                onSuccess={async () => {
+                    // Refresh document data to show new badge
+                    loadDocument(true);
+                }}
+            />
         </div>
     )
 }

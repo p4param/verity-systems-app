@@ -27,6 +27,10 @@ type AuthContextType = {
         input: RequestInfo | URL,
         init?: RequestInit
     ) => Promise<T>
+    fetchRawWithAuth: (
+        input: RequestInfo | URL,
+        init?: RequestInit
+    ) => Promise<Response>
 }
 
 const AuthContext = createContext<AuthContextType | null>(null)
@@ -225,10 +229,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
        Authenticated fetch helper
     ---------------------------------------- */
 
-    const fetchWithAuth = useCallback(async <T = any>(
+    const fetchRawWithAuth = useCallback(async (
         input: RequestInfo | URL,
         init: RequestInit = {}
-    ): Promise<T> => {
+    ): Promise<Response> => {
         if (loadingRef.current) {
             while (loadingRef.current) {
                 await new Promise(resolve => setTimeout(resolve, 50))
@@ -258,7 +262,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         let response = await fetch(input, { ...init, headers })
 
         if (response.status !== 401) {
-            return handleAPIResponse<T>(response)
+            return response
         }
 
         const newToken = await getRefreshTokenSingleton()
@@ -271,8 +275,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         headers.set("Authorization", `Bearer ${newToken}`)
         response = await fetch(input, { ...init, headers })
 
-        return handleAPIResponse<T>(response)
+        return response
     }, [logout, getRefreshTokenSingleton])
+
+    const fetchWithAuth = useCallback(async <T = any>(
+        input: RequestInfo | URL,
+        init: RequestInit = {}
+    ): Promise<T> => {
+        const response = await fetchRawWithAuth(input, init)
+        return handleAPIResponse<T>(response)
+    }, [fetchRawWithAuth])
 
 
     /* ----------------------------------------
@@ -322,8 +334,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         logout,
         verifyMfa,
         refreshTokens,
-        fetchWithAuth
-    }), [user, accessToken, loading, mfaRequired, mfaSetupRequired, login, logout, verifyMfa, refreshTokens, fetchWithAuth])
+        fetchWithAuth,
+        fetchRawWithAuth
+    }), [user, accessToken, loading, mfaRequired, mfaSetupRequired, login, logout, verifyMfa, refreshTokens, fetchWithAuth, fetchRawWithAuth])
 
     return (
         <AuthContext.Provider value={contextValue}>

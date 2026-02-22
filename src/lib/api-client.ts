@@ -11,7 +11,7 @@ export async function handleAPIResponse<T>(res: Response): Promise<T> {
                 message = data.message || (data.error && data.error.message) || (typeof data.error === 'string' ? data.error : JSON.stringify(data.error)) || message
             }
         } catch {
-            // ignore parse errors
+            message = `${message} (${res.status} ${res.statusText})`
         }
 
         throw new Error(message)

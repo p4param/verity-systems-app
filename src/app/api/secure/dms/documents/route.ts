@@ -22,7 +22,7 @@ export async function GET(req: Request) {
 
         // Parsing Query Parameters
         const page = parseInt(searchParams.get("page") || "1");
-        const limit = parseInt(searchParams.get("limit") || "50");
+        const limit = parseInt(searchParams.get("limit") || "20");
         const search = searchParams.get("search") || undefined;
         const folderId = searchParams.get("folderId") || undefined;
         const includeSubfolders = searchParams.get("includeSubfolders") === "true";

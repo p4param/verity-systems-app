@@ -10,7 +10,8 @@ import {
     FolderNotEmptyError,
     DocumentLockedError,
     ShareLinkExpiredError,
-    DomainViolationError
+    DomainViolationError,
+    LegalHoldViolationError
 } from "./errors";
 import {
     FileTooLargeError,
@@ -54,6 +55,8 @@ export function handleApiError(error: any) {
         status = 404;
     } else if (error instanceof UnauthorizedWorkflowActionError) {
         status = 403;
+    } else if (error instanceof LegalHoldViolationError) {
+        status = 423; // HTTP 423 Locked
     } else if (error instanceof VersionConflictError) {
         status = 409;
     } else if (

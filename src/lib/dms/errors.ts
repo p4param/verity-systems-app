@@ -107,3 +107,14 @@ export class DomainViolationError extends Error {
         this.name = "DomainViolationError";
     }
 }
+
+/**
+ * Custom error thrown when a destructive operation is blocked because
+ * the target document is under an active Legal Hold.
+ */
+export class LegalHoldViolationError extends Error {
+    constructor(documentId: string) {
+        super(`Document ${documentId} is under an active Legal Hold. This action is blocked until the hold is released.`);
+        this.name = "LegalHoldViolationError";
+    }
+}

@@ -4,6 +4,8 @@ import { requirePermission } from "@/lib/auth/permission-guard";
 import { handleApiError } from "@/lib/dms/api-error-handler";
 import { DmsQueryService } from "@/services/dms/query-service";
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/secure/dms/query/folders/tree
  * 

@@ -53,6 +53,11 @@ async function main() {
         { id: 36, code: 'DMS_SHARE_REVOKE', description: 'Revoke share links' },
         { id: 37, code: 'DMS_DOCUMENT_TYPE_MANAGE', description: 'Manage document types (CRUD)' },
         { id: 38, code: 'DMS_AUDIT_EXPORT', description: 'Export DMS audit logs' },
+        { id: 43, code: 'DMS_DOCUMENT_APPROVE_ON_BEHALF', description: 'Approve or reject on behalf of assigned reviewers' },
+        { id: 50, code: 'LEGAL_HOLD_VIEW', description: 'View legal holds and their targets' },
+        { id: 51, code: 'LEGAL_HOLD_CREATE', description: 'Create new legal holds' },
+        { id: 52, code: 'LEGAL_HOLD_ATTACH', description: 'Attach legal holds to documents/folders' },
+        { id: 53, code: 'LEGAL_HOLD_RELEASE', description: 'Release active legal holds' },
     ]
 
     for (const perm of permissions) {
@@ -272,6 +277,43 @@ async function main() {
         create: { userId: reviewerUser.id, roleId: reviewerRole.id, assignedBy: adminUser.id },
     })
 
+    // 8.5. Create Compliance Admin Role
+    console.log('Creating Compliance Admin role...')
+    const complianceAdminRole = await prisma.role.upsert({
+        where: { id: 4 },
+        update: { name: 'Compliance Admin', tenantId: tenant.id },
+        create: {
+            id: 4,
+            tenantId: tenant.id,
+            name: 'Compliance Admin',
+            description: 'Handles Legal Holds and Compliance auditing',
+            isSystem: false,
+            requiresMfa: false,
+            isActive: true,
+        },
+    })
+
+    // Assign Compliance Admin permissions (Legal Hold + Audit View)
+    const compliancePermissions = await prisma.permission.findMany({
+        where: {
+            code: {
+                in: [
+                    'LEGAL_HOLD_VIEW', 'LEGAL_HOLD_CREATE', 'LEGAL_HOLD_ATTACH', 'LEGAL_HOLD_RELEASE',
+                    'AUDIT_VIEW', 'DMS_VIEW', 'DMS_DOCUMENT_READ'
+                ]
+            }
+        }
+    })
+
+    for (const p of compliancePermissions) {
+        await prisma.rolePermission.upsert({
+            where: { roleId_permissionId: { roleId: complianceAdminRole.id, permissionId: p.id } },
+            update: {},
+            create: { roleId: complianceAdminRole.id, permissionId: p.id }
+        })
+    }
+    console.log(`✅ Assigned ${compliancePermissions.length} permissions to Compliance Admin role`)
+
 
     // 9. Create Sample Folders
     console.log('Creating sample folders...')
@@ -279,22 +321,24 @@ async function main() {
     const folderNames = ['Policies', 'Procedures', 'Manuals', 'Templates']
 
     for (const name of folderNames) {
-        const folder = await prisma.folder.upsert({
-            where: { tenantId_path: { tenantId: tenant.id, path: `/${name}` } }, // Path unique constraint?
-            // Wait, schema might use name+parentId or path. 
-            // In seed.js we don't see schema details. Assuming path or name logic.
-            // Let's check if we can just create if not exists.
-            // Using findFirst to avoid unique constraint issues if we don't know the unique key perfectly.
-            // But upsert requires unique input.
-            // Let's rely on create for now, wrapped in try-catch or check first.
-            update: {},
-            create: {
-                name: name,
-                parentId: null,
+        let folder = await prisma.folder.findFirst({
+            where: {
                 tenantId: tenant.id,
-                path: `/${name}`,
+                parentId: null,
+                name: name
             }
         })
+
+        if (!folder) {
+            folder = await prisma.folder.create({
+                data: {
+                    name: name,
+                    parentId: null,
+                    tenantId: tenant.id,
+                    createdById: adminUser.id
+                }
+            })
+        }
         folders.push(folder)
     }
     console.log(`✅ Created ${folders.length} folders`)
@@ -303,16 +347,12 @@ async function main() {
     console.log('Creating sample documents...')
 
     const docTypeInfo = await prisma.documentType.upsert({
-        where: { name: 'Policy' }, // Assuming name is unique? Or id? 
-        // If Model doesn't have @unique on name, this fails.
-        // Let's assuming DocumentType might need to be created first or standard ones exist.
-        // Let's create a default one.
+        where: { tenantId_name: { tenantId: tenant.id, name: 'Policy' } },
         update: {},
         create: {
             name: 'Policy',
-            description: 'Standard Policy',
+            tenantId: tenant.id,
             isActive: true,
-            retentionPeriod: 365
         }
     })
 
@@ -332,17 +372,16 @@ async function main() {
                 folderId: folder.id,
                 tenantId: tenant.id,
                 typeId: docTypeInfo.id,
-                createdBy: creatorUser.id,
+                createdById: creatorUser.id,
                 // Create a generic version
-                DocumentVersion: {
+                versions: {
                     create: {
-                        versionNumber: '1.0',
+                        versionNumber: 1,
                         fileName: 'sample.pdf',
                         fileSize: 1024,
                         mimeType: 'application/pdf',
-                        storagePath: 'sample.pdf',
-                        uploadedBy: creatorUser.id,
-                        isCurrent: true,
+                        storageKey: `sample-${i}.pdf`,
+                        createdById: creatorUser.id,
                         tenantId: tenant.id
                     }
                 }
@@ -396,12 +435,13 @@ async function main() {
     console.log('   Admin:    admin@example.com / Admin@123')
     console.log('   Creator:  creator@example.com / User@123')
     console.log('   Reviewer: reviewer@example.com / User@123')
+}
 
-    main()
-        .catch((e) => {
-            console.error('❌ Seed failed:', e)
-            process.exit(1)
-        })
-        .finally(async () => {
-            await prisma.$disconnect()
-        })
+main()
+    .catch((e) => {
+        console.error('❌ Seed failed:', e)
+        process.exit(1)
+    })
+    .finally(async () => {
+        await prisma.$disconnect()
+    })

@@ -15,6 +15,7 @@ import {
 } from "./errors";
 import { PdfService } from "@/services/dms/pdf-service";
 import { ApprovalService } from "./services/ApprovalService";
+import { assertNotUnderLegalHold } from "@/services/dms/legal-hold-service";
 
 /**
  * Maps workflow actions to required Folder Permissions.
@@ -32,8 +33,13 @@ function getRequiredFolderPermission(action: WorkflowAction): "READ" | "WRITE" |
     }
 }
 
-export function getEffectiveDocumentStatus(document: { status: DocumentStatus, expiryDate: Date | null, effectiveDate?: Date | null }): DocumentStatus | "EXPIRED" | "PENDING_EFFECTIVE" {
+export function getEffectiveDocumentStatus(document: { status: DocumentStatus, expiryDate: Date | null, effectiveDate?: Date | null, isUnderLegalHold?: boolean }): DocumentStatus | "EXPIRED" | "PENDING_EFFECTIVE" {
     if (document.status === DocumentStatus.APPROVED) {
+        // V3 Legal Hold Integration: Skip expiry if under hold
+        if (document.isUnderLegalHold) {
+            return document.status;
+        }
+
         const now = new Date();
         const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
@@ -79,7 +85,10 @@ export async function transitionDocumentStatus(
                 createdById: true,
                 supersedesId: true, // Added for obsolete logic
                 supersededById: true, // Added for Manual Obsolete Logic
-                documentNumber: true // Added for audit log
+                documentNumber: true, // Added for audit log
+                _count: {
+                    select: { reviews: { where: { status: "PENDING" } } }
+                }
             }
         });
 
@@ -103,7 +112,8 @@ export async function transitionDocumentStatus(
                     user,
                     document.folderId,
                     requiredFolderPerm,
-                    transition.permission
+                    transition.permission,
+                    tx
                 );
             } else {
                 // No folder or no specific folder action -> Global RBAC
@@ -137,6 +147,9 @@ export async function transitionDocumentStatus(
 
         // e. Business Logic: Manual Obsolete Rules
         if (action === "obsolete") {
+            // Rule 0: V3 Legal Hold Guard — cannot obsolete held documents
+            await assertNotUnderLegalHold(documentId, tenantId, tx);
+
             // Rule 1: Must be APPROVED
             if (document.status !== "APPROVED") {
                 throw new DomainViolationError("Only APPROVED documents can be marked as OBSOLETE.");
@@ -151,32 +164,23 @@ export async function transitionDocumentStatus(
             }
         }
 
-        // --- V2 V INTERCEPTION START ---
-        // Check if this is a V2 document flow (has reviews)
-        // If "withdraw", we always allow V2 interception if status is SUBMITTED
-        // But for approve/reject, checking reviews existence is key.
+        const reviewCount = (document as any)._count?.reviews || 0;
 
-        // For 'withdraw', ReviewService handles it even if no reviews? 
-        // No, 'withdraw' is for "In Review". If no reviews exist, V1 SUBMITTED -> DRAFT is logic?
-        // V1 didn't have withdraw.
-        // If V1 SUBMITTED, can we withdraw? 
-        // Yes, if we added it to Matrix.
-        // But V1 SUBMITTED usually implies "Waiting for Admin".
-
-        const reviewCount = await tx.documentReview.count({
-            where: { documentId, tenantId }
-        });
+        // Check for specific bypass permission (ID 43: DMS_DOCUMENT_APPROVE_ON_BEHALF)
+        const canApproveOnBehalf = user.permissionIds?.includes(43) ||
+            user.permissions?.includes("DMS_DOCUMENT_APPROVE_ON_BEHALF") ||
+            false;
 
         if (reviewCount > 0 || action === "withdraw") {
             if (action === "approve") {
                 // Delegate to ReviewService
-                const result = await ReviewService.submitReview(documentId, tenantId, user.sub, "APPROVE", comment);
+                const result = await ReviewService.submitReview(documentId, tenantId, user.sub, "APPROVE", comment, tx, canApproveOnBehalf);
                 return await tx.document.findUnique({ where: { id: documentId } });
             }
 
             if (action === "reject") {
                 // Delegate to ReviewService
-                await ReviewService.submitReview(documentId, tenantId, user.sub, "REJECT", comment);
+                await ReviewService.submitReview(documentId, tenantId, user.sub, "REJECT", comment, tx, canApproveOnBehalf);
                 return await tx.document.findUnique({ where: { id: documentId } });
             }
 
@@ -188,7 +192,7 @@ export async function transitionDocumentStatus(
                 // updateMany where status=PENDING.
                 // If count is 0, it just updates Doc to DRAFT.
                 // So it is safe to call even if no reviews exist.
-                await ReviewService.withdrawReview(documentId, tenantId, user.sub);
+                await ReviewService.withdrawReview(documentId, tenantId, user.sub, tx);
                 return await tx.document.findUnique({ where: { id: documentId } });
             }
         }
@@ -315,7 +319,7 @@ export async function transitionDocumentStatus(
 
     // Transaction Handling: Support both Client and TransactionClient (nested)
     if (typeof prisma.$transaction === 'function') {
-        return await prisma.$transaction(execute);
+        return await prisma.$transaction(execute, { timeout: 30000 });
     } else {
         return await execute(prisma);
     }

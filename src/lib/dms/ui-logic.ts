@@ -23,7 +23,9 @@ export function getAvailableWorkflowActions(
     status: DocumentStatus | string,
     userPermissions: string[] = [],
     isCreator: boolean = false,
-    isSuperseded: boolean = false
+    isSuperseded: boolean = false,
+    isReviewer: boolean = false,
+    canApproveOnBehalf: boolean = false
 ): UiWorkflowAction[] {
     const actions: UiWorkflowAction[] = [];
 
@@ -41,7 +43,9 @@ export function getAvailableWorkflowActions(
 
     // 2. SUBMITTED -> Approve / Reject / Withdraw
     if (status === "SUBMITTED") {
-        if (userPermissions.includes("DMS_DOCUMENT_APPROVE")) {
+        const canActAsReviewer = isReviewer || canApproveOnBehalf;
+
+        if (userPermissions.includes("DMS_DOCUMENT_APPROVE") && canActAsReviewer) {
             actions.push({
                 action: "approve",
                 label: "Approve",
@@ -49,7 +53,7 @@ export function getAvailableWorkflowActions(
                 requiredPermission: "DMS_DOCUMENT_APPROVE"
             });
         }
-        if (userPermissions.includes("DMS_DOCUMENT_REJECT")) {
+        if (userPermissions.includes("DMS_DOCUMENT_REJECT") && canActAsReviewer) {
             actions.push({
                 action: "reject",
                 label: "Reject",
@@ -68,13 +72,13 @@ export function getAvailableWorkflowActions(
         }
     }
 
-    // 3. REJECTED -> Revise
+    // 3. REJECTED -> Revise (transition back to DRAFT for editing)
     if (status === "REJECTED") {
         if (userPermissions.includes("DMS_DOCUMENT_EDIT")) {
             actions.push({
                 action: "revise",
-                label: "Revise",
-                variant: "info",
+                label: "Revive",
+                variant: "secondary",
                 requiredPermission: "DMS_DOCUMENT_EDIT"
             });
         }

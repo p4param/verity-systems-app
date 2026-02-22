@@ -7,11 +7,13 @@ import {
     ChevronRight,
     ChevronDown,
     Plus,
-    Loader2
+    Loader2,
+    Shield
 } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
 import { usePermission } from "@/lib/auth/use-permission"
 import { Modal } from "@/components/ui/Modal"
+import { ApplyLegalHoldModal } from "./ApplyLegalHoldModal"
 
 interface FolderData {
     id: string
@@ -19,6 +21,7 @@ interface FolderData {
     parentId: string | null
     createdById: number
     createdAt: string
+    isUnderLegalHold?: boolean
 }
 
 interface FolderTreeProps {
@@ -41,7 +44,11 @@ export function FolderTree({ onFolderSelect, selectedFolderId }: FolderTreeProps
 
     // Permission check
     const canCreateFolder = usePermission("DMS_FOLDER_CREATE")
+    const canAttachHold = usePermission("LEGAL_HOLD_ATTACH")
     const [refreshKey, setRefreshKey] = useState(0) // Used to force tree updates
+
+    // Legal Hold state
+    const [holdModalFolder, setHoldModalFolder] = useState<{ id: string, name: string } | null>(null)
 
     const loadFolders = useCallback(async () => {
         try {
@@ -168,18 +175,40 @@ export function FolderTree({ onFolderSelect, selectedFolderId }: FolderTreeProps
                         >
                             {isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                         </span>
-                        <Folder className={isSelected ? "text-primary fill-primary/20" : "text-muted-foreground"} size={16} />
-                        <span className="truncate text-sm">{folder.name}</span>
+                        <Folder className={isSelected ? "text-primary fill-primary/20" : folder.isUnderLegalHold ? "text-amber-500" : "text-muted-foreground"} size={16} />
+                        <span className={`truncate text-sm ${folder.isUnderLegalHold ? "text-amber-700 font-medium" : ""}`}>
+                            {folder.name}
+                        </span>
+                        {folder.isUnderLegalHold && (
+                            <span title="Legal Hold Active" className="shrink-0 ml-auto mr-1">
+                                <Shield size={12} className="text-amber-500 fill-amber-500/20" />
+                            </span>
+                        )}
                     </div>
 
-                    {canCreateFolder && (
-                        <button
-                            onClick={(e) => openCreateModal(e, folder.id)}
-                            className="opacity-0 group-hover:opacity-100 p-1 hover:bg-muted-foreground/20 rounded-sm transition-all text-muted-foreground hover:text-foreground"
-                        >
-                            <Plus size={14} />
-                        </button>
-                    )}
+                    <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-all">
+                        {canAttachHold && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setHoldModalFolder({ id: folder.id, name: folder.name });
+                                }}
+                                className="p-1 hover:bg-amber-500/20 rounded-sm text-muted-foreground hover:text-amber-600"
+                                title="Apply Legal Hold"
+                            >
+                                <Shield size={14} />
+                            </button>
+                        )}
+                        {canCreateFolder && (
+                            <button
+                                onClick={(e) => openCreateModal(e, folder.id)}
+                                className="p-1 hover:bg-muted-foreground/20 rounded-sm text-muted-foreground hover:text-foreground"
+                                title="New Subfolder"
+                            >
+                                <Plus size={14} />
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {isExpanded && (
@@ -311,6 +340,19 @@ export function FolderTree({ onFolderSelect, selectedFolderId }: FolderTreeProps
                     </div>
                 </div>
             </Modal>
+
+            {/* Legal Hold Modal */}
+            <ApplyLegalHoldModal
+                isOpen={!!holdModalFolder}
+                onClose={() => setHoldModalFolder(null)}
+                targetType="FOLDER"
+                targetId={holdModalFolder?.id || ""}
+                targetName={holdModalFolder?.name || ""}
+                onSuccess={() => {
+                    setRefreshKey(prev => prev + 1)
+                    loadFolders()
+                }}
+            />
         </div>
     )
 }

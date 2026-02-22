@@ -58,7 +58,7 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
         try {
             setLoadingAction(action)
 
-            if (action === "revise") {
+            if (action === "revise" && document.effectiveStatus === "APPROVED") {
                 const newDoc = await fetchWithAuth(`/api/secure/dms/documents/${document.id}/revise`, {
                     method: "POST"
                 })
@@ -91,11 +91,17 @@ export function DocumentHeaderActions({ document, onSuccess }: DocumentHeaderAct
     const supersededBy = (document as any).supersededBy;
     const isSuperseded = document.effectiveStatus === "APPROVED" && !!supersededBy;
 
+    // NEW LOGIC: Check for Reviewer/Admin bypass
+    const isReviewer = (document as any).isReviewer || false;
+    const canApproveOnBehalf = (document as any).canApproveOnBehalf || false;
+
     const availableActions = getAvailableWorkflowActions(
         document.effectiveStatus,
         userPermissions,
         isCreator,
-        isSuperseded // Pass the new parameter
+        isSuperseded,
+        isReviewer,
+        canApproveOnBehalf
     )
 
     // Filter out "revise" if superseded

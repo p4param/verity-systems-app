@@ -19,6 +19,8 @@ interface Document {
     effectiveStatus: string
     createdById: number
     effectivePermissions?: string[]
+    isReviewer?: boolean
+    canApproveOnBehalf?: boolean
 }
 
 interface WorkflowActionsProps {
@@ -50,7 +52,14 @@ export function DmsWorkflowActions({ document, onSuccess }: WorkflowActionsProps
 
     // 2. Compute Available Actions
     const isCreator = user?.id === document.createdById || user?.sub === document.createdById;
-    const actions = getAvailableWorkflowActions(document.effectiveStatus, userPermissions, isCreator)
+    const actions = getAvailableWorkflowActions(
+        document.effectiveStatus,
+        userPermissions,
+        isCreator,
+        false, // isSuperseded - handled by effectiveStatus or separate flag if needed
+        document.isReviewer,
+        document.canApproveOnBehalf
+    )
 
     if (actions.length === 0) return null
 

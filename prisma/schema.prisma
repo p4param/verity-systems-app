@@ -167,6 +167,12 @@ model Tenant {
   folderPermissions        FolderPermission[]
   documentComments         DocumentComment[]
   documentAcknowledgements DocumentAcknowledgement[]
+
+  // V3 Relations
+  legalHolds       LegalHold[]
+  legalHoldTargets LegalHoldTarget[]
+  complianceSnapshots      ComplianceSnapshot[]
+  complianceAlerts         ComplianceAlert[]
 }
 
 model User {
@@ -248,6 +254,9 @@ model Folder {
   createdById Int
   updatedById Int?
 
+  // V3 Legal Hold
+  isUnderLegalHold Boolean @default(false)
+
   // Relations
   tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   parent   Folder?  @relation("FolderToFolder", fields: [parentId], references: [id])
@@ -315,6 +324,9 @@ model Document {
   childrenSuperseding Document[] @relation("Supersedes") 
   parentSuperseded    Document?  @relation("SupersededBy")
 
+  // V3 Legal Hold
+  isUnderLegalHold Boolean @default(false)
+
   @@unique([tenantId, supersedesId])
   @@unique([tenantId, documentNumber])
   @@index([tenantId])
@@ -323,6 +335,7 @@ model Document {
   @@index([tenantId, title])
   @@index([tenantId, typeId])
   @@index([tenantId, expiryDate])
+  @@index([tenantId, isUnderLegalHold])
 }
 
 model DocumentType {
@@ -554,4 +567,94 @@ enum FolderPermissionType {
   READ
   WRITE
   REVIEW
+}
+
+// --- DMS V3 Extensions ---
+
+enum LegalHoldTargetType {
+  DOCUMENT
+  FOLDER
+  DOCUMENT_TYPE
+  TENANT
+}
+
+model LegalHold {
+  id               String    @id @default(cuid())
+  tenantId         Int
+  name             String
+  description      String?
+  reason           String
+  imposedByUserId  String
+  startDate        DateTime
+  endDate          DateTime?
+  isActive         Boolean   @default(true)
+  createdAt        DateTime  @default(now())
+  releasedAt       DateTime?
+  releasedByUserId String?
+
+  tenant  Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  targets LegalHoldTarget[]
+
+  @@index([tenantId, isActive])
+}
+
+model LegalHoldTarget {
+  id          String              @id @default(cuid())
+  tenantId    Int
+  legalHoldId String
+  targetType  LegalHoldTargetType
+  targetId    String
+
+  tenant    Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  legalHold LegalHold @relation(fields: [legalHoldId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, legalHoldId, targetType, targetId])
+  @@index([tenantId, targetType, targetId])
+}
+
+model ComplianceSnapshot {
+  id                     String   @id @default(uuid())
+  tenantId               Int
+  snapshotDate           DateTime
+  totalDocuments         Int
+  approvedDocuments      Int
+  draftDocuments         Int
+  expiredDocuments       Int
+  documentsNearExpiry    Int
+  documentsUnderReview   Int
+  overdueReviews         Int
+  unacknowledgedDocuments Int
+  activeShareLinks       Int
+  legalHoldCount         Int
+  documentsUnderHold     Int      @default(0)
+  holdsNearingReview     Int      @default(0)
+  holdReleaseEventsLast30Days Int @default(0)
+  holdViolationAttempts  Int      @default(0)
+  retentionViolations    Int
+  auditCoverageScore     Int
+  workflowIntegrityScore Int
+  legalHoldIntegrityScore Int     @default(100)
+  complianceScore        Int
+  lastComputedAt         DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, snapshotDate])
+  @@index([tenantId])
+}
+
+model ComplianceAlert {
+  id         String   @id @default(uuid())
+  tenantId   Int
+  type       String
+  severity   String   // LOW | MEDIUM | HIGH | CRITICAL
+  entityId   String?
+  message    String
+  createdAt  DateTime @default(now())
+  resolvedAt DateTime?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([severity])
 }

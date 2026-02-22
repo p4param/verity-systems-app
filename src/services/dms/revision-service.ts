@@ -9,6 +9,7 @@ import {
 } from "@/lib/dms/errors";
 import { hasPermission } from "@/lib/auth/permission-check";
 import { PermissionId } from "@/lib/auth/permission-codes";
+import { assertNotUnderLegalHold } from "./legal-hold-service";
 
 export class RevisionService {
     /**
@@ -50,6 +51,9 @@ export class RevisionService {
                     `Cannot revise document ${originalDoc.documentNumber}. It has already been superseded.`
                 );
             }
+
+            // c. V3 Legal Hold Guard — blocks revision/supersede of held documents
+            await assertNotUnderLegalHold(documentId, tenantId, tx);
 
             // 3. Security Check: User must have WRITE permission on the folder
             /* 

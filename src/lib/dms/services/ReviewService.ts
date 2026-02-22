@@ -14,15 +14,16 @@ export class ReviewService {
         documentId: string,
         tenantId: number,
         initiator: AuthUser,
-        reviewers: { userId: number; stage: number }[]
+        reviewers: { userId: number; stage: number }[],
+        tx?: any
     ) {
         if (reviewers.length === 0) {
             throw new Error("At least one reviewer is required to start a review process.");
         }
 
-        return await prisma.$transaction(async (tx) => {
+        const execute = async (innerTx: any) => {
             // 1. Verify Document Exists & Status
-            const doc = await tx.document.findUnique({
+            const doc = await innerTx.document.findUnique({
                 where: { id: documentId, tenantId },
             });
 
@@ -33,7 +34,7 @@ export class ReviewService {
 
             // 2. Create Review Entries
             for (const reviewer of reviewers) {
-                await tx.documentReview.create({
+                await innerTx.documentReview.create({
                     data: {
                         documentId,
                         tenantId,
@@ -46,7 +47,7 @@ export class ReviewService {
 
             // 3. Update Document Status to SUBMITTED (In Review)
             // Note: In V1, SUBMITTED implies "In Review".
-            await tx.document.update({
+            await innerTx.document.update({
                 where: { id: documentId },
                 data: { status: DocumentStatus.SUBMITTED },
             });
@@ -61,12 +62,18 @@ export class ReviewService {
                 details: `Review started with ${reviewers.length} reviewers.`,
                 module: "DMS",
                 metadata: { reviewCount: reviewers.length }
-            }, tx);
+            }, innerTx);
 
-            return await tx.document.findUnique({
+            return await innerTx.document.findUnique({
                 where: { id: documentId }
             });
-        });
+        };
+
+        if (tx) {
+            return await execute(tx);
+        } else {
+            return await prisma.$transaction(execute, { timeout: 30000 });
+        }
     }
 
     /**
@@ -77,11 +84,13 @@ export class ReviewService {
         tenantId: number,
         reviewerUserId: number,
         decision: "APPROVE" | "REJECT",
-        comment?: string
+        comment?: string,
+        tx?: any,
+        canApproveOnBehalf: boolean = false
     ) {
-        return await prisma.$transaction(async (tx) => {
+        const execute = async (innerTx: any) => {
             // 1. Find the pending review for this user
-            const review = await tx.documentReview.findFirst({
+            let review = await innerTx.documentReview.findFirst({
                 where: {
                     documentId,
                     tenantId,
@@ -90,8 +99,58 @@ export class ReviewService {
                 },
             });
 
+            // --- ON-BEHALF LOGIC START ---
             if (!review) {
-                throw new Error("No pending review found for this user.");
+                // If we already know the user has permission (from engine), skip the check
+                if (canApproveOnBehalf) {
+                    // Find the first available pending review for this document
+                    review = await innerTx.documentReview.findFirst({
+                        where: {
+                            documentId,
+                            tenantId,
+                            status: ReviewStatus.PENDING,
+                        },
+                        orderBy: { stageNumber: 'asc' }
+                    });
+                } else {
+                    // Fallback to manual check (e.g. if called from other service without flag)
+                    const user = await innerTx.user.findUnique({
+                        where: { id: reviewerUserId },
+                        include: {
+                            userRoles: {
+                                include: {
+                                    role: {
+                                        include: {
+                                            rolePermissions: {
+                                                include: { permission: true }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    const hasOnBehalfPermManual = user?.userRoles.some(ur =>
+                        ur.role.rolePermissions.some(rp => rp.permission.code === "DMS_DOCUMENT_APPROVE_ON_BEHALF")
+                    );
+
+                    if (hasOnBehalfPermManual) {
+                        review = await innerTx.documentReview.findFirst({
+                            where: {
+                                documentId,
+                                tenantId,
+                                status: ReviewStatus.PENDING,
+                            },
+                            orderBy: { stageNumber: 'asc' }
+                        });
+                    }
+                }
+            }
+            // --- ON-BEHALF LOGIC END ---
+
+            if (!review) {
+                throw new Error("No pending review found for this user and no on-behalf authority.");
             }
 
             // 2. Update Review Status
@@ -172,15 +231,21 @@ export class ReviewService {
 
                 return { status: "IN_PROGRESS", pendingReviews: pendingCount };
             }
-        });
+        };
+
+        if (tx) {
+            return await execute(tx);
+        } else {
+            return await prisma.$transaction(execute, { timeout: 30000 });
+        }
     }
 
     /**
      * Withdraws a document from review (Creator action).
      */
-    static async withdrawReview(documentId: string, tenantId: number, userId: number) {
-        return await prisma.$transaction(async (tx) => {
-            const doc = await tx.document.findUnique({
+    static async withdrawReview(documentId: string, tenantId: number, userId: number, tx?: any) {
+        const execute = async (innerTx: any) => {
+            const doc = await innerTx.document.findUnique({
                 where: { id: documentId, tenantId },
             });
 
@@ -210,10 +275,16 @@ export class ReviewService {
                 module: "DMS"
             }, tx);
 
-            return await tx.document.findUnique({
+            return await innerTx.document.findUnique({
                 where: { id: documentId }
             });
-        });
+        };
+
+        if (tx) {
+            return await execute(tx);
+        } else {
+            return await prisma.$transaction(execute, { timeout: 30000 });
+        }
     }
 
     /**

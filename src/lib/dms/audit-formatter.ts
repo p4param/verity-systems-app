@@ -23,7 +23,13 @@ const METADATA_ALLOW_LIST: Record<string, string[]> = {
 
     // Sharing
     "DMS.SHARE_CREATE": ["expiresAt", "recipientEmail"], // No token!
-    "DMS.SHARE_REVOKE": ["tokenPrefix"]
+    "DMS.SHARE_REVOKE": ["tokenPrefix"],
+
+    // V3 Legal Hold Events
+    "DMS.LEGAL_HOLD_CREATED": ["name", "reason", "startDate", "endDate"],
+    "DMS.LEGAL_HOLD_ATTACHED": ["holdName", "targetType", "targetId", "documentCount"],
+    "DMS.LEGAL_HOLD_RELEASED": ["releasedAt", "affectedDocumentCount"],
+    "DMS.LEGAL_HOLD_VIOLATION_BLOCKED": ["documentId", "documentTitle"]
 };
 
 // Global deny-list (applied even if in allow-list by mistake)

@@ -9,6 +9,7 @@ import {
     VersionConflictError
 } from "@/lib/dms/storage/errors";
 import { DocumentNotFoundError, DomainViolationError } from "@/lib/dms/errors";
+import { assertNotUnderLegalHold } from "./legal-hold-service";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
@@ -66,6 +67,9 @@ export class VersionService {
         if (!ALLOWED_UPLOAD_STATES.includes(document.status)) {
             throw new DomainViolationError(`Version upload only allowed in DRAFT or REJECTED states. Current: ${document.status}`);
         }
+
+        // V3 Legal Hold Guard — blocks upload if document is under hold
+        await assertNotUnderLegalHold(documentId, tenantId);
 
         // 3. Determine next versionNumber
         const lastVersion = await globalPrisma.documentVersion.findFirst({

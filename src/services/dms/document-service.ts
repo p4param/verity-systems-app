@@ -6,6 +6,8 @@ import { DocumentStatus } from "@prisma/client";
 import { resolveEffectiveStatus } from "@/lib/dms/status-utils";
 import { FolderService } from "./folder-service";
 import { DocumentNotFoundError, FolderNotFoundError, DocumentLockedError } from "@/lib/dms/errors";
+import { StorageService } from "@/lib/dms/storage";
+import { assertNotUnderLegalHold } from "./legal-hold-service";
 
 export interface CreateDocumentParams {
     title: string;
@@ -127,6 +129,10 @@ export class DocumentService {
      * Includes effectivePermissions for the requesting user.
      */
     static async getDocumentById(id: string, tenantId: number, user: AuthUser) {
+        const startTime = Date.now();
+        console.log(`[DocumentService] Fetching doc=${id} for tenant=${tenantId}`);
+
+        const dbStart = Date.now();
         const document = await globalPrisma.document.findUnique({
             where: { id, tenantId },
             include: {
@@ -140,7 +146,8 @@ export class DocumentService {
                         isFrozen: true,
                         attachments: true,
                         contentMode: true,
-                        contentJson: true
+                        contentJson: true,
+                        storageKey: true, // Include storageKey for preview generation
                     }
                 },
                 versions: {
@@ -169,19 +176,74 @@ export class DocumentService {
                         id: true,
                         documentNumber: true
                     }
+                },
+                reviews: {
+                    include: {
+                        reviewer: { select: { id: true, fullName: true, email: true } },
+                        document: { select: { id: true, documentNumber: true, title: true } }
+                    },
+                    orderBy: [
+                        { stageNumber: 'asc' },
+                        { reviewer: { fullName: 'asc' } }
+                    ]
                 }
             }
         });
+        console.log(`[DocumentService] DB Query took ${Date.now() - dbStart}ms`);
 
         if (!document) return null;
 
+        const permStart = Date.now();
         const { PermissionService } = require("../../lib/dms/services/PermissionService");
         const effectivePermissions = await PermissionService.getEffectivePermissions(user, document.folderId);
+        console.log(`[DocumentService] Permission check took ${Date.now() - permStart}ms`);
+
+        // NEW: Calculate reviewer and admin bypass flags for UI action gating
+        const isReviewer = document.reviews?.some(r => r.reviewerUserId === user.sub) || false;
+
+        // Check for specific bypass permission (ID 43: DMS_DOCUMENT_APPROVE_ON_BEHALF)
+        const canApproveOnBehalf = user.permissionIds?.includes(43) ||
+            user.permissions?.includes("DMS_DOCUMENT_APPROVE_ON_BEHALF") ||
+            false;
+
+        // --- PREVIEW SOURCE CONSOLIDATION ---
+        let previewSource = null;
+        const currentVersion = document.currentVersion;
+
+        if (currentVersion) {
+            if (currentVersion.contentMode === "STRUCTURED") {
+                const status = document.status;
+                if (status === "DRAFT" || status === "SUBMITTED" || status === "REJECTED") {
+                    previewSource = {
+                        type: "PDF",
+                        url: `/api/secure/dms/documents/${id}/versions/${currentVersion.id}/preview`
+                    };
+                } else if (currentVersion.isFrozen && (currentVersion as any).storageKey) {
+                    const signedUrl = await StorageService.getDownloadUrl((currentVersion as any).storageKey, 300);
+                    previewSource = { type: "PDF", url: signedUrl };
+                }
+            } else {
+                // FILE MODE
+                const cleanMime = currentVersion.mimeType?.toLowerCase() || "";
+                const isPdf = cleanMime === "application/pdf";
+                const isImage = cleanMime.startsWith("image/");
+                const storageKey = (currentVersion as any).storageKey;
+
+                if (storageKey && (isPdf || isImage)) {
+                    const signedUrl = await StorageService.getDownloadUrl(storageKey, 300);
+                    previewSource = { type: isPdf ? "PDF" : "IMAGE", url: signedUrl };
+                }
+            }
+        }
+        console.log(`[DocumentService] Total getDocumentById took ${Date.now() - startTime}ms`);
 
         return {
             ...document,
             effectiveStatus: resolveEffectiveStatus(document),
-            effectivePermissions
+            effectivePermissions,
+            isReviewer,
+            canApproveOnBehalf,
+            previewSource
         };
     }
 
@@ -469,7 +531,10 @@ export class DocumentService {
                 throw new DocumentLockedError(id, document.status);
             }
 
-            // 3. Delete document (Cascade handles versions and history)
+            // 3. V3 Legal Hold Guard — blocks delete even on DRAFT if under hold
+            await assertNotUnderLegalHold(id, tenantId, innerTx);
+
+            // 4. Delete document (Cascade handles versions and history)
             await innerTx.document.delete({
                 where: { id, tenantId }
             });

@@ -38,6 +38,18 @@ export enum PermissionId {
     DMS_SHARE_READ = 35,
     DMS_SHARE_REVOKE = 36,
     DMS_DOCUMENT_TYPE_MANAGE = 37,
+    DMS_AUDIT_EXPORT = 38,
+    DMS_DOCUMENT_DOWNLOAD = 42,
+    DMS_DOCUMENT_APPROVE_ON_BEHALF = 43,
+
+    // V3 Legal Hold Permissions
+    LEGAL_HOLD_VIEW = 50,
+    LEGAL_HOLD_CREATE = 51,
+    LEGAL_HOLD_ATTACH = 52,
+    LEGAL_HOLD_RELEASE = 53,
+
+    // V3 Compliance Permissions
+    COMPLIANCE_VIEW = 60,
 }
 
 export enum RoleId {

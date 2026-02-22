@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState, useCallback, useRef } from "react"
+import React, { useEffect, useState, useCallback, useRef, memo } from "react"
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { AlertCircle } from "lucide-react"
 import { useAuth } from "@/lib/auth/auth-context"
@@ -26,7 +26,7 @@ interface DocumentListProps {
     onCreateClick?: () => void
 }
 
-export function DmsDocumentList({
+export const DmsDocumentList = memo(function DmsDocumentList({
     folderId,
     folderName,
     search = "",
@@ -41,6 +41,10 @@ export function DmsDocumentList({
     onCreateClick,
 }: DocumentListProps) {
     const { fetchWithAuth } = useAuth()
+    // Keep fetchWithAuth stable in refs to avoid triggering effects on every auth context render
+    const fetchRef = useRef(fetchWithAuth)
+    useEffect(() => { fetchRef.current = fetchWithAuth }, [fetchWithAuth])
+
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
@@ -49,14 +53,14 @@ export function DmsDocumentList({
     const [loading, setLoading] = useState(true)
     const [initialLoad, setInitialLoad] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const [meta, setMeta] = useState({ page: 1, limit: 50, total: 0, totalPages: 1 })
+    const [meta, setMeta] = useState({ page: 1, limit: 20, total: 0, totalPages: 1 })
     const [documentTypes, setDocumentTypes] = useState<{ label: string, value: string }[]>([])
 
     useEffect(() => {
-        fetchWithAuth<{ id: string, name: string }[]>("/api/secure/dms/document-types?active=true")
+        fetchRef.current<{ id: string, name: string }[]>("/api/secure/dms/document-types?active=true")
             .then(types => setDocumentTypes(types.map(t => ({ label: t.name, value: t.id }))))
             .catch(console.error)
-    }, [fetchWithAuth]);
+    }, []) // fetchRef is stable — no dependency needed
 
     const searchParamsString = searchParams.toString()
 
@@ -98,6 +102,7 @@ export function DmsDocumentList({
             else params.delete("search")
 
             if (!params.has("page")) params.set("page", "1")
+            if (!params.has("limit")) params.set("limit", "20")
 
             if (params.has("type")) {
                 const types = params.getAll("type");
@@ -106,7 +111,7 @@ export function DmsDocumentList({
             }
 
             const queryString = params.toString()
-            const response = await fetchWithAuth<{ data: DocumentData[], meta: any }>(`/api/secure/dms/documents?${queryString}`)
+            const response = await fetchRef.current<{ data: DocumentData[], meta: any }>(`/api/secure/dms/documents?${queryString}`)
 
             setDocuments(response.data)
 
@@ -121,7 +126,7 @@ export function DmsDocumentList({
             setLoading(false)
             setInitialLoad(false)
         }
-    }, [folderId, search, searchParamsString, fetchWithAuth])
+    }, [folderId, search, searchParamsString, fetchRef])
 
     useEffect(() => {
         loadDocuments()
@@ -139,9 +144,12 @@ export function DmsDocumentList({
         return ['status', 'type', 'expiryFilter', 'versionFrom', 'versionTo', 'includeSubfolders'].includes(key) && val
     }).length
 
+    const onActiveFilterCountChangeRef = useRef(onActiveFilterCountChange)
+    useEffect(() => { onActiveFilterCountChangeRef.current = onActiveFilterCountChange }, [onActiveFilterCountChange])
+
     useEffect(() => {
-        onActiveFilterCountChange?.(activeFilterCount)
-    }, [activeFilterCount, onActiveFilterCountChange])
+        onActiveFilterCountChangeRef.current?.(activeFilterCount)
+    }, [activeFilterCount])
 
     const hasFiltersOrSearch = !!search || activeFilterCount > 0
     const isEmpty = !loading && documents.length === 0 && meta.total === 0
@@ -187,4 +195,4 @@ export function DmsDocumentList({
             )}
         </div>
     )
-}
+})

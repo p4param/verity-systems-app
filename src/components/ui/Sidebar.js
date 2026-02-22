@@ -36,6 +36,7 @@ const navItems = [
             { name: "Sessions", href: "/admin/sessions", icon: Activity, permission: PermissionId.AUDIT_VIEW },
             { name: "Permissions", href: "/admin/permissions", icon: Lock, permission: PermissionId.PERMISSION_VIEW },
             { name: "Audit Log", href: "/admin/audit", icon: FileText, permission: PermissionId.AUDIT_VIEW },
+            { name: "Legal Holds", href: "/admin/compliance/legal-holds", icon: Shield, permission: PermissionId.LEGAL_HOLD_VIEW },
         ]
     },
     {

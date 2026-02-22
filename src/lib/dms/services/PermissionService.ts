@@ -17,12 +17,14 @@ export class PermissionService {
         user: AuthUser,
         folderId: string,
         requiredPermission: FolderPermissionType,
-        globalPermissionCode?: string
+        globalPermissionCode?: string,
+        tx?: any
     ): Promise<boolean> {
+        const db = tx || prisma;
         // 1. Get User's Roles from AuthUser if available, or fetch
         // Assuming user.roles contains role names, but we need IDs for FolderPermission
         // We'll fetch role IDs from DB to be safe.
-        const userRoles = await prisma.userRole.findMany({
+        const userRoles = await db.userRole.findMany({
             where: { userId: user.sub },
             select: { roleId: true }
         });
@@ -35,7 +37,7 @@ export class PermissionService {
         }
 
         // 2. Check Folder Permissions
-        const folderPermissions = await prisma.folderPermission.findMany({
+        const folderPermissions = await db.folderPermission.findMany({
             where: {
                 folderId,
                 roleId: { in: roleIds },
@@ -78,14 +80,15 @@ export class PermissionService {
      * 1. Folder-specific ACLs (if folderId is provided and ACLs exist)
      * 2. Global RBAC permissions (fallback)
      */
-    static async getEffectivePermissions(user: AuthUser, folderId: string | null): Promise<string[]> {
+    static async getEffectivePermissions(user: AuthUser, folderId: string | null, tx?: any): Promise<string[]> {
+        const db = tx || prisma;
         // 1. If no folder, return global permissions
         if (!folderId) {
             return user.permissions || [];
         }
 
         // 2. Get User's Role IDs
-        const userRoles = await prisma.userRole.findMany({
+        const userRoles = await db.userRole.findMany({
             where: { userId: user.sub },
             select: { roleId: true }
         });
@@ -96,7 +99,7 @@ export class PermissionService {
         }
 
         // 3. Check for Folder Permissions
-        const folderPermissions = await prisma.folderPermission.findMany({
+        const folderPermissions = await db.folderPermission.findMany({
             where: {
                 folderId,
                 roleId: { in: roleIds },
@@ -125,7 +128,8 @@ export class PermissionService {
                     "DMS_FOLDER_EDIT",
                     "DMS_DOCUMENT_APPROVE",
                     "DMS_DOCUMENT_REJECT",
-                    "DMS_DOCUMENT_WITHDRAW"
+                    "DMS_DOCUMENT_WITHDRAW",
+                    "DMS_DOCUMENT_DOWNLOAD"
                 ];
 
             } else if (levels.has("REVIEW")) {
@@ -133,7 +137,8 @@ export class PermissionService {
                     "DMS_DOCUMENT_READ",
                     "DMS_DOCUMENT_REVIEW",
                     "DMS_DOCUMENT_APPROVE",
-                    "DMS_DOCUMENT_REJECT"
+                    "DMS_DOCUMENT_REJECT",
+                    "DMS_DOCUMENT_DOWNLOAD"
                 ];
             } else if (levels.has("READ")) {
                 effectiveParams = [
