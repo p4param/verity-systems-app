@@ -422,3 +422,1521 @@ undefined
 [2026-02-22T17:43:21.305Z] DB_VER: finding cmly135ni000waodz28pddgku for doc cmly12yz5000taodztk01ngnt
 [2026-02-22T17:43:21.308Z] DB_VER_SUCCESS: mode=STRUCTURED
 [2026-02-22T17:43:21.309Z] RESOLVE: STRUCTURED_LIVE
+[2026-02-23T03:38:58.801Z] REQ: doc=cmlw118310002cf23dtpkj71j, ver=cmlw1189f0005cf234ero7xha
+[2026-02-23T03:38:58.809Z] AUTH: user=admin@example.com, tenant=1
+[2026-02-23T03:38:58.810Z] DB_DOC: finding cmlw118310002cf23dtpkj71j for tenant 1
+[2026-02-23T03:38:58.822Z] DB_DOC_SUCCESS: status=REJECTED
+[2026-02-23T03:38:58.823Z] DB_VER: finding cmlw1189f0005cf234ero7xha for doc cmlw118310002cf23dtpkj71j
+[2026-02-23T03:38:58.831Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-02-23T03:38:58.831Z] RESOLVE: STRUCTURED_LIVE
+[2026-03-27T14:52:17.332Z] REQ: doc=cmlv5lp1p0009pv8o6mah8w12, ver=cmlv5lp30000bpv8orwk70ky2
+[2026-03-27T14:52:17.379Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-27T14:52:17.385Z] DB_DOC: finding cmlv5lp1p0009pv8o6mah8w12 for tenant 1
+[2026-03-27T14:52:17.435Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-27T14:52:17.439Z] DB_VER: finding cmlv5lp30000bpv8orwk70ky2 for doc cmlv5lp1p0009pv8o6mah8w12
+[2026-03-27T14:52:17.466Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-27T14:52:17.471Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-03-27T14:52:18.048Z] REQ: doc=cmlv5lp1p0009pv8o6mah8w12, ver=cmlv5lp30000bpv8orwk70ky2
+[2026-03-27T14:52:19.259Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-27T14:52:19.262Z] DB_DOC: finding cmlv5lp1p0009pv8o6mah8w12 for tenant 1
+[2026-03-27T14:52:19.315Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-27T14:52:19.320Z] DB_VER: finding cmlv5lp30000bpv8orwk70ky2 for doc cmlv5lp1p0009pv8o6mah8w12
+[2026-03-27T14:52:19.362Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-27T14:52:19.368Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-03-30T07:40:26.132Z] REQ: doc=cmluwqb8n000182h5j6jeunr6, ver=cmluwqbce000482h5r2tx89qp
+[2026-03-30T07:40:26.194Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:40:26.195Z] DB_DOC: finding cmluwqb8n000182h5j6jeunr6 for tenant 1
+[2026-03-30T07:40:26.208Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-30T07:40:26.209Z] DB_VER: finding cmluwqbce000482h5r2tx89qp for doc cmluwqb8n000182h5j6jeunr6
+[2026-03-30T07:40:26.233Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-30T07:40:26.233Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-03-30T07:40:26.343Z] REQ: doc=cmluwqb8n000182h5j6jeunr6, ver=cmluwqbce000482h5r2tx89qp
+[2026-03-30T07:40:26.367Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:40:26.370Z] DB_DOC: finding cmluwqb8n000182h5j6jeunr6 for tenant 1
+[2026-03-30T07:40:26.389Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-30T07:40:26.389Z] DB_VER: finding cmluwqbce000482h5r2tx89qp for doc cmluwqb8n000182h5j6jeunr6
+[2026-03-30T07:40:26.437Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-30T07:40:26.437Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-03-30T07:43:38.384Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-03-30T07:43:38.670Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:43:38.674Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-03-30T07:43:39.009Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-03-30T07:43:39.024Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-03-30T07:43:39.107Z] DB_VER_SUCCESS: mode=FILE
+[2026-03-30T07:43:39.123Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-03-30T07:43:39.472Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-03-30T07:43:39.522Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:43:39.526Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-03-30T07:43:39.603Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-03-30T07:43:39.609Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-03-30T07:43:39.655Z] DB_VER_SUCCESS: mode=FILE
+[2026-03-30T07:43:39.663Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-03-30T07:43:58.384Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-03-30T07:43:58.502Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:43:58.506Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-03-30T07:43:58.535Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-30T07:43:58.538Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-03-30T07:43:58.659Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-30T07:43:58.663Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-03-30T07:43:59.126Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-03-30T07:43:59.168Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:43:59.170Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-03-30T07:43:59.284Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-30T07:43:59.293Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-03-30T07:43:59.352Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-30T07:43:59.355Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-03-30T07:44:12.894Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-03-30T07:44:13.173Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:44:13.179Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-03-30T07:44:13.219Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-30T07:44:13.221Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-03-30T07:44:13.337Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-30T07:44:13.344Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-03-30T07:44:13.895Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-03-30T07:44:13.963Z] AUTH: user=admin@example.com, tenant=1
+[2026-03-30T07:44:13.965Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-03-30T07:44:14.031Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-03-30T07:44:14.036Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-03-30T07:44:14.074Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-03-30T07:44:14.082Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-05-15T16:17:36.840Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-05-15T16:17:36.862Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-15T16:17:36.866Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-05-15T16:17:36.877Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-05-15T16:17:36.878Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-05-15T16:17:36.883Z] DB_VER_SUCCESS: mode=FILE
+[2026-05-15T16:17:36.885Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-05-15T17:00:05.563Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-05-15T17:00:05.652Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-15T17:00:05.660Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-05-15T17:00:05.682Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-05-15T17:00:05.690Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-05-15T17:00:05.733Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-05-15T17:00:05.734Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-05-15T17:00:48.986Z] REQ: doc=cmlv5lp1p0009pv8o6mah8w12, ver=cmlv5lp30000bpv8orwk70ky2
+[2026-05-15T17:00:49.035Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-15T17:00:49.037Z] DB_DOC: finding cmlv5lp1p0009pv8o6mah8w12 for tenant 1
+[2026-05-15T17:00:49.046Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-05-15T17:00:49.050Z] DB_VER: finding cmlv5lp30000bpv8orwk70ky2 for doc cmlv5lp1p0009pv8o6mah8w12
+[2026-05-15T17:00:49.065Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-05-15T17:00:49.067Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-05-15T17:04:42.710Z] REQ: doc=cmluwqb8n000182h5j6jeunr6, ver=cmluwqbce000482h5r2tx89qp
+[2026-05-15T17:04:42.757Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-15T17:04:42.759Z] DB_DOC: finding cmluwqb8n000182h5j6jeunr6 for tenant 1
+[2026-05-15T17:04:42.768Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-05-15T17:04:42.770Z] DB_VER: finding cmluwqbce000482h5r2tx89qp for doc cmluwqb8n000182h5j6jeunr6
+[2026-05-15T17:04:42.845Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-05-15T17:04:42.849Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-05-15T17:08:56.483Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-05-15T17:08:56.499Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-15T17:08:56.501Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-05-15T17:08:56.510Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-05-15T17:08:56.511Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-05-15T17:08:56.519Z] DB_VER_SUCCESS: mode=FILE
+[2026-05-15T17:08:56.520Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-05-15T17:17:02.476Z] REQ: doc=cmlxr3zye000n8lkom2hy83bj, ver=cmlxr3zye000p8lko1txukrkh
+[2026-05-15T17:17:02.489Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-15T17:17:02.491Z] DB_DOC: finding cmlxr3zye000n8lkom2hy83bj for tenant 1
+[2026-05-15T17:17:02.504Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-05-15T17:17:02.506Z] DB_VER: finding cmlxr3zye000p8lko1txukrkh for doc cmlxr3zye000n8lkom2hy83bj
+[2026-05-15T17:17:02.517Z] DB_VER_SUCCESS: mode=FILE
+[2026-05-15T17:17:02.519Z] RESOLVE: FILE_URL type=PDF
+[2026-05-16T04:57:00.639Z] REQ: doc=cmly12yz5000taodztk01ngnt, ver=cmly135ni000waodz28pddgku
+[2026-05-16T04:57:00.647Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-16T04:57:00.647Z] DB_DOC: finding cmly12yz5000taodztk01ngnt for tenant 1
+[2026-05-16T04:57:00.651Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-05-16T04:57:00.651Z] DB_VER: finding cmly135ni000waodz28pddgku for doc cmly12yz5000taodztk01ngnt
+[2026-05-16T04:57:00.655Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-05-16T04:57:00.656Z] RESOLVE: STRUCTURED_LIVE
+[2026-05-16T05:01:00.519Z] REQ: doc=cmly12yz5000taodztk01ngnt, ver=cmly135ni000waodz28pddgku
+[2026-05-16T05:01:00.524Z] AUTH: user=admin@example.com, tenant=1
+[2026-05-16T05:01:00.524Z] DB_DOC: finding cmly12yz5000taodztk01ngnt for tenant 1
+[2026-05-16T05:01:00.531Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-05-16T05:01:00.532Z] DB_VER: finding cmly135ni000waodz28pddgku for doc cmly12yz5000taodztk01ngnt
+[2026-05-16T05:01:00.537Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-05-16T05:01:00.538Z] RESOLVE: STRUCTURED_LIVE
+[2026-06-10T08:24:51.853Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:24:51.884Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:24:51.885Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:24:51.897Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:24:51.898Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:24:51.905Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:24:51.905Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:24:51.975Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:24:51.986Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:24:51.987Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:24:51.996Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:24:51.998Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:24:52.011Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:24:52.012Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:29:04.973Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:29:04.998Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:29:05.000Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:29:05.011Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:29:05.012Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:29:05.023Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:29:05.025Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:29:05.091Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:29:05.102Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:29:05.103Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:29:05.111Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:29:05.112Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:29:05.128Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:29:05.130Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:30:03.488Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:30:03.548Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:30:03.549Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:30:03.558Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-06-10T08:30:03.559Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:30:03.571Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:30:03.572Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:30:03.655Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:30:03.673Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:30:03.674Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:30:03.688Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-06-10T08:30:03.689Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:30:03.704Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:30:03.706Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:36:19.275Z] REQ: doc=cmlxr3zxb000j8lko87e77boz, ver=cmlxr3zxb000l8lkoh8mcu6i7
+[2026-06-10T08:36:19.288Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:36:19.289Z] DB_DOC: finding cmlxr3zxb000j8lko87e77boz for tenant 1
+[2026-06-10T08:36:19.299Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:36:19.301Z] DB_VER: finding cmlxr3zxb000l8lkoh8mcu6i7 for doc cmlxr3zxb000j8lko87e77boz
+[2026-06-10T08:36:19.312Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:36:19.314Z] RESOLVE: FILE_URL type=PDF
+[2026-06-10T08:38:25.836Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:38:25.898Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:38:25.900Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:38:25.910Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:38:25.912Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:38:25.945Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:38:25.946Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:38:26.093Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:38:26.129Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:38:26.130Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:38:26.146Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:38:26.150Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:38:26.194Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:38:26.195Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:38:40.493Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T08:38:40.560Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:38:40.561Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T08:38:40.578Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:38:40.579Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T08:38:40.609Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:38:40.610Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:38:40.701Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T08:38:40.725Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:38:40.727Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T08:38:40.759Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:38:40.760Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T08:38:40.771Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:38:40.773Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:41:12.567Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:41:12.583Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:41:12.584Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:41:12.592Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-06-10T08:41:12.593Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:41:12.614Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:41:12.616Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:41:12.662Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:41:12.677Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:41:12.678Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:41:12.686Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-06-10T08:41:12.687Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:41:12.694Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:41:12.696Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:41:28.113Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:41:28.181Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:41:28.182Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:41:28.204Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:41:28.205Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:41:28.214Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:41:28.218Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:41:28.269Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:41:28.301Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:41:28.303Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:41:28.322Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:41:28.323Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:41:28.362Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:41:28.364Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:46:20.696Z] REQ: doc=cmlxr3zuz000b8lkoxvjs3fgk, ver=cmlxr3zv0000d8lkov3xz751f
+[2026-06-10T08:46:20.761Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:46:20.761Z] DB_DOC: finding cmlxr3zuz000b8lkoxvjs3fgk for tenant 1
+[2026-06-10T08:46:20.768Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:46:20.768Z] DB_VER: finding cmlxr3zv0000d8lkov3xz751f for doc cmlxr3zuz000b8lkoxvjs3fgk
+[2026-06-10T08:46:20.777Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:46:20.778Z] RESOLVE: FILE_URL type=PDF
+[2026-06-10T08:48:20.256Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T08:48:20.271Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:48:20.272Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T08:48:20.281Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:48:20.284Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T08:48:20.301Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:48:20.304Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:48:20.345Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T08:48:20.355Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:48:20.356Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T08:48:20.368Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:48:20.369Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T08:48:20.379Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:48:20.380Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:48:55.124Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T08:48:55.194Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:48:55.195Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T08:48:55.227Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:48:55.228Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T08:48:55.243Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:48:55.244Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:48:55.336Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T08:48:55.353Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:48:55.354Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T08:48:55.365Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:48:55.368Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T08:48:55.378Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:48:55.379Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:49:23.993Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T08:49:24.068Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:49:24.070Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T08:49:24.078Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:49:24.079Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T08:49:24.095Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:49:24.096Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:49:24.198Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T08:49:24.213Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:49:24.215Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T08:49:24.242Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:49:24.244Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T08:49:24.254Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:49:24.255Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:49:32.388Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T08:49:32.400Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:49:32.401Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T08:49:32.412Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:49:32.413Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T08:49:32.431Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:49:32.432Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:49:32.499Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T08:49:32.508Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:49:32.510Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T08:49:32.519Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:49:32.520Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T08:49:32.530Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:49:32.532Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:50:59.505Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T08:50:59.521Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:50:59.522Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T08:50:59.533Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:50:59.536Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T08:50:59.557Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:50:59.558Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:50:59.624Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T08:50:59.634Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:50:59.637Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T08:50:59.650Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T08:50:59.653Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T08:50:59.663Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:50:59.664Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:51:23.127Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:51:23.143Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:51:23.144Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:51:23.156Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-06-10T08:51:23.157Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:51:23.178Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:51:23.179Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:51:23.227Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-10T08:51:23.236Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:51:23.238Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-10T08:51:23.244Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-06-10T08:51:23.245Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-10T08:51:23.256Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T08:51:23.257Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T08:51:27.274Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:51:27.338Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:51:27.339Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:51:27.347Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:51:27.348Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:51:27.378Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:51:27.379Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T08:51:27.476Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-10T08:51:27.506Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T08:51:27.507Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-10T08:51:27.529Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T08:51:27.530Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-10T08:51:27.541Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T08:51:27.543Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:15:30.059Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:15:30.067Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:15:30.068Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:15:30.081Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:15:30.082Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:15:30.094Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:15:30.096Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:15:30.172Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:15:30.184Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:15:30.185Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:15:30.192Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:15:30.194Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:15:30.222Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:15:30.223Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:19:30.681Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:19:30.688Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:19:30.688Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:19:30.691Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:19:30.691Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:19:30.694Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:19:30.695Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:20:46.879Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:20:46.907Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:20:46.908Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:20:47.003Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:20:47.004Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:20:47.014Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:20:47.015Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:20:47.153Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:20:47.186Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:20:47.187Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:20:47.212Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:20:47.214Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:20:47.277Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:20:47.279Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:24:47.125Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:24:47.130Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:24:47.130Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:24:47.135Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:24:47.136Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:24:47.140Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:24:47.140Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:25:00.391Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:25:00.398Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:25:00.399Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:25:00.409Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:25:00.410Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:25:00.470Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:25:00.471Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:25:00.574Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:25:00.586Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:25:00.587Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:25:00.611Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:25:00.612Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:25:00.619Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:25:00.620Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:26:14.412Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:26:14.438Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:26:14.440Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:26:14.528Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:26:14.529Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:26:14.557Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:26:14.560Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:26:14.731Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:26:14.782Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:26:14.787Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:26:14.822Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:26:14.825Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:26:14.853Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:26:14.855Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:27:54.160Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:27:54.175Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:27:54.176Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:27:54.184Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:27:54.185Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:27:54.245Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:27:54.246Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:27:54.335Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-10T09:27:54.366Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:27:54.367Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-10T09:27:54.387Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:27:54.389Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-10T09:27:54.402Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:27:54.403Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:29:26.084Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T09:29:26.102Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:29:26.103Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T09:29:26.109Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T09:29:26.110Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T09:29:26.114Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T09:29:26.114Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T09:29:26.157Z] REQ: doc=cmlxp5gao0002krvxmf6t5izp, ver=cmlxpd3h60005krvxundfo0s0
+[2026-06-10T09:29:26.175Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:29:26.176Z] DB_DOC: finding cmlxp5gao0002krvxmf6t5izp for tenant 1
+[2026-06-10T09:29:26.184Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T09:29:26.191Z] DB_VER: finding cmlxpd3h60005krvxundfo0s0 for doc cmlxp5gao0002krvxmf6t5izp
+[2026-06-10T09:29:26.198Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T09:29:26.199Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-10T09:29:29.629Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:29:29.678Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:29:29.678Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:29:29.686Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:29:29.687Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:29:29.696Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:29:29.697Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:29:29.786Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:29:29.805Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:29:29.806Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:29:29.810Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:29:29.810Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:29:29.823Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:29:29.824Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:34:57.449Z] REQ: doc=cmlxr3zye000n8lkom2hy83bj, ver=cmlxr3zye000p8lko1txukrkh
+[2026-06-10T09:34:57.455Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:34:57.456Z] DB_DOC: finding cmlxr3zye000n8lkom2hy83bj for tenant 1
+[2026-06-10T09:34:57.461Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T09:34:57.462Z] DB_VER: finding cmlxr3zye000p8lko1txukrkh for doc cmlxr3zye000n8lkom2hy83bj
+[2026-06-10T09:34:57.468Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T09:34:57.469Z] RESOLVE: FILE_URL type=PDF
+[2026-06-10T09:38:57.628Z] REQ: doc=cmlxr3zye000n8lkom2hy83bj, ver=cmlxr3zye000p8lko1txukrkh
+[2026-06-10T09:38:57.657Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:38:57.658Z] DB_DOC: finding cmlxr3zye000n8lkom2hy83bj for tenant 1
+[2026-06-10T09:38:57.673Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-06-10T09:38:57.675Z] DB_VER: finding cmlxr3zye000p8lko1txukrkh for doc cmlxr3zye000n8lkom2hy83bj
+[2026-06-10T09:38:57.687Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-10T09:38:57.689Z] RESOLVE: FILE_URL type=PDF
+[2026-06-10T09:43:40.614Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:43:40.692Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:43:40.693Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:43:40.709Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:43:40.711Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:43:40.727Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:43:40.728Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:43:40.931Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:43:40.965Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:43:40.969Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:43:41.010Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:43:41.015Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:43:41.029Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:43:41.032Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:44:06.300Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:44:06.427Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:44:06.428Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:44:06.441Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:44:06.442Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:44:06.480Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:44:06.484Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:44:06.647Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:44:06.666Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:44:06.670Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:44:06.686Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:44:06.688Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:44:06.701Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:44:06.704Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:48:06.593Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:48:06.600Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:48:06.602Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:48:06.613Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:48:06.614Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:48:06.623Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:48:06.624Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:52:06.786Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:52:06.891Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:52:06.891Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:52:06.898Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:52:06.900Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:52:06.908Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:52:06.908Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T09:56:07.069Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T09:56:07.084Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T09:56:07.086Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T09:56:07.096Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T09:56:07.098Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T09:56:07.106Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T09:56:07.108Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:00:07.273Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:00:07.286Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:00:07.287Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:00:07.298Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:00:07.300Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:00:07.309Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:00:07.311Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:04:07.520Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:04:07.552Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:04:07.554Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:04:07.582Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:04:07.584Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:04:07.603Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:04:07.607Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:08:07.911Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:08:07.928Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:08:07.930Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:08:07.937Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:08:07.938Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:08:07.954Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:08:07.956Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:12:08.164Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:12:08.175Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:12:08.177Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:12:08.191Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:12:08.193Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:12:08.208Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:12:08.211Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:16:08.376Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:16:08.387Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:16:08.391Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:16:08.402Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:16:08.404Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:16:08.416Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:16:08.418Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:20:08.593Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:20:08.607Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:20:08.608Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:20:08.691Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:20:08.693Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:20:08.736Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:20:08.738Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:24:08.991Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:24:09.001Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:24:09.002Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:24:09.013Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:24:09.015Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:24:09.027Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:24:09.028Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:28:09.186Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:28:09.196Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:28:09.198Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:28:09.211Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:28:09.214Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:28:09.232Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:28:09.234Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:32:09.667Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:32:09.770Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:32:09.772Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:32:09.781Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:32:09.782Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:32:09.791Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:32:09.793Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:36:09.939Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:36:09.951Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:36:09.953Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:36:09.962Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:36:09.963Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:36:09.972Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:36:09.973Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:40:10.115Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:40:10.133Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:40:10.134Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:40:10.151Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:40:10.152Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:40:10.165Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:40:10.168Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T10:44:10.342Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T10:44:10.357Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T10:44:10.358Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T10:44:10.370Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T10:44:10.371Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T10:44:10.382Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T10:44:10.384Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:01:13.444Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:01:13.468Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:01:13.470Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:01:13.591Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:01:13.593Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:01:13.606Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:01:13.607Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:05:16.858Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:05:16.945Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:05:16.947Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:05:16.964Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:05:16.971Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:05:16.982Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:05:16.984Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:09:17.728Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:09:17.744Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:09:17.746Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:09:17.760Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:09:17.763Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:09:17.774Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:09:17.776Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:13:18.719Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:13:18.736Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:13:18.738Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:13:18.752Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:13:18.753Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:13:18.764Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:13:18.765Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:17:19.738Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:17:19.750Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:17:19.751Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:17:19.760Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:17:19.762Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:17:19.771Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:17:19.772Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:21:20.723Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:21:20.738Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:21:20.740Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:21:20.750Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:21:20.752Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:21:20.762Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:21:20.763Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:25:21.705Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:25:21.728Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:25:21.729Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:25:21.739Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:25:21.740Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:25:21.745Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:25:21.746Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:29:22.724Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:29:22.746Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:29:22.746Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:29:22.759Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:29:22.760Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:29:22.763Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:29:22.764Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:33:23.702Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:33:23.707Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:33:23.708Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:33:23.715Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:33:23.716Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:33:23.721Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:33:23.721Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:37:24.707Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:37:24.718Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:37:24.719Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:37:24.729Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:37:24.729Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:37:24.735Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:37:24.736Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:41:25.703Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:41:25.726Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:41:25.727Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:41:25.731Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:41:25.731Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:41:25.735Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:41:25.736Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:45:26.738Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:45:26.762Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:45:26.763Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:45:26.773Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:45:26.775Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:45:26.791Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:45:26.793Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:49:27.736Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:49:27.747Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:49:27.748Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:49:27.754Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:49:27.756Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:49:27.830Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:49:27.831Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:53:28.709Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:53:28.718Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:53:28.719Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:53:28.793Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:53:28.794Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:53:28.799Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:53:28.800Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T11:57:29.715Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T11:57:29.730Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T11:57:29.731Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T11:57:29.737Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T11:57:29.738Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T11:57:29.745Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T11:57:29.746Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:01:30.761Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:01:30.826Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:01:30.827Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:01:30.834Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:01:30.835Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:01:30.842Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:01:30.843Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:05:31.684Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:05:31.691Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:05:31.691Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:05:31.695Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:05:31.696Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:05:31.700Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:05:31.700Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:09:32.689Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:09:32.696Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:09:32.697Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:09:32.704Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:09:32.705Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:09:32.713Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:09:32.714Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:13:33.679Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:13:33.685Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:13:33.686Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:13:33.689Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:13:33.690Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:13:33.693Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:13:33.694Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:17:34.747Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:17:34.808Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:17:34.809Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:17:34.813Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:17:34.813Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:17:34.818Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:17:34.819Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:21:35.689Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:21:35.694Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:21:35.695Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:21:35.701Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:21:35.702Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:21:35.706Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:21:35.706Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:25:36.700Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:25:36.706Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:25:36.706Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:25:36.719Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:25:36.720Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:25:36.726Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:25:36.727Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:29:37.703Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:29:37.713Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:29:37.713Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:29:37.719Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:29:37.720Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:29:37.724Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:29:37.725Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:33:38.732Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:33:38.748Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:33:38.749Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:33:38.756Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:33:38.757Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:33:38.770Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:33:38.772Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:37:39.685Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:37:39.690Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:37:39.691Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:37:39.698Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:37:39.698Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:37:39.706Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:37:39.706Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:41:40.713Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:41:40.729Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:41:40.731Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:41:40.741Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:41:40.742Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:41:40.750Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:41:40.752Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:53:20.375Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:53:20.434Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:53:20.435Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:53:20.455Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:53:20.458Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:53:20.477Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:53:20.478Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T12:57:21.741Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T12:57:21.754Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T12:57:21.755Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T12:57:21.764Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T12:57:21.765Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T12:57:21.773Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T12:57:21.774Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:01:22.744Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:01:22.762Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:01:22.763Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:01:22.832Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:01:22.834Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:01:22.844Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:01:22.845Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:05:23.772Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:05:23.787Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:05:23.788Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:05:23.808Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:05:23.809Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:05:23.821Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:05:23.822Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:09:24.735Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:09:24.746Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:09:24.747Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:09:24.765Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:09:24.769Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:09:24.777Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:09:24.780Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:13:25.769Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:13:25.928Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:13:25.929Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:13:25.972Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:13:25.974Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:13:25.993Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:13:25.995Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:17:26.765Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:17:26.788Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:17:26.790Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:17:26.824Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:17:26.826Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:17:26.855Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:17:26.857Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:21:27.750Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:21:27.775Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:21:27.776Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:21:27.789Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:21:27.790Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:21:27.797Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:21:27.798Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:25:28.750Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:25:28.761Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:25:28.762Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:25:28.776Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:25:28.778Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:25:28.789Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:25:28.791Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:29:29.740Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:29:29.751Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:29:29.753Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:29:29.773Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:29:29.775Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:29:29.788Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:29:29.790Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:33:30.711Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:33:30.725Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:33:30.726Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:33:30.733Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:33:30.735Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:33:30.743Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:33:30.744Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:37:31.719Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:37:31.731Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:37:31.733Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:37:31.748Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:37:31.749Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:37:31.758Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:37:31.759Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:41:32.719Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:41:32.730Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:41:32.732Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:41:32.744Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:41:32.745Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:41:32.753Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:41:32.755Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:45:33.715Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:45:33.733Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:45:33.735Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:45:33.748Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:45:33.750Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:45:33.758Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:45:33.761Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:49:34.718Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:49:34.731Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:49:34.733Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:49:34.744Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:49:34.745Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:49:34.755Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:49:34.756Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:53:35.809Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:53:35.819Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:53:35.820Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:53:35.831Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:53:35.832Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:53:35.842Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:53:35.843Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T13:57:36.743Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T13:57:36.759Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T13:57:36.761Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T13:57:36.780Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T13:57:36.783Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T13:57:36.798Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T13:57:36.800Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:01:37.717Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:01:37.735Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:01:37.737Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:01:37.760Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:01:37.762Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:01:37.775Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:01:37.776Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:05:38.819Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:05:38.831Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:05:38.833Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:05:38.843Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:05:38.844Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:05:38.852Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:05:38.853Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:09:39.745Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:09:39.955Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:09:39.957Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:09:39.965Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:09:39.967Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:09:39.978Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:09:39.979Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:13:40.808Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:13:40.860Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:13:40.862Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:13:40.874Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:13:40.875Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:13:40.881Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:13:40.883Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:17:41.713Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:17:41.728Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:17:41.729Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:17:41.742Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:17:41.743Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:17:41.751Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:17:41.752Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:21:42.733Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:21:42.743Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:21:42.745Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:21:42.755Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:21:42.757Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:21:42.811Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:21:42.812Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:25:43.719Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:25:43.735Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:25:43.738Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:25:43.747Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:25:43.749Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:25:43.756Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:25:43.757Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:29:44.702Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:29:44.711Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:29:44.712Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:29:44.724Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:29:44.725Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:29:44.735Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:29:44.736Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:33:45.720Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:33:45.733Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:33:45.735Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:33:45.747Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:33:45.751Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:33:45.762Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:33:45.763Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T14:53:02.055Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T14:53:02.081Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T14:53:02.082Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T14:53:02.090Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T14:53:02.090Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T14:53:02.098Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T14:53:02.098Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T15:04:52.485Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T15:04:52.503Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T15:04:52.505Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T15:04:52.648Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T15:04:52.650Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T15:04:52.658Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T15:04:52.659Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T15:09:42.414Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T15:09:42.438Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T15:09:42.438Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T15:09:42.481Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T15:09:42.482Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T15:09:42.487Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T15:09:42.488Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T15:15:35.830Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T15:15:35.958Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T15:15:35.964Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T15:15:36.095Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T15:15:36.099Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T15:15:36.112Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T15:15:36.119Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T15:24:21.088Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T15:24:21.103Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T15:24:21.104Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T15:24:21.111Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T15:24:21.112Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T15:24:21.118Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T15:24:21.119Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T15:28:21.718Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T15:28:21.728Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T15:28:21.730Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T15:28:21.737Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T15:28:21.738Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T15:28:21.745Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T15:28:21.746Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T15:59:48.559Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T15:59:48.573Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T15:59:48.575Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T15:59:48.587Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T15:59:48.588Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T15:59:48.598Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T15:59:48.599Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T19:38:42.306Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T19:38:42.316Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T19:38:42.317Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T19:38:42.322Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T19:38:42.323Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T19:38:42.328Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T19:38:42.329Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T20:08:19.944Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T20:08:19.961Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T20:08:19.962Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T20:08:19.972Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T20:08:19.973Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T20:08:19.982Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T20:08:19.983Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T23:22:19.447Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T23:22:19.458Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T23:22:19.459Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T23:22:19.465Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T23:22:19.466Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T23:22:19.472Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T23:22:19.473Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T23:29:26.399Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T23:29:26.520Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T23:29:26.522Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T23:29:26.596Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T23:29:26.598Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T23:29:26.604Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T23:29:26.605Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T23:53:14.800Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T23:53:14.811Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T23:53:14.812Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T23:53:14.821Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T23:53:14.821Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T23:53:14.826Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T23:53:14.827Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-10T23:57:15.706Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-10T23:57:15.715Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-10T23:57:15.716Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-10T23:57:15.726Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-10T23:57:15.727Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-10T23:57:15.737Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-10T23:57:15.738Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T00:29:07.625Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T00:29:07.631Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T00:29:07.632Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T00:29:07.641Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T00:29:07.642Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T00:29:07.649Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T00:29:07.650Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T00:40:49.874Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T00:40:50.010Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T00:40:50.011Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T00:40:50.030Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T00:40:50.030Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T00:40:50.041Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T00:40:50.042Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T00:59:02.326Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T00:59:02.332Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T00:59:02.333Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T00:59:02.338Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T00:59:02.339Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T00:59:02.351Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T00:59:02.352Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T01:09:49.646Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T01:09:49.807Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T01:09:49.808Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T01:09:49.813Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T01:09:49.814Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T01:09:49.818Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T01:09:49.818Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T01:13:50.732Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T01:13:50.742Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T01:13:50.744Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T01:13:50.754Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T01:13:50.755Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T01:13:50.763Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T01:13:50.764Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T01:17:51.722Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T01:17:51.733Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T01:17:51.734Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T01:17:51.746Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T01:17:51.747Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T01:17:51.756Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T01:17:51.758Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T01:21:52.722Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T01:21:52.733Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T01:21:52.734Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T01:21:52.745Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T01:21:52.746Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T01:21:52.755Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T01:21:52.757Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T01:49:03.993Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T01:49:04.004Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T01:49:04.005Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T01:49:04.013Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T01:49:04.015Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T01:49:04.023Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T01:49:04.024Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T02:04:18.372Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T02:04:18.378Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T02:04:18.378Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T02:04:18.385Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T02:04:18.385Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T02:04:18.389Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T02:04:18.390Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T02:13:00.090Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T02:13:00.102Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T02:13:00.103Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T02:13:00.177Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T02:13:00.178Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T02:13:00.184Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T02:13:00.185Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:29:26.620Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:29:26.673Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:29:26.674Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:29:26.693Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:29:26.693Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:29:26.700Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:29:26.700Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:33:37.025Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:33:37.076Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:33:37.077Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:33:37.089Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:33:37.089Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:33:37.094Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:33:37.095Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:37:37.766Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:37:37.849Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:37:37.849Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:37:37.924Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:37:37.924Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:37:37.943Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:37:37.943Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:41:38.727Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:41:38.740Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:41:38.741Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:41:38.851Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:41:38.852Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:41:38.858Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:41:38.858Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:45:39.740Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:45:39.751Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:45:39.752Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:45:39.817Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:45:39.818Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:45:39.835Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:45:39.835Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:49:40.738Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:49:40.797Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:49:40.798Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:49:40.882Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:49:40.884Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:49:40.895Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:49:40.897Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:53:41.735Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:53:41.744Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:53:41.745Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:53:41.755Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:53:41.756Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:53:41.768Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:53:41.769Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T06:57:42.714Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T06:57:42.775Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T06:57:42.776Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T06:57:42.780Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T06:57:42.781Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T06:57:42.785Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T06:57:42.786Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:01:43.761Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:01:43.767Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:01:43.767Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:01:43.774Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:01:43.775Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:01:43.780Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:01:43.781Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:05:44.721Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:05:44.735Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:05:44.736Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:05:44.743Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:05:44.743Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:05:44.747Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:05:44.748Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:09:45.723Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:09:45.763Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:09:45.764Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:09:45.773Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:09:45.774Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:09:45.778Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:09:45.778Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:13:46.717Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:13:46.731Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:13:46.732Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:13:46.739Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:13:46.740Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:13:46.746Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:13:46.747Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:27:04.109Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:27:04.117Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:27:04.117Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:27:04.123Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:27:04.124Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:27:04.131Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:27:04.131Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:31:05.736Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:31:05.751Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:31:05.752Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:31:05.759Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:31:05.760Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:31:05.769Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:31:05.770Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:45:20.575Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:45:20.580Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:45:20.581Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:45:20.587Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:45:20.588Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:45:20.593Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:45:20.594Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:49:21.787Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:49:21.808Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:49:21.809Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:49:21.818Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:49:21.820Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:49:21.827Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:49:21.834Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:53:22.723Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:53:22.738Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:53:22.740Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:53:22.753Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:53:22.754Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:53:22.765Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:53:22.766Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T07:57:23.736Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T07:57:23.745Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T07:57:23.747Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T07:57:23.760Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T07:57:23.762Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T07:57:23.774Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T07:57:23.775Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:01:24.733Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:01:24.755Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:01:24.757Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:01:24.767Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:01:24.769Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:01:24.781Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:01:24.782Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:05:25.708Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:05:25.719Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:05:25.720Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:05:25.734Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:05:25.735Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:05:25.745Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:05:25.746Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:09:28.452Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:09:28.667Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:09:28.669Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:09:28.720Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:09:28.721Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:09:28.739Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:09:28.740Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:13:29.993Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:13:30.024Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:13:30.025Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:13:30.046Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:13:30.047Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:13:30.077Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:13:30.078Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:17:30.767Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:17:30.807Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:17:30.808Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:17:30.845Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:17:30.847Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:17:30.860Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:17:30.861Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:21:31.715Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:21:31.729Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:21:31.729Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:21:31.819Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:21:31.820Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:21:31.859Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:21:31.860Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:25:32.711Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:25:32.721Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:25:32.722Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:25:32.729Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:25:32.730Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:25:32.738Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:25:32.739Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:29:34.115Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:29:34.156Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:29:34.157Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:29:34.228Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:29:34.229Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:29:34.241Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:29:34.242Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:33:34.732Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:33:34.748Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:33:34.749Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:33:34.762Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:33:34.763Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:33:34.774Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:33:34.775Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T08:37:35.754Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T08:37:35.771Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T08:37:35.773Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T08:37:35.782Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T08:37:35.783Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T08:37:35.790Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T08:37:35.791Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T09:00:36.618Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T09:00:37.084Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T09:00:37.086Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T09:00:37.146Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T09:00:37.148Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T09:00:37.170Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T09:00:37.172Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T11:29:44.671Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T11:29:45.518Z] FATAL_ERROR: undefined
+undefined
+[2026-06-11T11:29:46.051Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T11:29:46.520Z] FATAL_ERROR: undefined
+undefined
+[2026-06-11T11:29:46.976Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T11:29:46.989Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T11:29:46.990Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T11:29:47.010Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T11:29:47.011Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T11:29:47.021Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T11:29:47.023Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T11:29:47.504Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T11:29:47.513Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T11:29:47.514Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T11:29:47.538Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T11:29:47.549Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T11:29:47.572Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T11:29:47.580Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T11:48:25.094Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T11:48:25.221Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T11:48:25.225Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T11:48:25.307Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T11:48:25.312Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T11:48:25.337Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T11:48:25.339Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T11:52:29.746Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T11:52:29.857Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T11:52:29.858Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T11:52:29.866Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T11:52:29.866Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T11:52:29.881Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T11:52:29.881Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T11:56:30.842Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-06-11T11:56:30.872Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T11:56:30.875Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-06-11T11:56:30.964Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T11:56:30.967Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-06-11T11:56:30.989Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T11:56:30.992Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T12:11:46.381Z] REQ: doc=cmq7szq40000jmznds1r44hxr, ver=cmq7t4q3h000qmzndb3bvbc9w
+[2026-06-11T12:11:46.404Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T12:11:46.408Z] DB_DOC: finding cmq7szq40000jmznds1r44hxr for tenant 1
+[2026-06-11T12:11:46.443Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-06-11T12:11:46.495Z] DB_VER: finding cmq7t4q3h000qmzndb3bvbc9w for doc cmq7szq40000jmznds1r44hxr
+[2026-06-11T12:11:46.600Z] DB_VER_SUCCESS: mode=FILE
+[2026-06-11T12:11:46.656Z] RESOLVE_ERROR: UNSUPPORTED_MIME application/vnd.openxmlformats-officedocument.wordprocessingml.document
+[2026-06-11T12:11:56.732Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-11T12:11:57.676Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T12:11:57.716Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-11T12:11:57.951Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T12:11:58.025Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-11T12:11:58.201Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T12:11:58.251Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T12:15:58.471Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-06-11T12:15:58.475Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T12:15:58.476Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-06-11T12:15:58.479Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T12:15:58.479Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-06-11T12:15:58.484Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T12:15:58.485Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T12:17:26.910Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-11T12:17:26.928Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T12:17:26.929Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-11T12:17:26.938Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T12:17:26.940Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-11T12:17:26.945Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T12:17:26.948Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-06-11T12:21:27.132Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-06-11T12:21:27.187Z] AUTH: user=admin@example.com, tenant=1
+[2026-06-11T12:21:27.195Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-06-11T12:21:27.217Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-06-11T12:21:27.225Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-06-11T12:21:27.283Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-06-11T12:21:27.297Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T14:49:35.084Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-07-07T14:49:35.091Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T14:49:35.092Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-07-07T14:49:35.097Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T14:49:35.098Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-07-07T14:49:35.102Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T14:49:35.103Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T14:49:35.161Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-07-07T14:49:35.168Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T14:49:35.170Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-07-07T14:49:35.174Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T14:49:35.175Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-07-07T14:49:35.179Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T14:49:35.180Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:00:18.951Z] REQ: doc=cmlvwyr120003h87bbwr2lacg, ver=cmlvx0ugt0006h87bxnrg8x9q
+[2026-07-07T15:00:18.957Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:00:18.958Z] DB_DOC: finding cmlvwyr120003h87bbwr2lacg for tenant 1
+[2026-07-07T15:00:18.965Z] DB_DOC_SUCCESS: status=REJECTED
+[2026-07-07T15:00:18.966Z] DB_VER: finding cmlvx0ugt0006h87bxnrg8x9q for doc cmlvwyr120003h87bbwr2lacg
+[2026-07-07T15:00:18.971Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:00:18.971Z] RESOLVE: STRUCTURED_LIVE
+[2026-07-07T15:02:31.928Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-07-07T15:02:31.967Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:02:31.969Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-07-07T15:02:31.976Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:02:31.976Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-07-07T15:02:31.981Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:02:31.982Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:02:32.028Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-07-07T15:02:32.051Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:02:32.051Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-07-07T15:02:32.062Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:02:32.063Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-07-07T15:02:32.077Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:02:32.078Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:02:37.586Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-07-07T15:02:37.630Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:02:37.630Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-07-07T15:02:37.638Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:02:37.639Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-07-07T15:02:37.655Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:02:37.656Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:02:37.713Z] REQ: doc=cmlxh49zb0001lnvup98uhi63, ver=cmlxh49zy0003lnvunzl7vzsf
+[2026-07-07T15:02:37.722Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:02:37.722Z] DB_DOC: finding cmlxh49zb0001lnvup98uhi63 for tenant 1
+[2026-07-07T15:02:37.740Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:02:37.740Z] DB_VER: finding cmlxh49zy0003lnvunzl7vzsf for doc cmlxh49zb0001lnvup98uhi63
+[2026-07-07T15:02:37.749Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:02:37.750Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:04:58.756Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-07-07T15:04:58.834Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:04:58.834Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-07-07T15:04:58.841Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:04:58.842Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-07-07T15:04:58.863Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:04:58.863Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:04:58.925Z] REQ: doc=cmlv4g94t0002111a42pnef8s, ver=cmlv50xfh000n111ax6ocxcxe
+[2026-07-07T15:04:58.936Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:04:58.937Z] DB_DOC: finding cmlv4g94t0002111a42pnef8s for tenant 1
+[2026-07-07T15:04:58.951Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:04:58.953Z] DB_VER: finding cmlv50xfh000n111ax6ocxcxe for doc cmlv4g94t0002111a42pnef8s
+[2026-07-07T15:04:58.959Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:04:58.960Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:06:01.699Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-07-07T15:06:01.737Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:06:01.738Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-07-07T15:06:01.744Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:06:01.745Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-07-07T15:06:01.763Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:06:01.764Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:06:01.820Z] REQ: doc=cmq7ssakt0002mznd6dmsjqxo, ver=cmq7ssd6r0005mznd7x9ngs6r
+[2026-07-07T15:06:01.831Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:06:01.832Z] DB_DOC: finding cmq7ssakt0002mznd6dmsjqxo for tenant 1
+[2026-07-07T15:06:01.847Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:06:01.848Z] DB_VER: finding cmq7ssd6r0005mznd7x9ngs6r for doc cmq7ssakt0002mznd6dmsjqxo
+[2026-07-07T15:06:01.853Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:06:01.854Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:06:23.715Z] REQ: doc=cmlv5lp1p0009pv8o6mah8w12, ver=cmlv5lp30000bpv8orwk70ky2
+[2026-07-07T15:06:23.772Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:06:23.774Z] DB_DOC: finding cmlv5lp1p0009pv8o6mah8w12 for tenant 1
+[2026-07-07T15:06:23.783Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:06:23.783Z] DB_VER: finding cmlv5lp30000bpv8orwk70ky2 for doc cmlv5lp1p0009pv8o6mah8w12
+[2026-07-07T15:06:23.810Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:06:23.811Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:06:23.928Z] REQ: doc=cmlv5lp1p0009pv8o6mah8w12, ver=cmlv5lp30000bpv8orwk70ky2
+[2026-07-07T15:06:23.989Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:06:23.990Z] DB_DOC: finding cmlv5lp1p0009pv8o6mah8w12 for tenant 1
+[2026-07-07T15:06:24.005Z] DB_DOC_SUCCESS: status=APPROVED
+[2026-07-07T15:06:24.006Z] DB_VER: finding cmlv5lp30000bpv8orwk70ky2 for doc cmlv5lp1p0009pv8o6mah8w12
+[2026-07-07T15:06:24.018Z] DB_VER_SUCCESS: mode=STRUCTURED
+[2026-07-07T15:06:24.019Z] RESOLVE: STRUCTURED_SNAPSHOT
+[2026-07-07T15:10:38.145Z] REQ: doc=cmlxr3zuz000b8lkoxvjs3fgk, ver=cmlxr3zv0000d8lkov3xz751f
+[2026-07-07T15:10:38.153Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-07T15:10:38.154Z] DB_DOC: finding cmlxr3zuz000b8lkoxvjs3fgk for tenant 1
+[2026-07-07T15:10:38.168Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-07-07T15:10:38.170Z] DB_VER: finding cmlxr3zv0000d8lkov3xz751f for doc cmlxr3zuz000b8lkoxvjs3fgk
+[2026-07-07T15:10:38.185Z] DB_VER_SUCCESS: mode=FILE
+[2026-07-07T15:10:38.187Z] RESOLVE: FILE_URL type=PDF
+[2026-07-08T07:46:24.883Z] REQ: doc=cmlxr3zuz000b8lkoxvjs3fgk, ver=cmlxr3zv0000d8lkov3xz751f
+[2026-07-08T07:46:24.935Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-08T07:46:24.937Z] DB_DOC: finding cmlxr3zuz000b8lkoxvjs3fgk for tenant 1
+[2026-07-08T07:46:24.958Z] DB_DOC_SUCCESS: status=DRAFT
+[2026-07-08T07:46:24.960Z] DB_VER: finding cmlxr3zv0000d8lkov3xz751f for doc cmlxr3zuz000b8lkoxvjs3fgk
+[2026-07-08T07:46:24.976Z] DB_VER_SUCCESS: mode=FILE
+[2026-07-08T07:46:24.977Z] RESOLVE: FILE_URL type=PDF
+[2026-07-08T07:51:40.351Z] REQ: doc=cmlxr3zuz000b8lkoxvjs3fgk, ver=cmlxr3zv0000d8lkov3xz751f
+[2026-07-08T07:51:40.368Z] AUTH: user=admin@example.com, tenant=1
+[2026-07-08T07:51:40.371Z] DB_DOC: finding cmlxr3zuz000b8lkoxvjs3fgk for tenant 1
+[2026-07-08T07:51:40.393Z] DB_DOC_SUCCESS: status=SUBMITTED
+[2026-07-08T07:51:40.395Z] DB_VER: finding cmlxr3zv0000d8lkov3xz751f for doc cmlxr3zuz000b8lkoxvjs3fgk
+[2026-07-08T07:51:40.405Z] DB_VER_SUCCESS: mode=FILE
+[2026-07-08T07:51:40.405Z] RESOLVE: FILE_URL type=PDF

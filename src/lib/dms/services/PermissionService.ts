@@ -25,7 +25,7 @@ export class PermissionService {
         // Assuming user.roles contains role names, but we need IDs for FolderPermission
         // We'll fetch role IDs from DB to be safe.
         const userRoles = await db.userRole.findMany({
-            where: { userId: user.sub },
+            where: { userId: Number(user.sub) },
             select: { roleId: true }
         });
 
@@ -89,7 +89,7 @@ export class PermissionService {
 
         // 2. Get User's Role IDs
         const userRoles = await db.userRole.findMany({
-            where: { userId: user.sub },
+            where: { userId: Number(user.sub) },
             select: { roleId: true }
         });
         const roleIds = userRoles.map(r => r.roleId);

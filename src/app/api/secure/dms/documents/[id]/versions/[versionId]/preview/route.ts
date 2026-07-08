@@ -70,7 +70,8 @@ export async function GET(
                     documentId,
                     versionId,
                     contentJson: (version as any).contentJson,
-                    title: "Document Preview"
+                    title: "Document Preview",
+                    excludeHeaderMetadata: true
                 });
                 console.log(`[PREVIEW_API_TIMER] PDF Generation finished in ${Date.now() - genStartTime}ms. Total API time: ${Date.now() - startTime}ms`);
 

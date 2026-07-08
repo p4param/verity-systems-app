@@ -68,8 +68,9 @@ export class PdfService {
         versionId: string;
         contentJson: any;
         title?: string;
+        excludeHeaderMetadata?: boolean;
     }): Promise<Buffer> {
-        const { documentId, versionId, contentJson, title = "Document Snapshot" } = params;
+        const { documentId, versionId, contentJson, title = "Document Snapshot", excludeHeaderMetadata = false } = params;
 
         // --- VALIDATION & DEFENSIVE LOGIC ---
         if (!contentJson || typeof contentJson !== 'object') {
@@ -141,6 +142,7 @@ export class PdfService {
                 </style>
             </head>
             <body>
+                ${excludeHeaderMetadata ? "" : `
                 <div class="header">
                     <h1>${title}</h1>
                 </div>
@@ -149,6 +151,7 @@ export class PdfService {
                     <span>Version: ${versionId}</span>
                     <span>Generated: ${new Date().toLocaleString()}</span>
                 </div>
+                `}
                 <div class="content">
                     ${htmlContent}
                 </div>

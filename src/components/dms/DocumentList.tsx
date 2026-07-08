@@ -9,12 +9,14 @@ import { columns, DocumentData } from "@/components/dms/columns"
 import { AdvancedFilterDrawer } from "@/components/dms/AdvancedFilterDrawer"
 import { TableSkeleton } from "@/components/dms/TableSkeleton"
 import { EmptyState } from "@/components/dms/EmptyState"
+import { DocumentGrid } from "@/components/dms/DocumentGrid"
 import { VisibilityState } from "@tanstack/react-table"
 
 interface DocumentListProps {
     folderId: string | null
     folderName?: string | null
     search?: string
+    viewMode?: "list" | "grid"
     onDocumentSelect: (docId: string) => void
     onLoadComplete?: (count: number) => void
     isFilterOpen?: boolean
@@ -39,6 +41,7 @@ export const DmsDocumentList = memo(function DmsDocumentList({
     onColumnVisibilityChange,
     canCreate,
     onCreateClick,
+    viewMode = "list",
 }: DocumentListProps) {
     const { fetchWithAuth } = useAuth()
     // Keep fetchWithAuth stable in refs to avoid triggering effects on every auth context render
@@ -172,6 +175,14 @@ export const DmsDocumentList = memo(function DmsDocumentList({
                         folderName={folderName}
                         canCreate={canCreate}
                         onCreateClick={onCreateClick}
+                    />
+                ) : viewMode === "grid" ? (
+                    <DocumentGrid
+                        data={documents}
+                        onRowClick={(doc) => onDocumentSelect(doc.id)}
+                        meta={meta}
+                        onPageChange={handlePageChange}
+                        onPageSizeChange={handlePageSizeChange}
                     />
                 ) : (
                     <DataTable

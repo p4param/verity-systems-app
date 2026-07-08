@@ -12,7 +12,9 @@ import {
     Columns,
     ChevronDown,
     ChevronRight,
-    Loader2
+    Loader2,
+    List,
+    LayoutGrid
 } from "lucide-react"
 import { FolderTree } from "@/components/dms/FolderTree"
 import { DmsDocumentList } from "@/components/dms/DocumentList"
@@ -68,11 +70,27 @@ export default function DmsDashboard() {
         return {}
     })
 
+    const [viewMode, setViewMode] = useState<"list" | "grid">(() => {
+        if (typeof window !== "undefined") {
+            try {
+                const saved = localStorage.getItem("dms-view-mode")
+                if (saved === "list" || saved === "grid") return saved as "list" | "grid"
+            } catch { }
+        }
+        return "list"
+    })
+
     useEffect(() => {
         try {
             localStorage.setItem("dms-column-visibility", JSON.stringify(columnVisibility))
         } catch { }
     }, [columnVisibility])
+
+    useEffect(() => {
+        try {
+            localStorage.setItem("dms-view-mode", viewMode)
+        } catch { }
+    }, [viewMode])
 
     const canCreateDocument = usePermission("DMS_DOCUMENT_CREATE")
 
@@ -161,11 +179,28 @@ export default function DmsDashboard() {
                             )}
                         </div>
 
+                        <div className="hidden sm:flex items-center bg-muted/50 rounded-md p-0.5 mr-1">
+                            <button
+                                onClick={() => setViewMode("list")}
+                                className={`p-1.5 rounded-sm flex items-center justify-center transition-all ${viewMode === "list" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                                title="List View"
+                            >
+                                <List size={15} />
+                            </button>
+                            <button
+                                onClick={() => setViewMode("grid")}
+                                className={`p-1.5 rounded-sm flex items-center justify-center transition-all ${viewMode === "grid" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                                title="Grid View"
+                            >
+                                <LayoutGrid size={15} />
+                            </button>
+                        </div>
+
                         <TooltipProvider delayDuration={300}>
                             <DropdownMenu>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <DropdownMenuTrigger asChild>
+                                        <DropdownMenuTrigger asChild disabled={viewMode === "grid"}>
                                             <Button variant="outline" size="sm" className="h-8 px-2.5">
                                                 <Columns size={15} />
                                                 <ChevronDown className="ml-1 h-3 w-3 hidden sm:block" />
@@ -273,6 +308,7 @@ export default function DmsDashboard() {
                             onColumnVisibilityChange={setColumnVisibility}
                             canCreate={canCreateDocument}
                             onCreateClick={() => setIsCreateModalOpen(true)}
+                            viewMode={viewMode}
                         />
                     </Suspense>
                 </div>

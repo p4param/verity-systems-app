@@ -18,7 +18,7 @@ import {
 } from "lucide-react"
 import React from "react"
 
-const PdfIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
+export const PdfIcon = ({ size = 18, className = "" }: { size?: number; className?: string }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
         <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -103,7 +103,7 @@ const EXT_ICON_MAP: Record<string, { icon: LucideIcon; color: string }> = {
     dxf: { icon: FileImage, color: "text-fuchsia-600" },
 }
 
-function getFileIcon(fileName: string | undefined | null): { icon: LucideIcon | null; color: string; isPdf?: boolean } {
+export function getFileIcon(fileName: string | undefined | null): { icon: LucideIcon | null; color: string; isPdf?: boolean } {
     if (!fileName) return { icon: File, color: "text-muted-foreground" }
     const ext = fileName.split(".").pop()?.toLowerCase()
     if (ext === "pdf") return { icon: null, color: "text-red-600", isPdf: true }

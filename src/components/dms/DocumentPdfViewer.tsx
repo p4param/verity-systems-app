@@ -17,8 +17,8 @@ import {
 } from 'lucide-react'
 import { useAuth } from '@/lib/auth/auth-context'
 
-// Set up the worker for pdf.js using the exact version from the package
-pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+// Set up the worker for pdf.js using the local worker copy
+pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
 interface DocumentPdfViewerProps {
     fileUrl: string
@@ -39,14 +39,13 @@ export function DocumentPdfViewer({
     versionId,
     onLoadComplete
 }: DocumentPdfViewerProps) {
-    const { fetchRawWithAuth, user } = useAuth()
+    const { user, accessToken } = useAuth()
     const [numPages, setNumPages] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState<number>(1)
     const [isLoading, setIsLoading] = useState(true)
     const [isDownloading, setIsDownloading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [errorDetail, setErrorDetail] = useState<string | null>(null)
-    const [blobUrl, setBlobUrl] = useState<string | null>(null)
     const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
     const [localZoom, setLocalZoom] = useState(initialZoom)
     const [viewMode, setViewMode] = useState<ViewMode>('FIT_WIDTH')
@@ -94,8 +93,9 @@ export function DocumentPdfViewer({
     // Keyboard Navigation
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Ignore if typing in an input
-            if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') return
+            // Ignore if typing in an input or contenteditable
+            const activeEl = document.activeElement as HTMLElement;
+            if (activeEl?.tagName === 'INPUT' || activeEl?.tagName === 'TEXTAREA' || activeEl?.isContentEditable) return
 
             if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
                 e.preventDefault()
@@ -116,71 +116,18 @@ export function DocumentPdfViewer({
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [numPages])
 
-    // Fetch PDF as Blob with credentials
-    useEffect(() => {
-        let active = true
-        let currentBlobUrl: string | null = null
-
-        async function fetchPdf() {
-            setIsLoading(true)
-            setError(null)
-            setErrorDetail(null)
-
-            try {
-                // Determine if we need to send Authorization header
-                // Internal API calls (relative URLs starting with /) need auth
-                // External signed URLs (S3, Cloudflare, etc.) will fail if Authorization is present
-                const isInternal = fileUrl.startsWith('/');
-                const fetchFn = isInternal ? fetchRawWithAuth : fetch;
-
-                console.log(`[DocumentPdfViewer] Fetching PDF. Internal: ${isInternal}, URL: ${fileUrl.substring(0, 100)}...`);
-
-                const response = await fetchFn(fileUrl, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/pdf' }
-                });
-
-                if (!response.ok) {
-                    // Logic to handle 401/403 specifically
-                    if (response.status === 401) {
-                        throw new Error("Unauthorized: Please log in again.");
-                    }
-                    if (response.status === 403) {
-                        throw new Error("Access Denied: You do not have permission to view this document or the signed URL has expired.");
-                    }
-                    throw new Error(`Server responded with ${response.status}: ${response.statusText}`);
-                }
-
-                const blob = await response.blob();
-                if (active) {
-                    currentBlobUrl = URL.createObjectURL(blob);
-                    setBlobUrl(currentBlobUrl);
-                }
-            } catch (err: any) {
-                if (active) {
-                    setError("Failed to fetch PDF document.")
-                    setErrorDetail(err.message || String(err))
-                    setIsLoading(false)
-                }
-            }
+    // Construct the file object for react-pdf
+    // Using httpHeaders for internal URLs allows react-pdf to fetch chunks efficiently via Range requests
+    const pdfFile = useMemo(() => {
+        if (!fileUrl) return null;
+        if (fileUrl.startsWith('/')) {
+            return {
+                url: fileUrl,
+                httpHeaders: accessToken ? { Authorization: `Bearer ${accessToken}` } : undefined
+            };
         }
-
-        fetchPdf()
-
-        const timeoutId = setTimeout(() => {
-            if (active && isLoading && !error) {
-                setErrorDetail("Initializing is taking longer than expected. Large documents may take time to render.")
-            }
-        }, 15000)
-
-        return () => {
-            active = false
-            clearTimeout(timeoutId)
-            if (currentBlobUrl) {
-                URL.revokeObjectURL(currentBlobUrl)
-            }
-        }
-    }, [fileUrl, fetchRawWithAuth])
+        return fileUrl;
+    }, [fileUrl, accessToken]);
 
     // Notify Parent
     useEffect(() => {
@@ -372,9 +319,9 @@ export function DocumentPdfViewer({
                     </div>
                 )}
 
-                {blobUrl && (
+                {pdfFile && (
                     <Document
-                        file={blobUrl}
+                        file={pdfFile}
                         onLoadSuccess={onDocumentLoadSuccess}
                         onLoadError={onDocumentLoadError}
                         loading={null}
@@ -385,32 +332,13 @@ export function DocumentPdfViewer({
                             className={`bg-[#f8fafc] border-r border-gray-200 transition-all duration-300 ease-in-out overflow-y-auto custom-scrollbar flex flex-col gap-8 py-8 shrink-0
                                 ${isSidebarCollapsed ? 'w-0 opacity-0 pointer-events-none' : 'w-[200px] opacity-100'}`}
                         >
-                            {numPages > 0 && Array.from(new Array(numPages), (el, index) => (
-                                <div
-                                    key={`thumb_${index + 1}`}
-                                    onClick={() => setCurrentPage(index + 1)}
-                                    className="flex flex-col items-center gap-3 cursor-pointer group px-4"
-                                >
-                                    <div className={`relative transition-all duration-200 shadow-md border-2 rounded bg-white
-                                        ${currentPage === index + 1 ? 'border-blue-500 scale-105 shadow-blue-200/50' : 'border-transparent group-hover:border-gray-300 group-hover:scale-105'}`}>
-                                        <Page
-                                            pageNumber={index + 1}
-                                            scale={0.15}
-                                            renderTextLayer={false}
-                                            renderAnnotationLayer={false}
-                                            loading={<div className="w-[124px] h-[175px] bg-gray-100 rounded" />}
-                                            className="overflow-hidden rounded"
-                                        />
-                                        {currentPage === index + 1 && (
-                                            <div className="absolute -top-1 -right-1">
-                                                <div className="bg-blue-500 rounded-full w-3 h-3 border-2 border-white shadow-sm" />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <span className={`text-[10px] font-black tracking-widest ${currentPage === index + 1 ? 'text-blue-600' : 'text-gray-400'}`}>
-                                        {index + 1}
-                                    </span>
-                                </div>
+                            {!isSidebarCollapsed && numPages > 0 && Array.from(new Array(numPages), (el, index) => (
+                                <ThumbnailItem 
+                                    key={`thumb_${index + 1}`} 
+                                    index={index} 
+                                    currentPage={currentPage} 
+                                    setCurrentPage={setCurrentPage} 
+                                />
                             ))}
                         </div>
 
@@ -474,4 +402,66 @@ export function DocumentPdfViewer({
             `}</style>
         </div>
     )
+}
+
+function ThumbnailItem({ 
+    index, 
+    currentPage, 
+    setCurrentPage 
+}: { 
+    index: number; 
+    currentPage: number; 
+    setCurrentPage: React.Dispatch<React.SetStateAction<number>>; 
+}) {
+    const pageNumber = index + 1;
+    const isCurrent = currentPage === pageNumber;
+    const [isVisible, setIsVisible] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) setIsVisible(true);
+            },
+            { rootMargin: '500px' }
+        );
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+        return () => observer.disconnect();
+    }, []);
+
+    const shouldRender = isVisible || Math.abs(currentPage - pageNumber) <= 2;
+
+    return (
+        <div
+            ref={ref}
+            onClick={() => setCurrentPage(pageNumber)}
+            className="flex flex-col items-center gap-3 cursor-pointer group px-4"
+        >
+            <div className={`relative transition-all duration-200 shadow-md border-2 rounded bg-white
+                ${isCurrent ? 'border-blue-500 scale-105 shadow-blue-200/50' : 'border-transparent group-hover:border-gray-300 group-hover:scale-105'}`}>
+                {shouldRender ? (
+                    <Page
+                        pageNumber={pageNumber}
+                        scale={0.15}
+                        renderTextLayer={false}
+                        renderAnnotationLayer={false}
+                        loading={<div className="w-[124px] h-[175px] bg-gray-100 rounded" />}
+                        className="overflow-hidden rounded"
+                    />
+                ) : (
+                    <div className="w-[124px] h-[175px] bg-gray-100 rounded" />
+                )}
+                {isCurrent && (
+                    <div className="absolute -top-1 -right-1">
+                        <div className="bg-blue-500 rounded-full w-3 h-3 border-2 border-white shadow-sm" />
+                    </div>
+                )}
+            </div>
+            <span className={`text-[10px] font-black tracking-widest ${isCurrent ? 'text-blue-600' : 'text-gray-400'}`}>
+                {pageNumber}
+            </span>
+        </div>
+    );
 }
